@@ -1,0 +1,9 @@
+{
+  "expo": {
+    "name": "health-clique-mobile",
+    "slug": "health-clique-mobile",
+    "version": "1.0.0",
+    "userInterfaceStyle": "automatic",
+    "scheme": "health-clique-mobile"
+  }
+}
