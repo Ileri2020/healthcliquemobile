@@ -34,7 +34,9 @@ jobs:
           cd ios
           pod install
 
-      - name: Build iOS Simulator App
+      - name: Build iOS App (Release)
+        env:
+          NODE_ENV: production
         run: |
           cd ios
           WORKSPACE=$(ls | grep .xcworkspace | head -1)
@@ -42,7 +44,7 @@ jobs:
           xcodebuild \
             -workspace "$WORKSPACE" \
             -scheme "$SCHEME" \
-            -configuration Debug \
+            -configuration Release \
             -sdk iphonesimulator \
             -derivedDataPath build \
             CODE_SIGNING_ALLOWED=NO
@@ -50,5 +52,5 @@ jobs:
       - name: Upload iOS App Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: health-clique-mobile-ios-app
-          path: ios/build/Build/Products/Debug-iphonesimulator/*.app
+          name: health-clique-ios-release-app
+          path: ios/build/Build/Products/Release-iphonesimulator/*.app
