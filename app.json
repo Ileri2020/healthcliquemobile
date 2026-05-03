@@ -4,6 +4,12 @@
     "slug": "health-clique-mobile",
     "version": "1.0.0",
     "userInterfaceStyle": "automatic",
-    "scheme": "health-clique-mobile"
+    "scheme": "health-clique-mobile",
+    "android": {
+      "package": "com.healthclique.app"
+    },
+    "ios": {
+      "bundleIdentifier": "com.healthclique.app"
+    }
   }
 }
