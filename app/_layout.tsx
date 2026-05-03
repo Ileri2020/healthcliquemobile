@@ -2,25 +2,32 @@ import "../global.css";
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
+import Header from '../components/Header';
+
 export default function RootLayout() {
   return (
     <>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="about" options={{ title: 'About' }} />
-        <Stack.Screen name="account" options={{ title: 'Account' }} />
-        <Stack.Screen name="admin" options={{ title: 'Admin' }} />
-        <Stack.Screen name="blog" options={{ title: 'Blog' }} />
-        <Stack.Screen name="cart" options={{ title: 'Cart' }} />
-        <Stack.Screen name="contact" options={{ title: 'Contact' }} />
-        <Stack.Screen name="help" options={{ title: 'Help' }} />
-        <Stack.Screen name="login" options={{ title: 'Login' }} />
-        <Stack.Screen name="lunch" options={{ title: 'Lunch' }} />
-        <Stack.Screen name="privacy" options={{ title: 'Privacy' }} />
-        <Stack.Screen name="products" options={{ title: 'Products' }} />
-        <Stack.Screen name="signup" options={{ title: 'Signup' }} />
-        <Stack.Screen name="store" options={{ title: 'Store' }} />
-        <Stack.Screen name="terms" options={{ title: 'Terms' }} />
+      <Stack
+        screenOptions={{
+          header: () => <Header />,
+          headerShown: true,
+        }}
+      >
+        <Stack.Screen name="index" />
+        <Stack.Screen name="about" />
+        <Stack.Screen name="account" />
+        <Stack.Screen name="admin" />
+        <Stack.Screen name="blog" />
+        <Stack.Screen name="cart" />
+        <Stack.Screen name="contact" />
+        <Stack.Screen name="help" />
+        <Stack.Screen name="login" />
+        <Stack.Screen name="lunch" />
+        <Stack.Screen name="privacy" />
+        <Stack.Screen name="products" />
+        <Stack.Screen name="signup" />
+        <Stack.Screen name="store" />
+        <Stack.Screen name="terms" />
       </Stack>
       <StatusBar style="auto" />
     </>
