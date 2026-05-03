@@ -35,12 +35,16 @@ jobs:
 
       - name: Inject Optimizations
         run: |
-          # Enable Proguard and Shrinking
+          # Enable Proguard and Shrinking in gradle.properties
           echo "android.enableProguardInReleaseBuilds=true" >> android/gradle.properties
           echo "android.enableShrinkResourcesInReleaseBuilds=true" >> android/gradle.properties
           
+          # Force minifyEnabled and shrinkResources to true in build.gradle
+          # This handles cases where properties might not be mapped correctly
+          sed -i 's/minifyEnabled .*/minifyEnabled true/g' android/app/build.gradle
+          sed -i 's/shrinkResources .*/shrinkResources true/g' android/app/build.gradle
+          
           # Enable ABI Splitting in build.gradle
-          # We search for the defaultConfig closing brace and insert the splits block
           sed -i '/versionName "1.0.0"/a \    splits {\n        abi {\n            reset()\n            enable true\n            universalApk false\n            include "armeabi-v7a", "arm64-v8a", "x86", "x86_64"\n        }\n    }' android/app/build.gradle
 
       - name: Build Android APK
