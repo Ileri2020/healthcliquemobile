@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.Sidenav"
+             x:Name="Root">
+    <Grid>
+        <ui:Button Text="{Binding MenuText, Source={x:Reference Root}}"
+                   Variant="Ghost"
+                   Command="{Binding ToggleCommand, Source={x:Reference Root}}" />
+        <Grid IsVisible="{Binding IsOpen, Source={x:Reference Root}}"
+              ZIndex="100"
+              BackgroundColor="{AppThemeBinding Light={StaticResource ThemeOverlayLight}, Dark={StaticResource ThemeOverlayDark}}">
+            <BoxView BackgroundColor="{AppThemeBinding Light={StaticResource ThemeOverlayLight}, Dark={StaticResource ThemeOverlayDark}}">
+                <BoxView.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CloseCommand, Source={x:Reference Root}}" />
+                </BoxView.GestureRecognizers>
+            </BoxView>
+            <Border WidthRequest="{Binding PanelWidth, Source={x:Reference Root}}"
+                    Padding="16"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Fill"
+                    Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource ThemeSurfaceLight}, Dark={StaticResource ThemeSurfaceDark}}">
+                <Grid RowDefinitions="Auto,*,Auto" RowSpacing="12">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Spacing="6">
+                            <Image Source="healthclique-logo.svg" HeightRequest="38" HorizontalOptions="Start" Aspect="AspectFit" />
+                            <Label Text="{Binding Title, Source={x:Reference Root}}"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                        </VerticalStackLayout>
+                        <ui:Button Grid.Column="1" Text="Close" Variant="Ghost" Command="{Binding CloseCommand, Source={x:Reference Root}}" />
+                    </Grid>
+                    <CollectionView Grid.Row="1"
+                                    ItemsSource="{Binding Items, Source={x:Reference Root}}"
+                                    SelectionMode="Single"
+                                    SelectionChanged="OnSelectionChanged">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <ui:Button Text="{Binding Title}"
+                                           Variant="Ghost"
+                                           Command="{Binding NavigateCommand, Source={x:Reference Root}}"
+                                           CommandParameter="{Binding .}"
+                                           HorizontalOptions="Fill" />
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <ContentView Grid.Row="2" Content="{Binding FooterContent, Source={x:Reference Root}}" />
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentView>

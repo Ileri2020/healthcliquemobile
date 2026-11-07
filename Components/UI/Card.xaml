@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EEE.Components.UI.Card"
+             x:Name="Root">
+    <Border x:Name="CardBorder"
+            Padding="{Binding CardPadding, Source={x:Reference Root}}"
+            Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 12"
+            BackgroundColor="{AppThemeBinding Light={StaticResource ThemeSurfaceLight}, Dark={StaticResource ThemeSurfaceDark}}">
+        <VerticalStackLayout Spacing="8">
+            <VerticalStackLayout IsVisible="{Binding HasHeader, Source={x:Reference Root}}" Spacing="4">
+                <Label Text="{Binding Title, Source={x:Reference Root}}"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                <Label Text="{Binding Subtitle, Source={x:Reference Root}}"
+                       FontSize="14"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                <ContentView Content="{Binding HeaderContent, Source={x:Reference Root}}" />
+            </VerticalStackLayout>
+            <ContentView Content="{Binding BodyContent, Source={x:Reference Root}}" />
+            <ContentView Content="{Binding FooterContent, Source={x:Reference Root}}" />
+        </VerticalStackLayout>
+    </Border>
+</ContentView>

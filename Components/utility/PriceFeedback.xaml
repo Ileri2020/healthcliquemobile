@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.PriceFeedback"
+             x:Name="Root">
+    <VerticalStackLayout Spacing="8">
+        <ui:Button Text="Give Price Feedback" Variant="Outline"
+                   IsVisible="{Binding ShowDialogTrigger, Source={x:Reference Root}}"
+                   Command="{Binding OpenCommand, Source={x:Reference Root}}" />
+        <VerticalStackLayout IsVisible="{Binding IsInline, Source={x:Reference Root}}" Spacing="8">
+            <Label Text="Pricing feedback" FontAttributes="Bold" FontSize="16"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeAccentLight}, Dark={StaticResource ThemeAccentDark}}" />
+            <Label Text="What do you think about the pricing?"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+            <FlexLayout BindableLayout.ItemsSource="{Binding FeedbackOptions, Source={x:Reference Root}}" Wrap="Wrap">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <ui:Button Text="{Binding .}" Margin="3" Variant="Outline"
+                                   Command="{Binding Source={x:Reference Root}, Path=ChooseCommand}"
+                                   CommandParameter="{Binding .}" />
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </FlexLayout>
+            <ui:TextArea Placeholder="Expected price or additional comments..."
+                         Text="{Binding Comment, Source={x:Reference Root}, Mode=TwoWay}" />
+            <ui:Button Text="{Binding SubmitText, Source={x:Reference Root}}"
+                       Command="{Binding SubmitCommand, Source={x:Reference Root}}"
+                       IsEnabled="{Binding CanSubmit, Source={x:Reference Root}}" />
+        </VerticalStackLayout>
+        <ui:Dialog Title="{Binding DialogTitle, Source={x:Reference Root}}"
+                   IsOpen="{Binding IsOpen, Source={x:Reference Root}}">
+            <ui:Dialog.BodyContent>
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="What do you think about this product's pricing?"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                    <FlexLayout BindableLayout.ItemsSource="{Binding FeedbackOptions, Source={x:Reference Root}}" Wrap="Wrap">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <ui:Button Text="{Binding .}" Margin="3"
+                                           Command="{Binding Source={x:Reference Root}, Path=ChooseCommand}"
+                                           CommandParameter="{Binding .}" />
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                    <ui:TextArea Placeholder="Tell us more (optional)"
+                                 Text="{Binding Comment, Source={x:Reference Root}, Mode=TwoWay}" />
+                    <HorizontalStackLayout HorizontalOptions="End" Spacing="8">
+                        <ui:Button Text="Cancel" Variant="Outline" Command="{Binding CloseCommand, Source={x:Reference Root}}" />
+                        <ui:Button Text="{Binding SubmitText, Source={x:Reference Root}}"
+                                   Command="{Binding SubmitCommand, Source={x:Reference Root}}"
+                                   IsEnabled="{Binding CanSubmit, Source={x:Reference Root}}" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </ui:Dialog.BodyContent>
+        </ui:Dialog>
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasError, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasSuccess, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeAccentLight}, Dark={StaticResource ThemeAccentDark}}" />
+    </VerticalStackLayout>
+</ContentView>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.AdminBulkManager"
+             x:Name="Root">
+    <VerticalStackLayout Spacing="12" IsVisible="{Binding IsAdmin, Source={x:Reference Root}}">
+        <Label Text="Bulk data manager" FontSize="20" FontAttributes="Bold"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+        <Picker Title="Data type" ItemsSource="{Binding Models, Source={x:Reference Root}}" SelectedItem="{Binding Model, Source={x:Reference Root}, Mode=TwoWay}" />
+        <HorizontalStackLayout Spacing="8">
+            <ui:Button Text="Export CSV" Command="{Binding ExportCommand, Source={x:Reference Root}}" IsEnabled="{Binding CanExport, Source={x:Reference Root}}" HorizontalOptions="FillAndExpand" />
+            <ui:Button Text="Import CSV" Variant="Outline" Command="{Binding ImportCommand, Source={x:Reference Root}}" IsEnabled="{Binding CanImport, Source={x:Reference Root}}" HorizontalOptions="FillAndExpand" />
+        </HorizontalStackLayout>
+        <ActivityIndicator IsRunning="{Binding IsLoading, Source={x:Reference Root}}" IsVisible="{Binding IsLoading, Source={x:Reference Root}}" Color="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+        <CollectionView ItemsSource="{Binding Errors, Source={x:Reference Root}}" IsVisible="{Binding HasErrors, Source={x:Reference Root}}" HeightRequest="160">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Label Text="{Binding .}" TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentView>

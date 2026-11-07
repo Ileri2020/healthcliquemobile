@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:app="clr-namespace:EEE.App"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             xmlns:utility="clr-namespace:EEE.Components.Utility"
+             x:Class="EEE.App.Pages.ProductDetailsPage"
+             x:Name="ProductRoot"
+             Title="Product"
+             BackgroundColor="{AppThemeBinding Light={StaticResource ThemeBackgroundLight}, Dark={StaticResource ThemeBackgroundDark}}">
+    <app:RootLayout x:Name="PageLayout" CurrentPath="/products">
+        <ScrollView>
+            <VerticalStackLayout Padding="16" Spacing="18">
+                <ActivityIndicator IsRunning="{Binding IsLoading, Source={x:Reference ProductRoot}}"
+                                   IsVisible="{Binding IsLoading, Source={x:Reference ProductRoot}}"
+                                   Color="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                <Label Text="{Binding StatusMessage, Source={x:Reference ProductRoot}}"
+                       IsVisible="{Binding HasStatus, Source={x:Reference ProductRoot}}"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+                <Border Padding="16"
+                        Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                        StrokeShape="RoundRectangle 18"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource ThemeSurfaceLight}, Dark={StaticResource ThemeSurfaceDark}}">
+                    <Image Source="{Binding Product.ImageUrl, Source={x:Reference ProductRoot}}"
+                           HeightRequest="300" Aspect="AspectFit" />
+                </Border>
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="{Binding Product.Brand.Name, Source={x:Reference ProductRoot}}"
+                           FontSize="13" FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                    <Label Text="{Binding Product.Name, Source={x:Reference ProductRoot}}"
+                           FontSize="28" FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                    <Label Text="{Binding ProductPriceText, Source={x:Reference ProductRoot}}"
+                           FontSize="25" FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                    <Label Text="{Binding DescriptionText, Source={x:Reference ProductRoot}}"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                </VerticalStackLayout>
+                <Border Padding="14"
+                        StrokeThickness="0"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource ThemeMutedLight}, Dark={StaticResource ThemeMutedDark}}">
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="10">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Form" FontSize="12"
+                                   TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                            <Label Text="{Binding Product.Form, Source={x:Reference ProductRoot}}" FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label Text="Pack size" FontSize="12"
+                                   TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                            <Label Text="{Binding Product.NumberPcs, Source={x:Reference ProductRoot}}" FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="1" Spacing="2">
+                            <Label Text="Weight" FontSize="12"
+                                   TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                            <Label Text="{Binding Product.Weight, Source={x:Reference ProductRoot}}" FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="1" Spacing="2">
+                            <Label Text="Classification" FontSize="12"
+                                   TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                            <Label Text="{Binding Product.RegulatoryClassification, Source={x:Reference ProductRoot}}" FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+                <VerticalStackLayout Spacing="8" IsVisible="{Binding HasIngredients, Source={x:Reference ProductRoot}}">
+                    <Label Text="Active ingredients" FontSize="18" FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                    <FlexLayout BindableLayout.ItemsSource="{Binding Product.ActiveIngredients, Source={x:Reference ProductRoot}}"
+                                Wrap="Wrap" Direction="Row">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <ui:Badge Text="{Binding Name}" Margin="3" />
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                </VerticalStackLayout>
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <ui:Button Text="Add to cart" Command="{Binding AddToCartCommand, Source={x:Reference ProductRoot}}" />
+                    <ui:Button Grid.Column="1" Text="Order via WhatsApp" Variant="Outline"
+                               Command="{Binding WhatsAppCommand, Source={x:Reference ProductRoot}}" />
+                </Grid>
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <ui:Card Title="Authenticity guaranteed" Subtitle="Genuine products from trusted suppliers." />
+                    <ui:Card Grid.Column="1" Title="Fast delivery" Subtitle="Delivery options at checkout." />
+                </Grid>
+                <utility:Similar x:Name="SimilarProducts"
+                                 Title="Similar Products"
+                                 UserRole="visitor" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </app:RootLayout>
+</ContentPage>

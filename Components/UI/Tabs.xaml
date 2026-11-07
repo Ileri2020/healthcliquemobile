@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EEE.Components.UI.Tabs"
+             x:Name="Root">
+    <VerticalStackLayout Spacing="12">
+        <ScrollView Orientation="Horizontal"
+                    HorizontalScrollBarVisibility="Never"
+                    IsVisible="{Binding HasItems, Source={x:Reference Root}}">
+            <HorizontalStackLayout BindableLayout.ItemsSource="{Binding Items, Source={x:Reference Root}}" Spacing="4">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Button Text="{Binding Title}"
+                                Command="{Binding SelectTabCommand, Source={x:Reference Root}}"
+                                CommandParameter="{Binding .}"
+                                Padding="14,8"
+                                MinimumHeightRequest="40"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource ThemeSecondaryLight}, Dark={StaticResource ThemeSecondaryDark}}"
+                                TextColor="{AppThemeBinding Light={StaticResource ThemeSecondaryForegroundLight}, Dark={StaticResource ThemeSecondaryForegroundDark}}" />
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </HorizontalStackLayout>
+        </ScrollView>
+        <ContentView Content="{Binding SelectedTab.Content, Source={x:Reference Root}}"
+                     IsVisible="{Binding HasItems, Source={x:Reference Root}}" />
+        <ContentView Content="{Binding CustomContent, Source={x:Reference Root}}"
+                     IsVisible="{Binding HasCustomContent, Source={x:Reference Root}}" />
+    </VerticalStackLayout>
+</ContentView>

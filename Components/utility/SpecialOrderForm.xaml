@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.SpecialOrderForm"
+             x:Name="Root">
+    <VerticalStackLayout Spacing="12">
+        <ui:Button Text="{Binding TriggerText, Source={x:Reference Root}}"
+                   IsVisible="{Binding ShowTrigger, Source={x:Reference Root}}"
+                   Variant="Outline"
+                   Command="{Binding OpenCommand, Source={x:Reference Root}}" />
+        <ui:Dialog IsOpen="{Binding IsOpen, Source={x:Reference Root}, Mode=TwoWay}" Title="Special Order Request">
+            <ui:Dialog.BodyContent>
+                <ScrollView>
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Request drugs requiring special formulation or those currently scarce in the market."
+                               TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                        <ui:Label Text="Drug / Formulation Name" />
+                        <ui:Input Placeholder="e.g. Specialized Skin Cream or Scarce Med"
+                                  Text="{Binding DrugName, Source={x:Reference Root}, Mode=TwoWay}" />
+                        <ui:Label Text="Quantity" />
+                        <ui:Input Placeholder="Quantity" Keyboard="Numeric"
+                                  Text="{Binding QuantityText, Source={x:Reference Root}, Mode=TwoWay}" />
+                        <ui:Button Text="{Binding PrescriptionButtonText, Source={x:Reference Root}}" Variant="Outline"
+                                   Command="{Binding PickPrescriptionCommand, Source={x:Reference Root}}" />
+                        <Label Text="{Binding DetailsLabel, Source={x:Reference Root}}"
+                               IsVisible="{Binding HasPrescription, Source={x:Reference Root}}" />
+                        <ui:Label Text="Additional Instructions" />
+                        <ui:TextArea Placeholder="Provide specific instructions or formulation details"
+                                     Text="{Binding Details, Source={x:Reference Root}, Mode=TwoWay}"
+                                     MinimumHeightRequest="90" />
+                        <Border Padding="10" StrokeShape="RoundRectangle 10"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource ThemeMutedLight}, Dark={StaticResource ThemeMutedDark}}">
+                            <Label Text="Pricing is determined by our pharmacists after review. You will be notified once the price is set."
+                                   FontSize="12"
+                                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                        </Border>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </ui:Dialog.BodyContent>
+            <ui:Dialog.FooterContent>
+                <HorizontalStackLayout Spacing="8">
+                    <ui:Button Text="Cancel" Variant="Outline" Command="{Binding CloseCommand, Source={x:Reference Root}}" />
+                    <ui:Button Text="{Binding SubmitText, Source={x:Reference Root}}"
+                               Command="{Binding SubmitCommand, Source={x:Reference Root}}" />
+                </HorizontalStackLayout>
+            </ui:Dialog.FooterContent>
+        </ui:Dialog>
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+    </VerticalStackLayout>
+</ContentView>

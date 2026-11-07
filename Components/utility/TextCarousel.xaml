@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EEE.Components.Utility.TextCarousel"
+             x:Name="Root">
+    <Grid HeightRequest="{Binding Height, Source={x:Reference Root}}"
+          BackgroundColor="{AppThemeBinding Light={StaticResource ThemeBackgroundLight}, Dark={StaticResource ThemeBackgroundDark}}"
+          ClipToBounds="True">
+        <Image Source="{Binding ImageUrl, Source={x:Reference Root}}"
+               Aspect="AspectFit"
+               IsVisible="{Binding ShowImage, Source={x:Reference Root}}"
+               Opacity="0.35" />
+        <Label x:Name="RotatingText"
+               Text="{Binding Text, Source={x:Reference Root}}"
+               FontSize="{Binding FontSize, Source={x:Reference Root}}"
+               FontAttributes="Bold"
+               HorizontalTextAlignment="Center"
+               VerticalTextAlignment="Center"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeAccentLight}, Dark={StaticResource ThemeAccentDark}}"
+               RotationY="{Binding Rotation, Source={x:Reference Root}}" />
+    </Grid>
+</ContentView>

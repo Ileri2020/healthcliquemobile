@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.ProfileImage"
+             x:Name="Root">
+    <VerticalStackLayout Spacing="8">
+        <Image Source="{Binding ImageUrl, Source={x:Reference Root}}" HeightRequest="160" WidthRequest="160"
+               Aspect="AspectFill" HorizontalOptions="Center" />
+        <ui:Button Text="Choose profile image" Variant="Outline"
+                   Command="{Binding PickCommand, Source={x:Reference Root}}" />
+        <Label Text="{Binding SelectedFileName, Source={x:Reference Root}}" HorizontalTextAlignment="Center"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+        <ui:Button Text="{Binding UploadText, Source={x:Reference Root}}"
+                   IsEnabled="{Binding CanUpload, Source={x:Reference Root}}"
+                   Command="{Binding UploadCommand, Source={x:Reference Root}}" />
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+    </VerticalStackLayout>
+</ContentView>

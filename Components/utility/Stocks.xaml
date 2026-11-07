@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.Stocks"
+             x:Name="Root">
+    <VerticalStackLayout Padding="14" Spacing="12">
+        <Label Text="Products" FontSize="26" FontAttributes="Bold"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+            <ui:Input Placeholder="Category" Text="{Binding CategoryFilter, Source={x:Reference Root}, Mode=TwoWay}" />
+            <ui:Input Grid.Column="1" Placeholder="Concern" Text="{Binding ConcernFilter, Source={x:Reference Root}, Mode=TwoWay}" />
+        </Grid>
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+            <ui:Input Placeholder="Brand" Text="{Binding BrandFilter, Source={x:Reference Root}, Mode=TwoWay}" />
+            <HorizontalStackLayout Grid.Column="1" Spacing="4">
+                <ui:CheckBox Text="Featured" IsChecked="{Binding IsFeatured, Source={x:Reference Root}, Mode=TwoWay}" />
+                <ui:CheckBox Text="Discounted" IsChecked="{Binding IsDiscounted, Source={x:Reference Root}, Mode=TwoWay}" />
+            </HorizontalStackLayout>
+        </Grid>
+        <HorizontalStackLayout Spacing="8">
+            <ui:Button Text="Apply filters" Command="{Binding ApplyFiltersCommand, Source={x:Reference Root}}" />
+            <ui:Button Text="Refresh" Variant="Outline" Command="{Binding RefreshCommand, Source={x:Reference Root}}" />
+            <ui:Button Text="Add product" IsVisible="{Binding IsAdmin, Source={x:Reference Root}}"
+                       Command="{Binding AddProductCommand, Source={x:Reference Root}}" />
+        </HorizontalStackLayout>
+        <ActivityIndicator IsRunning="{Binding IsLoading, Source={x:Reference Root}}"
+                           IsVisible="{Binding IsLoading, Source={x:Reference Root}}" />
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+        <CollectionView ItemsSource="{Binding Products, Source={x:Reference Root}}" SelectionMode="None">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="8" VerticalItemSpacing="8" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <ui:Card CardPadding="8">
+                        <ui:Card.BodyContent>
+                            <VerticalStackLayout Spacing="6">
+                                <Image Source="{Binding ImageUrl}" HeightRequest="130" Aspect="AspectFit" />
+                                <Label Text="{Binding Name}" FontAttributes="Bold" MaxLines="2" LineBreakMode="TailTruncation"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                                <Label Text="{Binding PriceText}" FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                                <ui:Button Text="View product" Variant="Outline"
+                                           Command="{Binding Source={x:Reference Root}, Path=SelectProductCommand}"
+                                           CommandParameter="{Binding .}" />
+                                <ui:Button Text="Add to cart"
+                                           Command="{Binding Source={x:Reference Root}, Path=AddToCartCommand}"
+                                           CommandParameter="{Binding .}" />
+                            </VerticalStackLayout>
+                        </ui:Card.BodyContent>
+                    </ui:Card>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <HorizontalStackLayout HorizontalOptions="Center" Spacing="12">
+            <ui:Button Text="Previous" Variant="Outline" IsEnabled="{Binding CanGoPrevious, Source={x:Reference Root}}"
+                       Command="{Binding PreviousCommand, Source={x:Reference Root}}" />
+            <Label Text="{Binding PageText, Source={x:Reference Root}}" VerticalOptions="Center" />
+            <ui:Button Text="Next" Variant="Outline" IsEnabled="{Binding CanGoNext, Source={x:Reference Root}}"
+                       Command="{Binding NextCommand, Source={x:Reference Root}}" />
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentView>

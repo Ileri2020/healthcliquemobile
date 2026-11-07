@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.PostButton"
+             x:Name="Root">
+    <VerticalStackLayout Spacing="10" IsVisible="{Binding IsAdmin, Source={x:Reference Root}}">
+        <Label Text="Create a post" FontSize="20" FontAttributes="Bold"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+        <ui:Input Placeholder="Post title" Text="{Binding Title, Source={x:Reference Root}, Mode=TwoWay}" />
+        <ui:TextArea Placeholder="Description" Text="{Binding Description, Source={x:Reference Root}, Mode=TwoWay}" />
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+            <Picker Title="Category" ItemsSource="{Binding Categories, Source={x:Reference Root}}"
+                    SelectedItem="{Binding Category, Source={x:Reference Root}, Mode=TwoWay}"
+                    TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}"
+                    TitleColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+            <Picker Grid.Column="1" Title="Media type" ItemsSource="{Binding Types, Source={x:Reference Root}}"
+                    SelectedItem="{Binding Type, Source={x:Reference Root}, Mode=TwoWay}"
+                    TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}"
+                    TitleColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+        </Grid>
+        <ui:Button Text="{Binding SelectFileText, Source={x:Reference Root}}" Variant="Outline"
+                   Command="{Binding PickCommand, Source={x:Reference Root}}" />
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+        <ui:Button Text="{Binding SubmitText, Source={x:Reference Root}}"
+                   IsEnabled="{Binding CanSubmit, Source={x:Reference Root}}"
+                   Command="{Binding SubmitCommand, Source={x:Reference Root}}" />
+    </VerticalStackLayout>
+</ContentView>

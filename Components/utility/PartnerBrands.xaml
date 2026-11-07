@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.PartnerBrands"
+             x:Name="Root">
+    <VerticalStackLayout Padding="14" Spacing="12">
+        <Grid ColumnDefinitions="*,Auto">
+            <VerticalStackLayout Spacing="3">
+                <Label Text="Elite Pharmaceutical Partners" FontSize="23" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                <Label Text="Our global network" FontSize="13"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+            </VerticalStackLayout>
+            <ui:Button Grid.Column="1" Text="Refresh" Variant="Outline"
+                       Command="{Binding RefreshCommand, Source={x:Reference Root}}" />
+        </Grid>
+        <HorizontalStackLayout IsVisible="{Binding IsAdmin, Source={x:Reference Root}}" Spacing="8">
+            <ui:Button Text="Add company" Command="{Binding NewCommand, Source={x:Reference Root}}" />
+            <ui:Button Text="Save order" Variant="Outline" Command="{Binding SaveOrderCommand, Source={x:Reference Root}}" />
+        </HorizontalStackLayout>
+        <ActivityIndicator IsRunning="{Binding IsLoading, Source={x:Reference Root}}"
+                           IsVisible="{Binding IsLoading, Source={x:Reference Root}}" />
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}"
+               IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+        <CollectionView ItemsSource="{Binding Brands, Source={x:Reference Root}}" SelectionMode="None">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <ui:Card WidthRequest="200" Title="{Binding Name}">
+                        <ui:Card.BodyContent>
+                            <VerticalStackLayout Spacing="8">
+                                <ui:Button Text="View products" Variant="Ghost"
+                                           Command="{Binding Source={x:Reference Root}, Path=SelectCommand}"
+                                           CommandParameter="{Binding .}" />
+                                <Label Text="{Binding Products, StringFormat='{0} Products'}" HorizontalTextAlignment="Center"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                                <ui:Input Placeholder="Display order" Keyboard="Numeric" IsEnabled="{Binding Source={x:Reference Root}, Path=IsAdmin}"
+                                          IsVisible="{Binding Source={x:Reference Root}, Path=IsAdmin}" Text="{Binding Order, Mode=TwoWay}" />
+                                <HorizontalStackLayout IsVisible="{Binding Source={x:Reference Root}, Path=IsAdmin}" Spacing="6">
+                                    <ui:Button Text="Edit" Variant="Outline" Command="{Binding Source={x:Reference Root}, Path=EditCommand}" CommandParameter="{Binding .}" />
+                                    <ui:Button Text="Delete" Variant="Destructive" Command="{Binding Source={x:Reference Root}, Path=DeleteCommand}" CommandParameter="{Binding .}" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </ui:Card.BodyContent>
+                    </ui:Card>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Label Text="No pharmaceutical companies added yet." IsVisible="{Binding IsEmpty, Source={x:Reference Root}}"
+               HorizontalTextAlignment="Center" Padding="12"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+        <ui:Dialog Title="{Binding EditorTitle, Source={x:Reference Root}}"
+                   IsOpen="{Binding IsEditorOpen, Source={x:Reference Root}}">
+            <ui:Dialog.BodyContent>
+                <VerticalStackLayout Spacing="10">
+                    <ui:Input Placeholder="Company name" Text="{Binding EditName, Source={x:Reference Root}, Mode=TwoWay}" />
+                    <ui:Input Placeholder="Display order" Keyboard="Numeric" Text="{Binding EditOrder, Source={x:Reference Root}, Mode=TwoWay}" />
+                    <HorizontalStackLayout HorizontalOptions="End" Spacing="8">
+                        <ui:Button Text="Cancel" Variant="Outline" Command="{Binding CancelCommand, Source={x:Reference Root}}" />
+                        <ui:Button Text="Save" Command="{Binding SaveCommand, Source={x:Reference Root}}" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </ui:Dialog.BodyContent>
+        </ui:Dialog>
+    </VerticalStackLayout>
+</ContentView>

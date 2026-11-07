@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.Similar"
+             x:Name="Root">
+    <VerticalStackLayout Spacing="10" IsVisible="{Binding HasProducts, Source={x:Reference Root}}">
+        <Label Text="{Binding Title, Source={x:Reference Root}}" FontSize="20" FontAttributes="Bold"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+        <CollectionView x:Name="ProductsCarousel" ItemsSource="{Binding Items, Source={x:Reference Root}}" HeightRequest="290">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <ui:Card WidthRequest="172" CardPadding="8">
+                        <ui:Card.BodyContent>
+                            <VerticalStackLayout Spacing="6">
+                                <Image Source="{Binding ImageUrl}" HeightRequest="118" Aspect="AspectFit" />
+                                <Label Text="{Binding Name}" FontAttributes="Bold" MaxLines="2" LineBreakMode="TailTruncation"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                                <Label Text="{Binding PriceText}" FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                                <ui:Button Text="View product" Variant="Ghost"
+                                           Command="{Binding Source={x:Reference Root}, Path=SelectCommand}"
+                                           CommandParameter="{Binding .}" />
+                                <ui:Button Text="Add to cart" Variant="Outline"
+                                           Command="{Binding Source={x:Reference Root}, Path=AddToCartCommand}"
+                                           CommandParameter="{Binding .}" />
+                            </VerticalStackLayout>
+                        </ui:Card.BodyContent>
+                    </ui:Card>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentView>

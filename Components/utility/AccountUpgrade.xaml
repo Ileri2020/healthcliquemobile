@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.AccountUpgrade"
+             x:Name="Root">
+    <Grid>
+        <ui:Button Text="Are you a Healthcare Professional? Upgrade Now"
+                   Variant="Outline"
+                   IsVisible="{Binding IsCustomer, Source={x:Reference Root}}"
+                   Command="{Binding OpenCommand, Source={x:Reference Root}}"
+                   HorizontalOptions="Fill" />
+        <Grid IsVisible="{Binding IsOpen, Source={x:Reference Root}}"
+              ZIndex="100"
+              BackgroundColor="{AppThemeBinding Light={StaticResource ThemeOverlayLight}, Dark={StaticResource ThemeOverlayDark}}">
+            <Button Text="" BackgroundColor="{StaticResource ThemeTransparent}" Command="{Binding CloseCommand, Source={x:Reference Root}}" />
+            <Border Padding="24"
+                    Margin="20"
+                    MaximumWidthRequest="500"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                    StrokeShape="RoundRectangle 16"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource ThemeSurfaceLight}, Dark={StaticResource ThemeSurfaceDark}}">
+                <ScrollView>
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="{Binding Heading, Source={x:Reference Root}}"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                        <Label Text="{Binding Description, Source={x:Reference Root}}"
+                               TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                        <VerticalStackLayout IsVisible="{Binding IsRoleStep, Source={x:Reference Root}}" Spacing="10">
+                            <ui:Button Text="Healthcare Professional" Variant="Outline" Command="{Binding SelectProfessionalCommand, Source={x:Reference Root}}" />
+                            <ui:Button Text="Wholesaler / Facility" Variant="Outline" Command="{Binding SelectWholesalerCommand, Source={x:Reference Root}}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout IsVisible="{Binding IsFormStep, Source={x:Reference Root}}" Spacing="10">
+                            <Picker Title="Professional type" ItemsSource="{Binding ProfessionalTypes, Source={x:Reference Root}}" SelectedItem="{Binding ProfessionalType, Source={x:Reference Root}, Mode=TwoWay}" IsVisible="{Binding IsProfessional, Source={x:Reference Root}}" />
+                            <ui:Input Placeholder="Registration number" Text="{Binding RegNumber, Source={x:Reference Root}, Mode=TwoWay}" IsVisible="{Binding IsProfessional, Source={x:Reference Root}}" />
+                            <ui:Input Placeholder="Facility / company name" Text="{Binding FacilityName, Source={x:Reference Root}, Mode=TwoWay}" IsVisible="{Binding IsWholesaler, Source={x:Reference Root}}" />
+                            <ui:Input Placeholder="Facility address" Text="{Binding FacilityAddress, Source={x:Reference Root}, Mode=TwoWay}" IsVisible="{Binding IsWholesaler, Source={x:Reference Root}}" />
+                            <ui:Input Placeholder="Facility registration number" Text="{Binding FacilityRegNumber, Source={x:Reference Root}, Mode=TwoWay}" IsVisible="{Binding IsWholesaler, Source={x:Reference Root}}" />
+                            <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}" TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+                            <HorizontalStackLayout Spacing="8">
+                                <ui:Button Text="Back" Variant="Ghost" Command="{Binding BackCommand, Source={x:Reference Root}}" HorizontalOptions="FillAndExpand" />
+                                <ui:Button Text="{Binding SubmitText, Source={x:Reference Root}}" Command="{Binding SubmitCommand, Source={x:Reference Root}}" IsEnabled="{Binding CanSubmit, Source={x:Reference Root}}" HorizontalOptions="FillAndExpand" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout IsVisible="{Binding IsSuccessStep, Source={x:Reference Root}}" Spacing="12">
+                            <Label Text="Application submitted. Your request is being reviewed." TextColor="{AppThemeBinding Light={StaticResource ThemeAccentLight}, Dark={StaticResource ThemeAccentDark}}" />
+                            <ui:Button Text="Close" Variant="Outline" Command="{Binding CloseCommand, Source={x:Reference Root}}" />
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentView>

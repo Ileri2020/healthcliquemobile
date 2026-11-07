@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:app="clr-namespace:EEE.App"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             xmlns:utility="clr-namespace:EEE.Components.Utility"
+             x:Class="EEE.App.Pages.HomePage"
+             x:Name="HomeRoot"
+             Title="Home"
+             BackgroundColor="{AppThemeBinding Light={StaticResource ThemeBackgroundLight}, Dark={StaticResource ThemeBackgroundDark}}">
+
+    <app:RootLayout x:Name="PageLayout" CurrentPath="/home">
+        <Grid>
+            <ScrollView x:Name="HomeScroll">
+                <VerticalStackLayout Spacing="12" Padding="0,0,0,88">
+                    <utility:Hero x:Name="HomeHero"
+                                  ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference PageLayout}}"
+                                  UserRole="visitor"
+                                  IsAuthenticated="False" />
+                    <utility:CommonMedications x:Name="CommonMeds"
+                                               ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference PageLayout}}"
+                                               IsAdmin="False" />
+                    <utility:HeavilyDiscountedCarousel x:Name="DiscountedDeals"
+                                                       ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference PageLayout}}"
+                                                       UserRole="visitor" />
+                    <utility:PartnerBrands x:Name="Partners"
+                                           ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference PageLayout}}"
+                                           IsAdmin="False" />
+                    <utility:ConcernGrid x:Name="HealthConcerns" Columns="2" />
+                    <utility:FeaturedCategories x:Name="Categories"
+                                                ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference PageLayout}}"
+                                                IsAdmin="False" />
+                    <utility:FeaturedIngredients x:Name="Ingredients"
+                                                 ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference PageLayout}}" />
+                    <utility:FeaturedProducts x:Name="Products"
+                                              ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference PageLayout}}"
+                                              UserRole="visitor"
+                                              IsAdmin="False" />
+                    <utility:Features />
+                    <VerticalStackLayout x:Name="PrescriptionSection" Padding="16" Spacing="12">
+                        <Label Text="Prescription and special orders"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                        <utility:SnapPrescription x:Name="PrescriptionFlow"
+                                                 ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference PageLayout}}"
+                                                 ShowTrigger="False" />
+                        <utility:SpecialOrderForm x:Name="SpecialOrderFlow" ShowTrigger="False" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </ScrollView>
+            <ui:Button Text="Contact"
+                       HorizontalOptions="End"
+                       VerticalOptions="End"
+                       Margin="16"
+                       Command="{Binding ContactCommand, Source={x:Reference HomeRoot}}" />
+        </Grid>
+    </app:RootLayout>
+</ContentPage>

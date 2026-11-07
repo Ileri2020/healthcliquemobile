@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             xmlns:utility="clr-namespace:EEE.Components.Utility"
+             x:Class="EEE.App.RootLayout"
+             x:Name="Root">
+    <Grid RowDefinitions="Auto,*,Auto"
+          BackgroundColor="{AppThemeBinding Light={StaticResource ThemeBackgroundLight}, Dark={StaticResource ThemeBackgroundDark}}">
+        <utility:Navbar Grid.Row="0">
+            <utility:Navbar.SideNavigation>
+                <utility:Sidenav x:Name="PageSidenav"
+                                 Title="HealthClique">
+                    <utility:Sidenav.FooterContent>
+                        <Label Text="© HealthClique"
+                               HorizontalOptions="Center"
+                               TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                    </utility:Sidenav.FooterContent>
+                </utility:Sidenav>
+            </utility:Navbar.SideNavigation>
+            <utility:Navbar.BrandContent>
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                    <Image Source="healthclique-logo.svg" HeightRequest="34" Aspect="AspectFit" />
+                    <Label Text="HealthClique"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                </HorizontalStackLayout>
+            </utility:Navbar.BrandContent>
+            <utility:Navbar.ActionsContent>
+                <ui:Button Text="{Binding CartButtonText, Source={x:Reference Root}}"
+                           Variant="Outline"
+                           Command="{Binding OpenCartCommand, Source={x:Reference Root}}" />
+            </utility:Navbar.ActionsContent>
+        </utility:Navbar>
+        <ContentView Grid.Row="1"
+                     Content="{Binding PageContent, Source={x:Reference Root}}"
+                     VerticalOptions="Fill" />
+        <utility:Footer x:Name="PageFooter"
+                        Grid.Row="2"
+                        ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference Root}}"
+                        CurrentPath="{Binding CurrentPath, Source={x:Reference Root}}" />
+        <ui:Dialog Grid.RowSpan="3"
+                   Title="Your Cart"
+                   IsOpen="{Binding IsCartOpen, Source={x:Reference Root}}">
+            <ui:Dialog.BodyContent>
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Your cart is empty."
+                           IsVisible="{Binding IsCartEmpty, Source={x:Reference Root}}"
+                           HorizontalTextAlignment="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                    <CollectionView ItemsSource="{Binding CartItems, Source={x:Reference Root}}"
+                                    IsVisible="{Binding HasCartItems, Source={x:Reference Root}}"
+                                    MaximumHeightRequest="420">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" Padding="6">
+                                    <VerticalStackLayout Spacing="2">
+                                        <Label Text="{Binding DisplayName}" FontAttributes="Bold"
+                                               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                                        <Label Text="{Binding SummaryPrice}" FontSize="12"
+                                               TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                                    </VerticalStackLayout>
+                                    <ui:Button Grid.Column="1" Text="Remove" Variant="Ghost"
+                                               Command="{Binding Source={x:Reference Root}, Path=RemoveCartItemCommand}"
+                                               CommandParameter="{Binding .}" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Subtotal" FontAttributes="Bold" />
+                        <Label Grid.Column="1" Text="{Binding CartTotalText, Source={x:Reference Root}}" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                    </Grid>
+                    <Label Text="Sign in and continue to checkout on HealthClique to complete your order."
+                           FontSize="12"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                    <HorizontalStackLayout HorizontalOptions="End" Spacing="8">
+                        <ui:Button Text="Continue shopping" Variant="Outline"
+                                   Command="{Binding CloseCartCommand, Source={x:Reference Root}}" />
+                        <ui:Button Text="Checkout"
+                                   Command="{Binding CheckoutCommand, Source={x:Reference Root}}" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </ui:Dialog.BodyContent>
+        </ui:Dialog>
+    </Grid>
+</ContentView>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.Gallery"
+             x:Name="Root">
+    <VerticalStackLayout Padding="14" Spacing="12">
+        <Grid ColumnDefinitions="*,Auto">
+            <Label Text="Shop Essentials" FontSize="26" FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+            <ui:Button Grid.Column="1" Text="Refresh" Variant="Outline"
+                       Command="{Binding RefreshCommand, Source={x:Reference Root}}" />
+        </Grid>
+        <ActivityIndicator IsRunning="{Binding IsLoading, Source={x:Reference Root}}"
+                           IsVisible="{Binding IsLoading, Source={x:Reference Root}}"
+                           Color="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+        <CollectionView ItemsSource="{Binding Products, Source={x:Reference Root}}" HeightRequest="640">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="10" VerticalItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                            StrokeShape="RoundRectangle 12"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource ThemeSurfaceLight}, Dark={StaticResource ThemeSurfaceDark}}">
+                        <VerticalStackLayout Spacing="7">
+                            <Image Source="{Binding ImageUrl}" HeightRequest="150" Aspect="AspectFill" />
+                            <VerticalStackLayout Padding="10" Spacing="5">
+                                <Label Text="{Binding Name}" FontAttributes="Bold" LineBreakMode="TailTruncation"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                                <Label Text="{Binding Description}" MaxLines="2" LineBreakMode="TailTruncation"
+                                       FontSize="12"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                                <Label Text="{Binding PriceLabel}" FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                                <ui:Button Text="Add to cart" Command="{Binding Source={x:Reference Root}, Path=AddToCartCommand}"
+                                           CommandParameter="{Binding Product}" />
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentView>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.Footer"
+             x:Name="Root">
+    <VerticalStackLayout Padding="20" Spacing="16"
+                         IsVisible="{Binding ShowFooter, Source={x:Reference Root}}"
+                         BackgroundColor="{AppThemeBinding Light={StaticResource ThemeSecondaryLight}, Dark={StaticResource ThemeSecondaryDark}}">
+        <Label Text="{Binding SiteName, Source={x:Reference Root}}" FontSize="24" FontAttributes="Bold"
+               TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+        <Label Text="Healthcare essentials, delivered with care."
+               TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+            <VerticalStackLayout Spacing="8">
+                <Label Text="Explore" FontAttributes="Bold" FontSize="17"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                <ui:Button Text="Home" Variant="Ghost" Command="{Binding NavigateCommand, Source={x:Reference Root}}" CommandParameter="/home" />
+                <ui:Button Text="About us" Variant="Ghost" Command="{Binding NavigateCommand, Source={x:Reference Root}}" CommandParameter="/about" />
+                <ui:Button Text="Store" Variant="Ghost" Command="{Binding NavigateCommand, Source={x:Reference Root}}" CommandParameter="/store" />
+                <ui:Button Text="User account" Variant="Ghost" Command="{Binding NavigateCommand, Source={x:Reference Root}}" CommandParameter="/account" />
+                <Label Text="Categories" FontAttributes="Bold" FontSize="17"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                <ui:Button Text="All categories" Variant="Ghost" Command="{Binding NavigateCommand, Source={x:Reference Root}}" CommandParameter="/store" />
+                <CollectionView ItemsSource="{Binding Categories, Source={x:Reference Root}}" HeightRequest="180">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <ui:Button Text="{Binding Name}" Variant="Ghost"
+                                       Command="{Binding Source={x:Reference Root}, Path=CategoryCommand}"
+                                       CommandParameter="{Binding .}" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+            <VerticalStackLayout Grid.Column="1" Spacing="8">
+                <Label Text="Support" FontAttributes="Bold" FontSize="17"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                <ui:Button Text="Help centre" Variant="Ghost" Command="{Binding NavigateCommand, Source={x:Reference Root}}" CommandParameter="/help" />
+                <ui:Button Text="Contact us" Variant="Ghost" Command="{Binding NavigateCommand, Source={x:Reference Root}}" CommandParameter="/contact" />
+                <ui:Button Text="Privacy policy" Variant="Ghost" Command="{Binding NavigateCommand, Source={x:Reference Root}}" CommandParameter="/privacy" />
+                <ui:Button Text="Terms of service" Variant="Ghost" Command="{Binding NavigateCommand, Source={x:Reference Root}}" CommandParameter="/terms" />
+                <ui:Button Text="Advertise with us" Variant="Ghost" Command="{Binding NavigateCommand, Source={x:Reference Root}}" CommandParameter="/contact" />
+                <ui:Button Text="Health consult" Variant="Ghost" Command="{Binding NavigateCommand, Source={x:Reference Root}}" CommandParameter="/contact" />
+                <ui:Button Text="Corporate partnership" Variant="Ghost" Command="{Binding NavigateCommand, Source={x:Reference Root}}" CommandParameter="/contact" />
+                <ui:Button Text="Become an affiliate" Variant="Outline"
+                           Command="{Binding ToggleAffiliateCommand, Source={x:Reference Root}}" />
+                <HorizontalStackLayout IsVisible="{Binding IsAffiliateFormOpen, Source={x:Reference Root}}" Spacing="6">
+                    <ui:Input Placeholder="Affiliate name" Text="{Binding AffiliateName, Source={x:Reference Root}, Mode=TwoWay}" />
+                    <ui:Button Text="Apply" Command="{Binding AffiliateCommand, Source={x:Reference Root}}" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Grid>
+        <HorizontalStackLayout Spacing="8">
+            <ui:Button Text="Instagram" Variant="Outline" Command="{Binding NavigateCommand, Source={x:Reference Root}}" CommandParameter="https://www.instagram.com/healthclique_specialties?utm_source=qr" />
+            <ui:Button Text="Email us" Variant="Outline" Command="{Binding NavigateCommand, Source={x:Reference Root}}" CommandParameter="mailto:healthcliquespecialties@gmail.com" />
+        </HorizontalStackLayout>
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+        <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}" />
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+            <Label Text="{Binding CopyrightText, Source={x:Reference Root}}" FontSize="12"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+            <HorizontalStackLayout Grid.Column="1" Spacing="8">
+                <ui:Button Text="Cookies" Variant="Ghost" Command="{Binding NavigateCommand, Source={x:Reference Root}}" CommandParameter="/cookies" />
+                <ui:Button Text="Sitemap" Variant="Ghost" Command="{Binding NavigateCommand, Source={x:Reference Root}}" CommandParameter="/sitemap" />
+            </HorizontalStackLayout>
+        </Grid>
+    </VerticalStackLayout>
+</ContentView>

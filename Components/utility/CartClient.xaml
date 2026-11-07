@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.CartClient"
+             x:Name="Root">
+    <VerticalStackLayout Spacing="12">
+        <HorizontalStackLayout Spacing="8">
+            <Label Text="Shopping cart" FontSize="24" FontAttributes="Bold" HorizontalOptions="FillAndExpand"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+            <ui:Badge Text="{Binding ItemCount, Source={x:Reference Root}}" />
+        </HorizontalStackLayout>
+        <CollectionView ItemsSource="{Binding Items, Source={x:Reference Root}}" IsVisible="{Binding HasItems, Source={x:Reference Root}}" MaximumHeightRequest="380">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="10" Margin="2"
+                            Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                            StrokeShape="RoundRectangle 10"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource ThemeSecondaryLight}, Dark={StaticResource ThemeSecondaryDark}}">
+                        <Grid ColumnDefinitions="72,*,Auto" ColumnSpacing="10">
+                            <Image Source="{Binding ImageUrl}" WidthRequest="72" HeightRequest="72" Aspect="AspectFill" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="{Binding Name}" FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                                <Label Text="{Binding BulkName}" FontSize="11"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                                <HorizontalStackLayout Spacing="6">
+                                    <ui:Button Text="+" Variant="Outline"
+                                               Command="{Binding Source={x:Reference Root}, Path=IncreaseCommand}"
+                                               CommandParameter="{Binding .}" />
+                                    <Label Text="{Binding Quantity}" VerticalTextAlignment="Center" />
+                                    <ui:Button Text="−" Variant="Outline"
+                                               Command="{Binding Source={x:Reference Root}, Path=DecreaseCommand}"
+                                               CommandParameter="{Binding .}" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="2" Spacing="8">
+                                <Label Text="{Binding Price, StringFormat='₦{0:N0}'}" FontAttributes="Bold" />
+                                <ui:Button Text="Remove" Variant="Ghost"
+                                           Command="{Binding Source={x:Reference Root}, Path=RemoveItemCommand}"
+                                           CommandParameter="{Binding .}" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Label Text="Your cart is empty" IsVisible="{Binding IsEmpty, Source={x:Reference Root}}"
+               HorizontalTextAlignment="Center"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+        <VerticalStackLayout IsVisible="{Binding HasItems, Source={x:Reference Root}}" Spacing="10">
+            <Picker Title="Delivery address"
+                    ItemsSource="{Binding Addresses, Source={x:Reference Root}}"
+                    ItemDisplayBinding="{Binding DisplayText}"
+                    SelectedItem="{Binding SelectedAddress, Source={x:Reference Root}, Mode=TwoWay}" />
+            <HorizontalStackLayout Spacing="8">
+                <ui:Input Placeholder="Promo code" Text="{Binding CouponCode, Source={x:Reference Root}, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+                <ui:Button Text="Apply" Variant="Outline" Command="{Binding ApplyCouponCommand, Source={x:Reference Root}}" />
+            </HorizontalStackLayout>
+            <ui:CheckBox Text="Include delivery" IsChecked="{Binding IncludeDelivery, Source={x:Reference Root}, Mode=TwoWay}" />
+            <Label Text="{Binding CouponStatus, Source={x:Reference Root}}" IsVisible="{Binding HasCouponStatus, Source={x:Reference Root}}"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeAccentLight}, Dark={StaticResource ThemeAccentDark}}" />
+            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="5">
+                <Label Text="Subtotal" TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                <Label Grid.Column="1" Text="{Binding SubtotalText, Source={x:Reference Root}}" />
+                <Label Grid.Row="1" Text="Discount" TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                <Label Grid.Row="1" Grid.Column="1" Text="{Binding DiscountText, Source={x:Reference Root}}" />
+                <Label Grid.Row="2" Text="Delivery" TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                <Label Grid.Row="2" Grid.Column="1" Text="{Binding DeliveryText, Source={x:Reference Root}}" />
+                <Label Grid.Row="3" Text="Total" FontAttributes="Bold" FontSize="18" />
+                <Label Grid.Row="3" Grid.Column="1" Text="{Binding TotalText, Source={x:Reference Root}}" FontAttributes="Bold" FontSize="18" />
+            </Grid>
+            <ui:CheckBox Text="I agree to the terms, privacy, and returns policies." IsChecked="{Binding TermsAccepted, Source={x:Reference Root}, Mode=TwoWay}" />
+            <ui:Button Text="Checkout" Command="{Binding CheckoutCommand, Source={x:Reference Root}}" IsEnabled="{Binding CanCheckout, Source={x:Reference Root}}" />
+            <ui:Button Text="Clear cart" Variant="Outline" Command="{Binding ClearCommand, Source={x:Reference Root}}" />
+        </VerticalStackLayout>
+        <ActivityIndicator IsRunning="{Binding IsLoading, Source={x:Reference Root}}" IsVisible="{Binding IsLoading, Source={x:Reference Root}}"
+                           Color="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+        <Border Padding="12" IsVisible="{Binding HasCheckout, Source={x:Reference Root}}"
+                Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                StrokeShape="RoundRectangle 12">
+            <VerticalStackLayout Spacing="8">
+                <Label Text="{Binding CheckoutSummary, Source={x:Reference Root}}" />
+                <ui:Button Text="Confirm payment result" Variant="Outline"
+                           Command="{Binding ConfirmPaymentCommand, Source={x:Reference Root}}" />
+            </VerticalStackLayout>
+        </Border>
+    </VerticalStackLayout>
+</ContentView>

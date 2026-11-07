@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.CartDetailsDialog"
+             x:Name="Root">
+    <Grid>
+        <ui:Button Text="{Binding TriggerText, Source={x:Reference Root}}"
+                   Variant="Outline"
+                   Command="{Binding OpenCommand, Source={x:Reference Root}}" />
+        <Grid IsVisible="{Binding IsOpen, Source={x:Reference Root}}"
+              ZIndex="100"
+              BackgroundColor="{AppThemeBinding Light={StaticResource ThemeOverlayLight}, Dark={StaticResource ThemeOverlayDark}}">
+            <Button Text="" BackgroundColor="{StaticResource ThemeTransparent}" Command="{Binding CloseCommand, Source={x:Reference Root}}" />
+            <Border Padding="20"
+                    Margin="16"
+                    MaximumWidthRequest="760"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                    StrokeShape="RoundRectangle 16"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource ThemeSurfaceLight}, Dark={StaticResource ThemeSurfaceDark}}">
+                <ScrollView MaximumHeightRequest="700">
+                    <VerticalStackLayout Spacing="12">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Order Details" FontSize="24" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                            <ui:Badge Grid.Column="1" Text="{Binding Cart.Status, Source={x:Reference Root}}" />
+                        </Grid>
+                        <Label Text="{Binding CustomerText, Source={x:Reference Root}}" />
+                        <Label Text="{Binding PaymentText, Source={x:Reference Root}}" />
+                        <Label Text="Order items" FontAttributes="Bold" FontSize="18" />
+                        <CollectionView ItemsSource="{Binding Cart.Products, Source={x:Reference Root}}" MaximumHeightRequest="220">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="*,Auto" Padding="6">
+                                        <Label Text="{Binding DisplayName}" />
+                                        <Label Grid.Column="1" Text="{Binding SummaryPrice}" FontAttributes="Bold" />
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Label Text="{Binding TotalsText, Source={x:Reference Root}}" FontSize="18" FontAttributes="Bold"
+                               HorizontalTextAlignment="End"
+                               TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                        <ui:TextArea Placeholder="Message to customer"
+                                     Text="{Binding EmailMessage, Source={x:Reference Root}, Mode=TwoWay}" />
+                        <ui:Button Text="{Binding SendEmailText, Source={x:Reference Root}}" Variant="Secondary"
+                                   Command="{Binding SendEmailCommand, Source={x:Reference Root}}"
+                                   IsEnabled="{Binding CanSendEmail, Source={x:Reference Root}}" />
+                        <ui:Button Text="Confirm payment" Command="{Binding ConfirmPaymentCommand, Source={x:Reference Root}}"
+                                   IsVisible="{Binding CanConfirm, Source={x:Reference Root}}" />
+                        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+                               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+                        <ui:Button Text="Close" Variant="Ghost" Command="{Binding CloseCommand, Source={x:Reference Root}}" />
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentView>

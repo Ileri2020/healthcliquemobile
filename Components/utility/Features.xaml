@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.Features">
+    <VerticalStackLayout Padding="18" Spacing="12">
+        <Label Text="Why Choose Us" FontSize="26" FontAttributes="Bold"
+               HorizontalTextAlignment="Center"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="12">
+            <ui:Card Title="Fast, Reliable Shipping" Subtitle="Get your essentials delivered with care.">
+                <ui:Card.BodyContent>
+                    <ui:CardContent>
+                        <ui:Label Text="We work to get your order to you promptly and safely." />
+                    </ui:CardContent>
+                </ui:Card.BodyContent>
+            </ui:Card>
+            <ui:Card Grid.Column="1" Title="Secure Checkout" Subtitle="Your information is protected.">
+                <ui:Card.BodyContent>
+                    <ui:CardContent>
+                        <ui:Label Text="A secure, straightforward checkout experience." />
+                    </ui:CardContent>
+                </ui:Card.BodyContent>
+            </ui:Card>
+            <ui:Card Grid.Row="1" Title="Dedicated Support" Subtitle="We're here to help.">
+                <ui:Card.BodyContent>
+                    <ui:CardContent>
+                        <ui:Label Text="Our team can help with orders and product questions." />
+                    </ui:CardContent>
+                </ui:Card.BodyContent>
+            </ui:Card>
+            <ui:Card Grid.Row="1" Grid.Column="1" Title="Quality Guarantee" Subtitle="Shop with confidence.">
+                <ui:Card.BodyContent>
+                    <ui:CardContent>
+                        <ui:Label Text="We carefully select products from trusted suppliers." />
+                    </ui:CardContent>
+                </ui:Card.BodyContent>
+            </ui:Card>
+        </Grid>
+    </VerticalStackLayout>
+</ContentView>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.ProductReviews"
+             x:Name="Root">
+    <VerticalStackLayout Spacing="14">
+        <ui:Card Title="Write a Review">
+            <ui:Card.BodyContent>
+                <VerticalStackLayout Spacing="10">
+                    <HorizontalStackLayout Spacing="4">
+                        <ui:Button Text="★" Variant="{Binding Star1Variant, Source={x:Reference Root}}" Command="{Binding SetRatingCommand, Source={x:Reference Root}}" CommandParameter="1" />
+                        <ui:Button Text="★" Variant="{Binding Star2Variant, Source={x:Reference Root}}" Command="{Binding SetRatingCommand, Source={x:Reference Root}}" CommandParameter="2" />
+                        <ui:Button Text="★" Variant="{Binding Star3Variant, Source={x:Reference Root}}" Command="{Binding SetRatingCommand, Source={x:Reference Root}}" CommandParameter="3" />
+                        <ui:Button Text="★" Variant="{Binding Star4Variant, Source={x:Reference Root}}" Command="{Binding SetRatingCommand, Source={x:Reference Root}}" CommandParameter="4" />
+                        <ui:Button Text="★" Variant="{Binding Star5Variant, Source={x:Reference Root}}" Command="{Binding SetRatingCommand, Source={x:Reference Root}}" CommandParameter="5" />
+                    </HorizontalStackLayout>
+                    <ui:TextArea Placeholder="Share your thoughts about this product..."
+                                 Text="{Binding Comment, Source={x:Reference Root}, Mode=TwoWay}" />
+                    <ui:Button Text="{Binding SubmitText, Source={x:Reference Root}}"
+                               Command="{Binding SubmitCommand, Source={x:Reference Root}}"
+                               IsEnabled="{Binding CanSubmit, Source={x:Reference Root}}" />
+                </VerticalStackLayout>
+            </ui:Card.BodyContent>
+        </ui:Card>
+        <Label Text="{Binding ReviewsTitle, Source={x:Reference Root}}" FontSize="19" FontAttributes="Bold"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+        <ActivityIndicator IsRunning="{Binding IsLoading, Source={x:Reference Root}}"
+                           IsVisible="{Binding IsLoading, Source={x:Reference Root}}" />
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+        <Label Text="No reviews yet. Be the first to share your experience." IsVisible="{Binding IsEmpty, Source={x:Reference Root}}"
+               HorizontalTextAlignment="Center" Padding="12"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+        <CollectionView ItemsSource="{Binding Reviews, Source={x:Reference Root}}" SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <ui:Card>
+                        <ui:Card.BodyContent>
+                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                <Label Text="{Binding AuthorName}" FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                                <Label Grid.Column="1" Text="{Binding DateLabel}" FontSize="11"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                                <Label Grid.Row="1" Text="{Binding Stars}" TextColor="{AppThemeBinding Light={StaticResource ThemeAccentLight}, Dark={StaticResource ThemeAccentDark}}" />
+                                <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding Comment}" Margin="0,6,0,0"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                            </Grid>
+                        </ui:Card.BodyContent>
+                    </ui:Card>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentView>

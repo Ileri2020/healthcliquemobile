@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.CartItem"
+             x:Name="Root">
+    <Border Padding="10" Margin="2"
+            Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+            StrokeShape="RoundRectangle 10"
+            BackgroundColor="{AppThemeBinding Light={StaticResource ThemeSecondaryLight}, Dark={StaticResource ThemeSecondaryDark}}">
+        <Grid ColumnDefinitions="78,*,Auto" ColumnSpacing="10">
+            <Image Source="{Binding ImageUrl, Source={x:Reference Root}}"
+                   WidthRequest="78" HeightRequest="78" Aspect="AspectFill"
+                   BackgroundColor="{AppThemeBinding Light={StaticResource ThemeMutedLight}, Dark={StaticResource ThemeMutedDark}}" />
+            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                <Label Text="{Binding Name, Source={x:Reference Root}}" FontSize="16" FontAttributes="Bold" LineBreakMode="TailTruncation"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeAccentLight}, Dark={StaticResource ThemeAccentDark}}" />
+                <Label Text="{Binding BulkName, Source={x:Reference Root}}" FontSize="11"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                <Label Text="{Binding PriceText, Source={x:Reference Root}}" FontSize="13"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                <HorizontalStackLayout Spacing="6">
+                    <ui:Button Text="+" Variant="Outline" Command="{Binding IncreaseCommand, Source={x:Reference Root}}" />
+                    <Label Text="{Binding Quantity, Source={x:Reference Root}}" VerticalTextAlignment="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                    <ui:Button Text="−" Variant="Outline" Command="{Binding DecreaseCommand, Source={x:Reference Root}}" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+            <VerticalStackLayout Grid.Column="2" Spacing="8">
+                <Label Text="{Binding TotalText, Source={x:Reference Root}}" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                <ui:Button Text="Remove" Variant="Ghost" Command="{Binding RemoveCommand, Source={x:Reference Root}}" />
+            </VerticalStackLayout>
+        </Grid>
+    </Border>
+</ContentView>

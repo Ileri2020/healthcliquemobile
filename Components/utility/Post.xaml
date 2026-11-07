@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.Post"
+             x:Name="Root">
+    <Grid>
+        <ui:Card>
+            <ui:Card.BodyContent>
+                <VerticalStackLayout Spacing="12">
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                        <ui:Avatar WidthRequest="42" HeightRequest="42"
+                                   Source="{Binding AvatarSource, Source={x:Reference Root}}"
+                                   FallbackText="{Binding Post.User.Name, Source={x:Reference Root}}" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="{Binding Post.AuthorName, Source={x:Reference Root}}" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                            <Label Text="{Binding DateCategory, Source={x:Reference Root}}" FontSize="11"
+                                   TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                        </VerticalStackLayout>
+                        <ui:Button Grid.Column="2" Text="Delete" Variant="Ghost"
+                                   IsVisible="{Binding IsAdmin, Source={x:Reference Root}}"
+                                   Command="{Binding DeleteCommand, Source={x:Reference Root}}" />
+                    </Grid>
+                    <Label Text="{Binding Post.Title, Source={x:Reference Root}}" FontSize="19" FontAttributes="Bold"
+                           IsVisible="{Binding HasTitle, Source={x:Reference Root}}"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                    <Image Source="{Binding Post.ContentUrl, Source={x:Reference Root}}" HeightRequest="280" Aspect="AspectFill"
+                           IsVisible="{Binding IsImage, Source={x:Reference Root}}" />
+                    <ui:Button Text="{Binding Post.MediaLabel, Source={x:Reference Root}}" Variant="Outline"
+                               IsVisible="{Binding IsExternalMedia, Source={x:Reference Root}}"
+                               Command="{Binding OpenMediaCommand, Source={x:Reference Root}}" />
+                    <Label Text="{Binding Post.Description, Source={x:Reference Root}}" LineBreakMode="WordWrap"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                    <HorizontalStackLayout Spacing="8">
+                        <ui:Button Text="{Binding LikeButtonText, Source={x:Reference Root}}" Variant="Secondary"
+                                   Command="{Binding LikeCommand, Source={x:Reference Root}}" />
+                        <ui:Button Text="Chat" Variant="Secondary"
+                                   Command="{Binding CommentCommand, Source={x:Reference Root}}" />
+                        <ui:Button Text="Share" Variant="Ghost"
+                                   Command="{Binding ShareCommand, Source={x:Reference Root}}" />
+                    </HorizontalStackLayout>
+                    <Label Text="{Binding StatusMessage, Source={x:Reference Root}}"
+                           IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+                </VerticalStackLayout>
+            </ui:Card.BodyContent>
+        </ui:Card>
+        <ui:Dialog Title="Community Discussion" IsOpen="{Binding IsCommentsOpen, Source={x:Reference Root}}">
+            <ui:Dialog.BodyContent>
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="{Binding CommentsSummary, Source={x:Reference Root}}"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                    <CollectionView ItemsSource="{Binding Comments, Source={x:Reference Root}}"
+                                    MaximumHeightRequest="300" SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="10" Margin="0,3"
+                                        Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                                        StrokeShape="RoundRectangle 10">
+                                    <VerticalStackLayout Spacing="3">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <Label Text="{Binding Username}" FontAttributes="Bold" FontSize="12"
+                                                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                                            <Label Grid.Column="1" Text="{Binding DateLabel}" FontSize="10"
+                                                   TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                                        </Grid>
+                                        <Label Text="{Binding Comment}"
+                                               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <ui:TextArea Placeholder="Contribute to the clinical discussion..."
+                                 Text="{Binding CommentText, Source={x:Reference Root}, Mode=TwoWay}" />
+                    <ui:Button Text="{Binding CommentSubmitText, Source={x:Reference Root}}"
+                               Command="{Binding SubmitCommentCommand, Source={x:Reference Root}}"
+                               IsEnabled="{Binding CanSubmitComment, Source={x:Reference Root}}" />
+                </VerticalStackLayout>
+            </ui:Dialog.BodyContent>
+        </ui:Dialog>
+    </Grid>
+</ContentView>

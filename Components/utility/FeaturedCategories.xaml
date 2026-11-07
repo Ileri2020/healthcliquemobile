@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.FeaturedCategories"
+             x:Name="Root">
+    <VerticalStackLayout Padding="14" Spacing="12">
+        <Grid ColumnDefinitions="*,Auto">
+            <VerticalStackLayout Spacing="2">
+                <Label Text="Shop by Category" FontSize="26" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                <Label Text="Find essentials for your health and wellbeing."
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+            </VerticalStackLayout>
+            <ui:Button Grid.Column="1" Text="Refresh" Variant="Outline" Command="{Binding RefreshCommand, Source={x:Reference Root}}" />
+        </Grid>
+        <ActivityIndicator IsRunning="{Binding IsLoading, Source={x:Reference Root}}"
+                           IsVisible="{Binding IsLoading, Source={x:Reference Root}}"
+                           Color="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+        <CollectionView ItemsSource="{Binding Categories, Source={x:Reference Root}}" HeightRequest="255">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border WidthRequest="225" Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                            StrokeShape="RoundRectangle 14">
+                        <Grid RowDefinitions="*,Auto">
+                            <Image Source="{Binding ImageUrl}" Aspect="AspectFill" />
+                            <VerticalStackLayout Grid.Row="1" Padding="10" Spacing="4"
+                                                 BackgroundColor="{AppThemeBinding Light={StaticResource ThemeSurfaceLight}, Dark={StaticResource ThemeSurfaceDark}}">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" LineBreakMode="TailTruncation"
+                                           TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                                    <ui:Badge Grid.Column="1" Text="{Binding CountText}" />
+                                </Grid>
+                                <Label Text="{Binding Description}" MaxLines="2" FontSize="12"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                                <HorizontalStackLayout IsVisible="{Binding Source={x:Reference Root}, Path=IsAdmin}" Spacing="4">
+                                    <ui:Button Text="Edit" Variant="Outline"
+                                               Command="{Binding Source={x:Reference Root}, Path=EditCommand}"
+                                               CommandParameter="{Binding Category}" />
+                                    <ui:Button Text="Delete" Variant="Destructive"
+                                               Command="{Binding Source={x:Reference Root}, Path=DeleteCommand}"
+                                               CommandParameter="{Binding Category}" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Grid>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={x:Reference Root}, Path=SelectCommand}"
+                                                  CommandParameter="{Binding Category}" />
+                        </Border.GestureRecognizers>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Grid ColumnDefinitions="*,Auto">
+            <Label Text="All Categories" FontSize="20" FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+            <HorizontalStackLayout Grid.Column="1" Spacing="6">
+                <ui:Button Text="Add category" Variant="Outline"
+                           IsVisible="{Binding IsAdmin, Source={x:Reference Root}}"
+                           Command="{Binding NewCommand, Source={x:Reference Root}}" />
+                <ui:Button Text="{Binding ExpandText, Source={x:Reference Root}}" Variant="Ghost"
+                           Command="{Binding ToggleExpandedCommand, Source={x:Reference Root}}" />
+            </HorizontalStackLayout>
+        </Grid>
+        <CollectionView ItemsSource="{Binding VisibleCategories, Source={x:Reference Root}}"
+                        IsVisible="{Binding HasCategories, Source={x:Reference Root}}">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="8" VerticalItemSpacing="8" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="10" Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                            StrokeShape="RoundRectangle 10">
+                        <VerticalStackLayout Spacing="6">
+                            <Image Source="{Binding ImageUrl}" HeightRequest="110" Aspect="AspectFill" />
+                            <Label Text="{Binding Name}" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                            <Label Text="{Binding CountText}" FontSize="12"
+                                   TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                            <ui:Button Text="Browse category" Variant="Outline"
+                                       Command="{Binding Source={x:Reference Root}, Path=SelectCommand}"
+                                       CommandParameter="{Binding Category}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <VerticalStackLayout IsVisible="{Binding IsEditing, Source={x:Reference Root}}" Spacing="8">
+            <Label Text="{Binding EditorTitle, Source={x:Reference Root}}" FontSize="20" FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+            <ui:Input Placeholder="Category name" Text="{Binding EditName, Source={x:Reference Root}, Mode=TwoWay}" />
+            <ui:TextArea Placeholder="Description" Text="{Binding EditDescription, Source={x:Reference Root}, Mode=TwoWay}" />
+            <Label Text="{Binding SelectedFileName, Source={x:Reference Root}}"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+            <HorizontalStackLayout Spacing="8">
+                <ui:Button Text="Choose image" Variant="Outline" Command="{Binding PickImageCommand, Source={x:Reference Root}}" />
+                <ui:Button Text="Save category" Command="{Binding SaveCommand, Source={x:Reference Root}}" />
+                <ui:Button Text="Cancel" Variant="Ghost" Command="{Binding CancelCommand, Source={x:Reference Root}}" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+</ContentView>

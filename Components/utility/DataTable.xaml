@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.DataTable"
+             x:Name="Root">
+    <VerticalStackLayout Spacing="10">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+            <ui:Input Placeholder="Filter rows..."
+                      Text="{Binding SearchText, Source={x:Reference Root}, Mode=TwoWay}" />
+            <ui:Button Grid.Column="1" Text="Clear" Variant="Outline"
+                       Command="{Binding ClearCommand, Source={x:Reference Root}}" />
+        </Grid>
+        <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Always">
+            <HorizontalStackLayout BindableLayout.ItemsSource="{Binding Columns, Source={x:Reference Root}}"
+                                   Spacing="1"
+                                   BackgroundColor="{AppThemeBinding Light={StaticResource ThemeMutedLight}, Dark={StaticResource ThemeMutedDark}}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <ui:Button Text="{Binding Title}"
+                                   Variant="Secondary"
+                                   Command="{Binding Source={x:Reference Root}, Path=SortCommand}"
+                                   CommandParameter="{Binding .}" />
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </HorizontalStackLayout>
+        </ScrollView>
+        <CollectionView ItemsSource="{Binding PageRows, Source={x:Reference Root}}"
+                        SelectionMode="None"
+                        MaximumHeightRequest="620">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="8" Margin="0,1"
+                            Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                            StrokeShape="RoundRectangle 6">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={x:Reference Root}, Path=SelectRowCommand}"
+                                                  CommandParameter="{Binding .}" />
+                        </Border.GestureRecognizers>
+                        <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                            <HorizontalStackLayout BindableLayout.ItemsSource="{Binding Cells}" Spacing="14">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label Text="{Binding Text}" WidthRequest="150" LineBreakMode="TailTruncation"
+                                               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </HorizontalStackLayout>
+                        </ScrollView>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+            <ui:Button Text="Previous" Variant="Outline"
+                       Command="{Binding PreviousCommand, Source={x:Reference Root}}"
+                       IsEnabled="{Binding CanGoPrevious, Source={x:Reference Root}}" />
+            <Label Grid.Column="1" Text="{Binding PageSummary, Source={x:Reference Root}}"
+                   VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+            <ui:Button Grid.Column="2" Text="Next" Variant="Outline"
+                       Command="{Binding NextCommand, Source={x:Reference Root}}"
+                       IsEnabled="{Binding CanGoNext, Source={x:Reference Root}}" />
+        </Grid>
+    </VerticalStackLayout>
+</ContentView>

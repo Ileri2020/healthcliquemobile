@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.SnapPrescription"
+             x:Name="Root">
+    <VerticalStackLayout Spacing="8">
+        <ui:Button Text="{Binding TriggerText, Source={x:Reference Root}}"
+                   IsVisible="{Binding ShowTrigger, Source={x:Reference Root}}"
+                   Command="{Binding OpenCommand, Source={x:Reference Root}}" />
+        <ui:Dialog IsOpen="{Binding IsOpen, Source={x:Reference Root}, Mode=TwoWay}" Title="Snap Prescription">
+            <ui:Dialog.BodyContent>
+                <ScrollView HeightRequest="560">
+                    <VerticalStackLayout Spacing="12">
+                        <HorizontalStackLayout Spacing="8">
+                            <ui:Button Text="Camera" Variant="Outline" Command="{Binding CaptureCommand, Source={x:Reference Root}}" />
+                            <ui:Button Text="Upload image" Variant="Outline" Command="{Binding PickImageCommand, Source={x:Reference Root}}" />
+                            <ui:Button Text="Remove image" Variant="Ghost"
+                                       IsVisible="{Binding HasImage, Source={x:Reference Root}}"
+                                       Command="{Binding RemoveImageCommand, Source={x:Reference Root}}" />
+                        </HorizontalStackLayout>
+                        <Image Source="{Binding ImagePath, Source={x:Reference Root}}" HeightRequest="160" Aspect="AspectFit"
+                               IsVisible="{Binding HasImage, Source={x:Reference Root}}" />
+                        <ui:TextArea Placeholder="Or type your prescription or product list"
+                                     Text="{Binding ManualText, Source={x:Reference Root}, Mode=TwoWay}"
+                                     MinimumHeightRequest="90" />
+                        <ui:Button Text="{Binding IdentifyText, Source={x:Reference Root}}"
+                                   Command="{Binding ProcessCommand, Source={x:Reference Root}}" />
+                        <ActivityIndicator IsRunning="{Binding IsLoading, Source={x:Reference Root}}"
+                                           IsVisible="{Binding IsLoading, Source={x:Reference Root}}" />
+                        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+                               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Groups, Source={x:Reference Root}}" Spacing="12">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <ui:Card Title="{Binding Name}" Subtitle="{Binding RequestSummary}">
+                                        <ui:Card.BodyContent>
+                                            <VerticalStackLayout Spacing="8">
+                                                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Options}" Spacing="6">
+                                                    <BindableLayout.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Padding="8"
+                                                                    Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                                                                    StrokeShape="RoundRectangle 8">
+                                                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                                                                    <ui:CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                                                                 IsVisible="{Binding HasOptions}" />
+                                                                    <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                                        <Label Text="{Binding Name}" FontAttributes="Bold"
+                                                                               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                                                                        <Label Text="{Binding Details}" FontSize="11"
+                                                                               TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                                                                    </VerticalStackLayout>
+                                                                    <Label Grid.Column="2" Text="{Binding PriceText}" FontAttributes="Bold"
+                                                                           TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                                                                </Grid>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </BindableLayout.ItemTemplate>
+                                                </VerticalStackLayout>
+                                                <ui:Button Text="{Binding SpecialButtonText}"
+                                                           Variant="Outline"
+                                                           IsVisible="{Binding ShowSpecialOption}"
+                                                           Command="{Binding Source={x:Reference Root}, Path=SelectSpecialCommand}"
+                                                           CommandParameter="{Binding .}" />
+                                            </VerticalStackLayout>
+                                        </ui:Card.BodyContent>
+                                    </ui:Card>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                        <HorizontalStackLayout Spacing="8" IsVisible="{Binding HasGroups, Source={x:Reference Root}}">
+                            <ui:Button Text="Reset" Variant="Outline" Command="{Binding ResetCommand, Source={x:Reference Root}}" />
+                            <ui:Button Text="Add selected to cart"
+                                       Command="{Binding AddSelectedCommand, Source={x:Reference Root}}" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </ui:Dialog.BodyContent>
+        </ui:Dialog>
+    </VerticalStackLayout>
+</ContentView>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.NotificationUI"
+             x:Name="Root">
+    <VerticalStackLayout Spacing="8">
+        <HorizontalStackLayout Spacing="6">
+            <ui:Button Text="Messages"
+                       Variant="Ghost"
+                       Command="{Binding OpenChatCommand, Source={x:Reference Root}}" />
+            <ui:Badge Text="{Binding UnreadBadgeText, Source={x:Reference Root}}"
+                      IsVisible="{Binding HasUnread, Source={x:Reference Root}}" />
+        </HorizontalStackLayout>
+        <ui:Card IsVisible="{Binding IsToastVisible, Source={x:Reference Root}}">
+            <ui:Card.BodyContent>
+                <VerticalStackLayout Spacing="10">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Spacing="3">
+                            <Label Text="New Messages!" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                            <Label Text="{Binding ToastMessage, Source={x:Reference Root}}"
+                                   TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                        </VerticalStackLayout>
+                        <ui:Button Grid.Column="1" Text="×" Variant="Ghost"
+                                   Command="{Binding DismissCommand, Source={x:Reference Root}}" />
+                    </Grid>
+                    <ui:Button Text="Open Chat Section" Variant="Secondary"
+                               Command="{Binding OpenChatCommand, Source={x:Reference Root}}" />
+                </VerticalStackLayout>
+            </ui:Card.BodyContent>
+        </ui:Card>
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}"
+               IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+    </VerticalStackLayout>
+</ContentView>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.AdminUserManager"
+             x:Name="Root">
+    <VerticalStackLayout Spacing="12" IsVisible="{Binding IsAdmin, Source={x:Reference Root}}">
+        <Label Text="User management" FontSize="20" FontAttributes="Bold"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+        <ui:Input Placeholder="Search by name or email" Text="{Binding SearchText, Source={x:Reference Root}, Mode=TwoWay}" />
+        <ui:Button Text="Refresh users" Variant="Outline" Command="{Binding RefreshCommand, Source={x:Reference Root}}" IsEnabled="{Binding CanRefresh, Source={x:Reference Root}}" />
+        <CollectionView ItemsSource="{Binding FilteredUsers, Source={x:Reference Root}}"
+                        SelectedItem="{Binding SelectedUser, Source={x:Reference Root}, Mode=TwoWay}"
+                        SelectionMode="Single"
+                        HeightRequest="280">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="10" Margin="2"
+                            Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                            StrokeShape="RoundRectangle 10"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource ThemeSurfaceLight}, Dark={StaticResource ThemeSurfaceDark}}">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                            <ui:Avatar FallbackText="{Binding Name}" Size="40" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                                <Label Text="{Binding Email}" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                                <Label Text="{Binding Role}" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <VerticalStackLayout IsVisible="{Binding HasSelectedUser, Source={x:Reference Root}}" Spacing="10">
+            <Label Text="{Binding SelectedUser.Name, Source={x:Reference Root}}" FontSize="18" FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+            <Picker Title="Role" ItemsSource="{Binding Roles, Source={x:Reference Root}}" SelectedItem="{Binding EditRole, Source={x:Reference Root}, Mode=TwoWay}" />
+            <Picker Title="Verification status" ItemsSource="{Binding VerificationStatuses, Source={x:Reference Root}}" SelectedItem="{Binding EditVerificationStatus, Source={x:Reference Root}, Mode=TwoWay}" />
+            <ui:Button Text="Save user changes" Command="{Binding SaveCommand, Source={x:Reference Root}}" IsEnabled="{Binding CanSave, Source={x:Reference Root}}" />
+        </VerticalStackLayout>
+        <ActivityIndicator IsRunning="{Binding IsLoading, Source={x:Reference Root}}" IsVisible="{Binding IsLoading, Source={x:Reference Root}}" Color="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+    </VerticalStackLayout>
+</ContentView>

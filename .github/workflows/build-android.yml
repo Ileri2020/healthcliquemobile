@@ -1,0 +1,64 @@
+name: Build Android
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-android:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4.0.4
+
+      - name: Install Android SDK Platform 36 and Build Tools
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Install .NET MAUI Android workload
+        run: dotnet workload install maui-android
+
+      - name: Publish Android APK
+        run: >-
+          dotnet publish EEE.csproj
+          -f net10.0-android
+          -c Release
+          --artifacts-path Platforms/dist
+          -p:PublishReadyToRun=false
+          -p:PublishTrimmed=false
+          -p:RunAOTCompilation=false
+          -p:AndroidPackageFormats=apk
+          -p:RuntimeIdentifier=android-arm64
+
+      - name: Prepare Android APK
+        run: |
+          mkdir -p Platforms/dist
+          SIGNED_APK=$(find Platforms/dist -type f -name "*-Signed.apk" -print -quit)
+          if [ -z "$SIGNED_APK" ]; then
+            echo "Error: Signed APK not found in publish output"
+            exit 1
+          fi
+          cp "$SIGNED_APK" Platforms/dist/HealthClique.apk
+
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: healthclique-android
+          path: Platforms/dist/HealthClique.apk
+          if-no-files-found: error

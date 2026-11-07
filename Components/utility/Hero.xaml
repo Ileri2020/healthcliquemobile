@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             xmlns:utility="clr-namespace:EEE.Components.Utility"
+             x:Class="EEE.Components.Utility.Hero"
+             x:Name="Root">
+    <Grid x:Name="HeroGrid" RowDefinitions="Auto,Auto" ColumnDefinitions="*,*"
+          ColumnSpacing="20" RowSpacing="16" Padding="16">
+        <VerticalStackLayout x:Name="HeroCopy" Grid.RowSpan="2" Spacing="16" VerticalOptions="Center">
+            <Image Source="healthclique-logo.svg" HeightRequest="48" HorizontalOptions="Start" Aspect="AspectFit" />
+            <ui:Badge Text="NAFDAC Approved Pharmacy" />
+            <Label Text="{Binding RotatingMessage, Source={x:Reference Root}}"
+                   FontSize="20" FontAttributes="Bold,Italic"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeAccentLight}, Dark={StaticResource ThemeAccentDark}}" />
+            <Label Text="With a click, get your Premium Medical Supplies"
+                   FontSize="32" FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+            <Label Text="Order authentic medications, pharmaceutical products, and medical equipment at the lowest prices, delivered to your doorstep."
+                   FontSize="16"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+            <utility:GlobalSearch x:Name="HeroSearch"
+                                  ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference Root}}"
+                                  UserRole="{Binding UserRole, Source={x:Reference Root}}"
+                                  Placeholder="Search medications, brands or ingredients..." />
+            <FlexLayout Wrap="Wrap" Direction="Row" AlignItems="Center">
+                <ui:Button Text="Shop All Meds" Command="{Binding NavigateCommand, Source={x:Reference Root}}" CommandParameter="/store" />
+                <ui:Button Text="Snap or List Prescription" Variant="Outline"
+                           Command="{Binding PrescriptionCommand, Source={x:Reference Root}}" />
+                <ui:Button Text="Speak to the Pharmacist" Variant="Outline"
+                           Command="{Binding ContactCommand, Source={x:Reference Root}}" />
+                <ui:Button Text="Order Scarce / Special Meds" Variant="Secondary"
+                           Command="{Binding SpecialOrderCommand, Source={x:Reference Root}}" />
+            </FlexLayout>
+            <HorizontalStackLayout Spacing="8">
+                <Label Text="Doorstep Delivery (1-4 hrs)"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                <ui:Button Text="Talk to a Pharmacist" Variant="Ghost"
+                           Command="{Binding ContactCommand, Source={x:Reference Root}}" />
+            </HorizontalStackLayout>
+            <ui:Card Title="Call to Order" Subtitle="+234 818 876 2448">
+                <ui:Card.FooterContent>
+                    <ui:Button Text="Call now" Variant="Outline" Command="{Binding CallCommand, Source={x:Reference Root}}" />
+                </ui:Card.FooterContent>
+            </ui:Card>
+        </VerticalStackLayout>
+        <Grid x:Name="HeroImagePanel" Grid.Column="1" RowDefinitions="*,Auto" RowSpan="2" IsVisible="{Binding HasHeroImage, Source={x:Reference Root}}">
+            <Border Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                    StrokeThickness="6" StrokeShape="RoundRectangle 24">
+                <Image Source="{Binding HeroImageUrl, Source={x:Reference Root}}" Aspect="AspectFill" />
+            </Border>
+            <ui:Card Grid.Row="1" Title="Quality Guaranteed" Subtitle="100% Authentic"
+                     Margin="0,-20,0,0" HorizontalOptions="Start" />
+        </Grid>
+        <ui:Dialog Grid.ColumnSpan="2" Grid.RowSpan="2"
+                   Title="Login required"
+                   IsOpen="{Binding IsLoginPromptOpen, Source={x:Reference Root}}">
+            <ui:Dialog.BodyContent>
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Log in to chat directly with our expert pharmacists."
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                    <ui:Button Text="Sign in to continue" Command="{Binding NavigateCommand, Source={x:Reference Root}}" CommandParameter="/account" />
+                </VerticalStackLayout>
+            </ui:Dialog.BodyContent>
+        </ui:Dialog>
+    </Grid>
+</ContentView>

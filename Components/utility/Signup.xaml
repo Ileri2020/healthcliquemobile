@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.Signup"
+             x:Name="Root">
+    <VerticalStackLayout Padding="14" Spacing="12">
+        <Label Text="Create an account with HealthClique" FontSize="22" FontAttributes="Bold"
+               HorizontalTextAlignment="Center"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+        <ui:Input Placeholder="Full name" Text="{Binding Name, Source={x:Reference Root}, Mode=TwoWay}" />
+        <ui:Input Placeholder="Email address" Keyboard="Email" Text="{Binding Email, Source={x:Reference Root}, Mode=TwoWay}" />
+        <ui:Input Placeholder="Password (at least 8 characters)" IsPassword="True"
+                  Text="{Binding Password, Source={x:Reference Root}, Mode=TwoWay}" />
+        <Label Text="Account type" FontAttributes="Bold"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+        <FlexLayout Wrap="Wrap">
+            <ui:Button Text="Customer" Margin="2" Variant="{Binding CustomerVariant, Source={x:Reference Root}}"
+                       Command="{Binding SelectRoleCommand, Source={x:Reference Root}}" CommandParameter="customer" />
+            <ui:Button Text="Healthcare professional" Margin="2" Variant="{Binding ProfessionalVariant, Source={x:Reference Root}}"
+                       Command="{Binding SelectRoleCommand, Source={x:Reference Root}}" CommandParameter="professional" />
+            <ui:Button Text="Wholesaler / facility" Margin="2" Variant="{Binding WholesalerVariant, Source={x:Reference Root}}"
+                       Command="{Binding SelectRoleCommand, Source={x:Reference Root}}" CommandParameter="wholesaler" />
+        </FlexLayout>
+        <VerticalStackLayout IsVisible="{Binding IsProfessional, Source={x:Reference Root}}" Spacing="8">
+            <Label Text="Professional registration" FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+            <ui:Select Title="Professional type" ItemsSource="{Binding ProfessionalTypes, Source={x:Reference Root}}"
+                       SelectedItem="{Binding ProfessionalType, Source={x:Reference Root}, Mode=TwoWay}" />
+            <ui:Input Placeholder="Registration number" Text="{Binding RegNumber, Source={x:Reference Root}, Mode=TwoWay}" />
+        </VerticalStackLayout>
+        <VerticalStackLayout IsVisible="{Binding IsWholesaler, Source={x:Reference Root}}" Spacing="8">
+            <Label Text="Facility details" FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+            <ui:Input Placeholder="Facility / company name" Text="{Binding FacilityName, Source={x:Reference Root}, Mode=TwoWay}" />
+            <ui:Input Placeholder="Facility address" Text="{Binding FacilityAddress, Source={x:Reference Root}, Mode=TwoWay}" />
+            <ui:Input Placeholder="Facility registration number" Text="{Binding FacilityRegNumber, Source={x:Reference Root}, Mode=TwoWay}" />
+        </VerticalStackLayout>
+        <ui:Button Text="{Binding SubmitText, Source={x:Reference Root}}" Command="{Binding SubmitCommand, Source={x:Reference Root}}"
+                   IsEnabled="{Binding CanSubmit, Source={x:Reference Root}}" />
+        <ui:Button Text="Continue with Google" Variant="Outline"
+                   Command="{Binding GoogleSignInCommand, Source={x:Reference Root}}" />
+        <ui:Button Text="Already have an account? Login" Variant="Ghost"
+                   Command="{Binding LoginCommand, Source={x:Reference Root}}" />
+        <ActivityIndicator IsRunning="{Binding IsSubmitting, Source={x:Reference Root}}"
+                           IsVisible="{Binding IsSubmitting, Source={x:Reference Root}}" />
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasError, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasSuccess, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeAccentLight}, Dark={StaticResource ThemeAccentDark}}" />
+    </VerticalStackLayout>
+</ContentView>

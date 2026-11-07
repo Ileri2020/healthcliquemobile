@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.HeavilyDiscountedCarousel"
+             x:Name="Root">
+    <VerticalStackLayout Padding="14" Spacing="12"
+                         IsVisible="{Binding ShouldShow, Source={x:Reference Root}}"
+                         BackgroundColor="{AppThemeBinding Light={StaticResource ThemeAccentLight}, Dark={StaticResource ThemeAccentDark}}">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="RAPID SALE" FontSize="13" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeAccentForegroundLight}, Dark={StaticResource ThemeAccentForegroundDark}}" />
+                <Label Text="Flash Deals &amp; Clearances" FontSize="30" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                <Label Text="Authentic medical supplies at clearance prices. Limited quantities available — move fast!"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+            </VerticalStackLayout>
+            <VerticalStackLayout Grid.Column="1" Spacing="8">
+                <ui:Button Text="View All Deals" Variant="Ghost"
+                           Command="{Binding NavigateCommand, Source={x:Reference Root}}"
+                           CommandParameter="/store?discounted=true" />
+                <ui:Button Text="List for Rapid Sale"
+                           IsVisible="{Binding IsProfessional, Source={x:Reference Root}}"
+                           Command="{Binding OpenManageCommand, Source={x:Reference Root}}" />
+            </VerticalStackLayout>
+        </Grid>
+        <ActivityIndicator IsRunning="{Binding IsLoading, Source={x:Reference Root}}"
+                           IsVisible="{Binding IsLoading, Source={x:Reference Root}}"
+                           Color="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}"
+               IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+        <CollectionView ItemsSource="{Binding RowOne, Source={x:Reference Root}}"
+                        IsVisible="{Binding HasDisplayItems, Source={x:Reference Root}}"
+                        HeightRequest="340">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="16" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid WidthRequest="260">
+                        <ui:Card Title="{Binding Name}" Subtitle="{Binding PriceText}">
+                            <ui:Card.BodyContent>
+                                <VerticalStackLayout Spacing="6">
+                                    <Image Source="{Binding ImageUrl}" HeightRequest="150" Aspect="AspectFill" />
+                                    <Label Text="{Binding Description}" MaxLines="2" LineBreakMode="TailTruncation"
+                                           TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                                    <ui:Badge Text="{Binding ApprovalText}"
+                                              IsVisible="{Binding IsPending}" />
+                                    <ui:Button Text="View product" Variant="Ghost"
+                                               Command="{Binding Source={x:Reference Root}, Path=SelectProductCommand}"
+                                               CommandParameter="{Binding Product}" />
+                                    <HorizontalStackLayout Spacing="6"
+                                                           IsVisible="{Binding Source={x:Reference Root}, Path=IsAdmin}">
+                                        <ui:Button Text="Approve" Variant="Outline"
+                                                   Command="{Binding Source={x:Reference Root}, Path=ApproveCommand}"
+                                                   CommandParameter="{Binding Item}" />
+                                        <ui:Button Text="Remove" Variant="Destructive"
+                                                   Command="{Binding Source={x:Reference Root}, Path=DeleteCommand}"
+                                                   CommandParameter="{Binding Item}" />
+                                    </HorizontalStackLayout>
+                                    <ui:Button Text="Remove my listing" Variant="Outline"
+                                               IsVisible="{Binding IsCreator}"
+                                               Command="{Binding Source={x:Reference Root}, Path=DeleteCommand}"
+                                               CommandParameter="{Binding Item}" />
+                                </VerticalStackLayout>
+                            </ui:Card.BodyContent>
+                        </ui:Card>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <CollectionView ItemsSource="{Binding RowTwo, Source={x:Reference Root}}"
+                        IsVisible="{Binding HasDisplayItems, Source={x:Reference Root}}"
+                        HeightRequest="340">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="16" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid WidthRequest="260">
+                        <ui:Card Title="{Binding Name}" Subtitle="{Binding PriceText}">
+                            <ui:Card.BodyContent>
+                                <VerticalStackLayout Spacing="6">
+                                    <Image Source="{Binding ImageUrl}" HeightRequest="150" Aspect="AspectFill" />
+                                    <Label Text="{Binding Description}" MaxLines="2" LineBreakMode="TailTruncation"
+                                           TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                                    <ui:Badge Text="{Binding ApprovalText}" IsVisible="{Binding IsPending}" />
+                                    <ui:Button Text="View product" Variant="Ghost"
+                                               Command="{Binding Source={x:Reference Root}, Path=SelectProductCommand}"
+                                               CommandParameter="{Binding Product}" />
+                                    <HorizontalStackLayout Spacing="6"
+                                                           IsVisible="{Binding Source={x:Reference Root}, Path=IsAdmin}">
+                                        <ui:Button Text="Approve" Variant="Outline"
+                                                   Command="{Binding Source={x:Reference Root}, Path=ApproveCommand}"
+                                                   CommandParameter="{Binding Item}" />
+                                        <ui:Button Text="Remove" Variant="Destructive"
+                                                   Command="{Binding Source={x:Reference Root}, Path=DeleteCommand}"
+                                                   CommandParameter="{Binding Item}" />
+                                    </HorizontalStackLayout>
+                                    <ui:Button Text="Remove my listing" Variant="Outline"
+                                               IsVisible="{Binding IsCreator}"
+                                               Command="{Binding Source={x:Reference Root}, Path=DeleteCommand}"
+                                               CommandParameter="{Binding Item}" />
+                                </VerticalStackLayout>
+                            </ui:Card.BodyContent>
+                        </ui:Card>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Label Text="No products in flash deal currently. Professionals can add products above."
+               IsVisible="{Binding ShowEmptyMessage, Source={x:Reference Root}}"
+               HorizontalTextAlignment="Center" FontAttributes="Italic"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+        <ui:Dialog Title="Rapid Sale Manager" IsOpen="{Binding IsManageOpen, Source={x:Reference Root}}">
+            <ui:Dialog.BodyContent>
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Search for a product to add it to the rapid sale review list."
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                    <ui:Input Placeholder="Filter available products..."
+                              Text="{Binding ProductSearch, Source={x:Reference Root}, Mode=TwoWay}" />
+                    <CollectionView ItemsSource="{Binding ProductOptions, Source={x:Reference Root}}" HeightRequest="240">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,Auto" Padding="6" ColumnSpacing="8">
+                                    <Label Text="{Binding Name}" FontSize="13" FontAttributes="Bold"
+                                           VerticalTextAlignment="Center"
+                                           TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                                    <ui:Button Grid.Column="1" Text="{Binding AddText}"
+                                               Variant="Outline"
+                                               IsEnabled="{Binding CanAdd}"
+                                               Command="{Binding Source={x:Reference Root}, Path=AddProductCommand}"
+                                               CommandParameter="{Binding Product}" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <ui:Button Text="Previous" Variant="Ghost"
+                                   IsEnabled="{Binding CanGoPrevious, Source={x:Reference Root}}"
+                                   Command="{Binding PreviousProductsCommand, Source={x:Reference Root}}" />
+                        <Label Grid.Column="1" Text="{Binding ProductPageText, Source={x:Reference Root}}"
+                               HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                               TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                        <ui:Button Grid.Column="2" Text="Next" Variant="Ghost"
+                                   IsEnabled="{Binding CanGoNext, Source={x:Reference Root}}"
+                                   Command="{Binding NextProductsCommand, Source={x:Reference Root}}" />
+                    </Grid>
+                    <Label Text="Your Submissions" FontSize="14" FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                    <CollectionView ItemsSource="{Binding MySubmissions, Source={x:Reference Root}}" HeightRequest="160">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,Auto" Padding="6" ColumnSpacing="6">
+                                    <VerticalStackLayout Spacing="2">
+                                        <Label Text="{Binding Name}" FontSize="12" FontAttributes="Bold"
+                                               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                                        <Label Text="{Binding StatusText}" FontSize="11"
+                                               TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                                    </VerticalStackLayout>
+                                    <ui:Button Grid.Column="1" Text="Remove" Variant="Ghost"
+                                               Command="{Binding Source={x:Reference Root}, Path=DeleteCommand}"
+                                               CommandParameter="{Binding Item}" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <ui:Button Text="Close" Variant="Ghost" Command="{Binding CloseManageCommand, Source={x:Reference Root}}" />
+                </VerticalStackLayout>
+            </ui:Dialog.BodyContent>
+        </ui:Dialog>
+    </VerticalStackLayout>
+</ContentView>

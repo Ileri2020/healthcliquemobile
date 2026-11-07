@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.TermsAgreements"
+             x:Name="Root">
+    <Border IsVisible="{Binding HasUser, Source={x:Reference Root}}"
+            Padding="14" Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+            StrokeShape="RoundRectangle 12"
+            BackgroundColor="{AppThemeBinding Light={StaticResource ThemeMutedLight}, Dark={StaticResource ThemeMutedDark}}">
+        <VerticalStackLayout Spacing="10">
+            <Label Text="Please review our policies" FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+            <Label Text="By continuing, you acknowledge our operations format. Check the boxes below to agree. Review the Terms &amp; Conditions and Privacy Policy on the HealthClique website."
+                   FontSize="12"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+            <HorizontalStackLayout Spacing="8">
+                <ui:Button Text="Terms &amp; Conditions" Variant="Ghost"
+                           Command="{Binding OpenTermsCommand, Source={x:Reference Root}}" />
+                <ui:Button Text="Privacy Policy" Variant="Ghost"
+                           Command="{Binding OpenPrivacyCommand, Source={x:Reference Root}}" />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Spacing="10">
+                <ui:CheckBox IsChecked="{Binding AcceptedTerms, Source={x:Reference Root}, Mode=TwoWay}"
+                             IsEnabled="{Binding CanToggle, Source={x:Reference Root}}" />
+                <Label Text="I agree to the Terms &amp; Conditions. HealthClique facilitates access but does not replace professional medical diagnosis."
+                       FontSize="12" VerticalOptions="Center" HorizontalOptions="Fill" />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Spacing="10">
+                <ui:CheckBox IsChecked="{Binding AcceptedPrivacy, Source={x:Reference Root}, Mode=TwoWay}"
+                             IsEnabled="{Binding CanToggle, Source={x:Reference Root}}" />
+                <Label Text="I agree to the Privacy Policy and consent to careful handling of my personal and health-related data."
+                       FontSize="12" VerticalOptions="Center" HorizontalOptions="Fill" />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Spacing="10">
+                <ui:CheckBox IsChecked="{Binding AcceptedReturns, Source={x:Reference Root}, Mode=TwoWay}"
+                             IsEnabled="{Binding CanToggle, Source={x:Reference Root}}" />
+                <Label Text="I agree to the Returns Policy. Medicines are generally non-returnable once dispensed."
+                       FontSize="12" VerticalOptions="Center" HorizontalOptions="Fill" />
+            </HorizontalStackLayout>
+            <ActivityIndicator IsRunning="{Binding IsLoading, Source={x:Reference Root}}"
+                               IsVisible="{Binding IsLoading, Source={x:Reference Root}}" />
+            <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+        </VerticalStackLayout>
+    </Border>
+</ContentView>

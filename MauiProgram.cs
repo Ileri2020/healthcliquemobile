@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using EEE.App.Pages;
 using EEE.ViewModels;
 using UraniumUI;
 
@@ -20,7 +21,7 @@ public static class MauiProgram
 			});
 
 		builder.Services.AddSingleton<MainViewModel>();
-		builder.Services.AddSingleton<MainPage>();
+		builder.Services.AddSingleton<HomePage>();
 		builder.Services.AddSingleton<AppShell>();
 
 #if DEBUG

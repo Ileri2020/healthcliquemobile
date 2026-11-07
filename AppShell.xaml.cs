@@ -1,15 +1,19 @@
+using EEE.App.Pages;
+
 namespace EEE;
 
 public partial class AppShell : Shell
 {
-	public AppShell(MainPage mainPage)
+	public AppShell(HomePage homePage)
 	{
 		InitializeComponent();
+		Routing.RegisterRoute("store", typeof(StorePage));
+		Routing.RegisterRoute("product", typeof(ProductDetailsPage));
 		Items.Add(new ShellContent
 		{
 			Title = "Home",
-			Route = "MainPage",
-			Content = mainPage
+			Route = "home",
+			Content = homePage
 		});
 	}
 }

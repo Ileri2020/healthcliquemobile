@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.CartDetails"
+             x:Name="Root">
+    <VerticalStackLayout Spacing="12" Padding="12">
+        <ActivityIndicator IsRunning="{Binding IsLoading, Source={x:Reference Root}}" IsVisible="{Binding IsLoading, Source={x:Reference Root}}"
+                           Color="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+        <VerticalStackLayout IsVisible="{Binding HasCart, Source={x:Reference Root}}" Spacing="10">
+            <HorizontalStackLayout Spacing="8">
+                <ui:Input Placeholder="Cart name" Text="{Binding CartName, Source={x:Reference Root}, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+                <ui:Button Text="Save name" Variant="Outline" Command="{Binding SaveNameCommand, Source={x:Reference Root}}" />
+            </HorizontalStackLayout>
+            <ui:Badge Text="{Binding Status, Source={x:Reference Root}}" />
+            <Image Source="{Binding PrescriptionUrl, Source={x:Reference Root}}" Aspect="AspectFit" HeightRequest="180"
+                   IsVisible="{Binding HasPrescription, Source={x:Reference Root}}" />
+            <Label Text="Delivery address" FontAttributes="Bold" IsVisible="{Binding CanCheckout, Source={x:Reference Root}}" />
+            <Picker Title="Select a delivery address"
+                    ItemsSource="{Binding Addresses, Source={x:Reference Root}}"
+                    ItemDisplayBinding="{Binding DisplayText}"
+                    SelectedItem="{Binding SelectedAddress, Source={x:Reference Root}, Mode=TwoWay}"
+                    IsVisible="{Binding CanCheckout, Source={x:Reference Root}}" />
+            <Label Text="Order items" FontSize="20" FontAttributes="Bold" />
+            <CollectionView ItemsSource="{Binding Items, Source={x:Reference Root}}" MaximumHeightRequest="360">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Padding="10" Margin="2"
+                                Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                                StrokeShape="RoundRectangle 10">
+                            <Grid ColumnDefinitions="64,*,Auto" ColumnSpacing="10">
+                                <Image Source="{Binding Product.Images[0]}" WidthRequest="64" HeightRequest="64" Aspect="AspectFill" />
+                                <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                    <Label Text="{Binding DisplayName}" FontAttributes="Bold" />
+                                    <Label Text="{Binding Quantity, StringFormat='Quantity: {0}'}" FontSize="12"
+                                           TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                                </VerticalStackLayout>
+                                <Label Grid.Column="2" Text="{Binding LineTotalText}" VerticalTextAlignment="Center" FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <VerticalStackLayout IsVisible="{Binding IsAdmin, Source={x:Reference Root}}" Spacing="8">
+                <ui:TextArea Placeholder="Pharmacist dosage instructions and notes"
+                             Text="{Binding PharmacistSummary, Source={x:Reference Root}, Mode=TwoWay}" />
+                <ui:Button Text="Save pharmacist summary" Variant="Outline" Command="{Binding SaveSummaryCommand, Source={x:Reference Root}}" />
+            </VerticalStackLayout>
+            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="5">
+                <Label Text="Subtotal" />
+                <Label Grid.Column="1" Text="{Binding SubtotalText, Source={x:Reference Root}}" />
+                <Label Grid.Row="1" Text="Delivery" />
+                <Label Grid.Row="1" Grid.Column="1" Text="{Binding DeliveryText, Source={x:Reference Root}}" />
+                <Label Grid.Row="2" Text="Total" FontAttributes="Bold" FontSize="18" />
+                <Label Grid.Row="2" Grid.Column="1" Text="{Binding TotalText, Source={x:Reference Root}}" FontAttributes="Bold" FontSize="18" />
+            </Grid>
+            <ui:Button Text="Checkout / payment" Command="{Binding CheckoutCommand, Source={x:Reference Root}}" IsEnabled="{Binding CanCheckout, Source={x:Reference Root}}" />
+            <Label Text="{Binding CheckoutSummary, Source={x:Reference Root}}" IsVisible="{Binding HasCheckout, Source={x:Reference Root}}" />
+            <ui:Button Text="Confirm payment result" Variant="Outline" Command="{Binding ConfirmPaymentCommand, Source={x:Reference Root}}" IsVisible="{Binding HasCheckout, Source={x:Reference Root}}" />
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+</ContentView>

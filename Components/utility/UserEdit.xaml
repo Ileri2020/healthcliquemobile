@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.UserEdit"
+             x:Name="Root">
+    <VerticalStackLayout Spacing="8">
+        <ui:Button Text="Edit Profile" Command="{Binding OpenCommand, Source={x:Reference Root}}" />
+        <ui:Drawer IsOpen="{Binding IsOpen, Source={x:Reference Root}, Mode=TwoWay}"
+                   Title="Edit Profile — HealthClique" DrawerWidth="480">
+            <ui:Drawer.BodyContent>
+                <ScrollView HeightRequest="650">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Personal Information" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                        <ui:Label Text="Full Name" />
+                        <ui:Input Placeholder="Full name" Text="{Binding Name, Source={x:Reference Root}, Mode=TwoWay}" />
+                        <ui:Label Text="Email Address" />
+                        <ui:Input Placeholder="Email" Keyboard="Email" Text="{Binding Email, Source={x:Reference Root}, Mode=TwoWay}" />
+                        <ui:Label Text="Phone / Contact" />
+                        <ui:Input Placeholder="Phone number" Text="{Binding Contact, Source={x:Reference Root}, Mode=TwoWay}" />
+                        <ui:Input Placeholder="Avatar image URL" Text="{Binding AvatarUrl, Source={x:Reference Root}, Mode=TwoWay}" />
+                        <VerticalStackLayout Spacing="8" IsVisible="{Binding IsProfessional, Source={x:Reference Root}}">
+                            <Label Text="Professional Verification" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                            <ui:Select Title="Professional type"
+                                       ItemsSource="{Binding ProfessionalTypes, Source={x:Reference Root}}"
+                                       SelectedItem="{Binding ProfessionalType, Source={x:Reference Root}, Mode=TwoWay}" />
+                            <ui:Input Placeholder="Registration number" Text="{Binding RegNumber, Source={x:Reference Root}, Mode=TwoWay}" />
+                            <ui:Input Placeholder="Practice license image URL" Text="{Binding LicenseImage, Source={x:Reference Root}, Mode=TwoWay}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Spacing="8" IsVisible="{Binding IsWholesaler, Source={x:Reference Root}}">
+                            <Label Text="Facility Verification" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                            <ui:Input Placeholder="Facility name" Text="{Binding FacilityName, Source={x:Reference Root}, Mode=TwoWay}" />
+                            <ui:Input Placeholder="Facility address" Text="{Binding FacilityAddress, Source={x:Reference Root}, Mode=TwoWay}" />
+                            <ui:Input Placeholder="Facility registration number" Text="{Binding FacilityRegNumber, Source={x:Reference Root}, Mode=TwoWay}" />
+                        </VerticalStackLayout>
+                        <Label Text="Shipping Address" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                        <ui:Input Placeholder="Street address" Text="{Binding Address, Source={x:Reference Root}, Mode=TwoWay}" />
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <ui:Input Placeholder="City" Text="{Binding City, Source={x:Reference Root}, Mode=TwoWay}" />
+                            <ui:Input Grid.Column="1" Placeholder="State" Text="{Binding State, Source={x:Reference Root}, Mode=TwoWay}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <ui:Input Placeholder="Country" Text="{Binding Country, Source={x:Reference Root}, Mode=TwoWay}" />
+                            <ui:Input Grid.Column="1" Placeholder="ZIP code" Text="{Binding Zip, Source={x:Reference Root}, Mode=TwoWay}" />
+                        </Grid>
+                        <ui:Input Placeholder="Phone" Text="{Binding AddressPhone, Source={x:Reference Root}, Mode=TwoWay}" />
+                        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+                               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+                        <HorizontalStackLayout Spacing="8">
+                            <ui:Button Text="Cancel" Variant="Outline" Command="{Binding CloseCommand, Source={x:Reference Root}}" />
+                            <ui:Button Text="{Binding SaveText, Source={x:Reference Root}}"
+                                       Command="{Binding SaveCommand, Source={x:Reference Root}}" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </ui:Drawer.BodyContent>
+        </ui:Drawer>
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+    </VerticalStackLayout>
+</ContentView>

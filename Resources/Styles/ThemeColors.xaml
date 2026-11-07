@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <Color x:Key="ThemeBackgroundLight">#FFFFFF</Color>
+    <Color x:Key="ThemeBackgroundDark">#0A111D</Color>
+    <Color x:Key="ThemeForegroundLight">#0D1726</Color>
+    <Color x:Key="ThemeForegroundDark">#F3F7FC</Color>
+    <Color x:Key="ThemeSurfaceLight">#FFFFFF</Color>
+    <Color x:Key="ThemeSurfaceDark">#101927</Color>
+    <Color x:Key="ThemeSurfaceForegroundLight">#0D1726</Color>
+    <Color x:Key="ThemeSurfaceForegroundDark">#F3F7FC</Color>
+    <Color x:Key="ThemePrimaryLight">#0073E6</Color>
+    <Color x:Key="ThemePrimaryDark">#47A3FF</Color>
+    <Color x:Key="ThemePrimaryForegroundLight">#F3F8FF</Color>
+    <Color x:Key="ThemePrimaryForegroundDark">#071626</Color>
+    <Color x:Key="ThemeSecondaryLight">#F1F5F9</Color>
+    <Color x:Key="ThemeSecondaryDark">#1B2636</Color>
+    <Color x:Key="ThemeSecondaryForegroundLight">#182436</Color>
+    <Color x:Key="ThemeSecondaryForegroundDark">#F3F7FC</Color>
+    <Color x:Key="ThemeMutedLight">#F1F5F9</Color>
+    <Color x:Key="ThemeMutedDark">#1B2636</Color>
+    <Color x:Key="ThemeMutedForegroundLight">#65758B</Color>
+    <Color x:Key="ThemeMutedForegroundDark">#A9B6C7</Color>
+    <Color x:Key="ThemeAccentLight">#A1BD00</Color>
+    <Color x:Key="ThemeAccentDark">#C4E62E</Color>
+    <Color x:Key="ThemeAccentSecondaryLight">#11A8E8</Color>
+    <Color x:Key="ThemeAccentSecondaryDark">#53C8FA</Color>
+    <Color x:Key="ThemeAccentForegroundLight">#18210A</Color>
+    <Color x:Key="ThemeAccentForegroundDark">#101A05</Color>
+    <Color x:Key="ThemeDestructiveLight">#DC3B3B</Color>
+    <Color x:Key="ThemeDestructiveDark">#F06B6B</Color>
+    <Color x:Key="ThemeDestructiveForegroundLight">#FFFFFF</Color>
+    <Color x:Key="ThemeDestructiveForegroundDark">#1A0808</Color>
+    <Color x:Key="ThemeBorderLight">#DCE4EF</Color>
+    <Color x:Key="ThemeBorderDark">#29374A</Color>
+    <Color x:Key="ThemeInputLight">#DCE4EF</Color>
+    <Color x:Key="ThemeInputDark">#29374A</Color>
+    <Color x:Key="ThemeRingLight">#0073E6</Color>
+    <Color x:Key="ThemeRingDark">#47A3FF</Color>
+    <Color x:Key="ThemeOverlayLight">#990D1726</Color>
+    <Color x:Key="ThemeOverlayDark">#CC000000</Color>
+    <Color x:Key="ThemeTransparent">#00000000</Color>
+    <Color x:Key="ThemeWhite">#FFFFFF</Color>
+    <Color x:Key="ThemeBlack">#000000</Color>
+
+    <Style x:Key="ThemeButtonPrimary" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ThemePrimaryForegroundLight}, Dark={StaticResource ThemePrimaryForegroundDark}}" />
+        <Setter Property="BorderColor" Value="{StaticResource ThemeTransparent}" />
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="16,10" />
+        <Setter Property="MinimumHeightRequest" Value="44" />
+    </Style>
+    <Style x:Key="ThemeButtonSecondary" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource ThemeSecondaryLight}, Dark={StaticResource ThemeSecondaryDark}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ThemeSecondaryForegroundLight}, Dark={StaticResource ThemeSecondaryForegroundDark}}" />
+        <Setter Property="BorderColor" Value="{StaticResource ThemeTransparent}" />
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="16,10" />
+        <Setter Property="MinimumHeightRequest" Value="44" />
+    </Style>
+    <Style x:Key="ThemeButtonOutline" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource ThemeTransparent}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="16,10" />
+        <Setter Property="MinimumHeightRequest" Value="44" />
+    </Style>
+    <Style x:Key="ThemeButtonGhost" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource ThemeTransparent}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+        <Setter Property="BorderColor" Value="{StaticResource ThemeTransparent}" />
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="16,10" />
+        <Setter Property="MinimumHeightRequest" Value="44" />
+    </Style>
+    <Style x:Key="ThemeButtonDestructive" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ThemeDestructiveForegroundLight}, Dark={StaticResource ThemeDestructiveForegroundDark}}" />
+        <Setter Property="BorderColor" Value="{StaticResource ThemeTransparent}" />
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="16,10" />
+        <Setter Property="MinimumHeightRequest" Value="44" />
+    </Style>
+</ResourceDictionary>

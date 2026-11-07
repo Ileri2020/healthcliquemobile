@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.SearchInput"
+             x:Name="Root">
+    <VerticalStackLayout Spacing="8">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+            <ui:Input Placeholder="{Binding Placeholder, Source={x:Reference Root}}"
+                      Text="{Binding SearchText, Source={x:Reference Root}, Mode=TwoWay}"
+                      ReturnType="Search" />
+            <ui:Button Grid.Column="1" Text="Search" Command="{Binding SearchCommand, Source={x:Reference Root}}" />
+        </Grid>
+        <ActivityIndicator IsRunning="{Binding IsLoading, Source={x:Reference Root}}"
+                           IsVisible="{Binding IsLoading, Source={x:Reference Root}}" />
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+        <CollectionView ItemsSource="{Binding Results, Source={x:Reference Root}}"
+                        IsVisible="{Binding HasResults, Source={x:Reference Root}}"
+                        MaximumHeightRequest="360" SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <ui:Button Text="{Binding Name}" Variant="Ghost"
+                               Command="{Binding Source={x:Reference Root}, Path=SelectCommand}"
+                               CommandParameter="{Binding .}" />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentView>

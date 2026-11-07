@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.Login"
+             x:Name="Root">
+    <VerticalStackLayout Padding="14" Spacing="12">
+        <VerticalStackLayout Spacing="4">
+            <Label Text="{Binding Title, Source={x:Reference Root}}" FontSize="22" FontAttributes="Bold"
+                   HorizontalTextAlignment="Center"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+            <Label Text="{Binding Description, Source={x:Reference Root}}"
+                   HorizontalTextAlignment="Center"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+        </VerticalStackLayout>
+        <ui:Card IsVisible="{Binding HasError, Source={x:Reference Root}}">
+            <ui:Card.BodyContent>
+                <Label Text="{Binding ErrorMessage, Source={x:Reference Root}}"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+            </ui:Card.BodyContent>
+        </ui:Card>
+        <ui:Card IsVisible="{Binding HasSuccess, Source={x:Reference Root}}">
+            <ui:Card.BodyContent>
+                <Label Text="{Binding SuccessMessage, Source={x:Reference Root}}"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeAccentLight}, Dark={StaticResource ThemeAccentDark}}" />
+            </ui:Card.BodyContent>
+        </ui:Card>
+        <VerticalStackLayout IsVisible="{Binding IsLoginStep, Source={x:Reference Root}}" Spacing="10">
+            <ui:Input Placeholder="Email address" Keyboard="Email"
+                      Text="{Binding Email, Source={x:Reference Root}, Mode=TwoWay}" />
+            <ui:Input Placeholder="Password" IsPassword="True"
+                      Text="{Binding Password, Source={x:Reference Root}, Mode=TwoWay}" />
+            <ui:Button Text="{Binding SubmitText, Source={x:Reference Root}}"
+                       Command="{Binding SubmitCommand, Source={x:Reference Root}}"
+                       IsEnabled="{Binding CanSubmit, Source={x:Reference Root}}" />
+            <ui:Button Text="Continue with Google" Variant="Outline"
+                       Command="{Binding GoogleSignInCommand, Source={x:Reference Root}}" />
+            <ui:Button Text="Continue with Facebook" Variant="Outline"
+                       Command="{Binding FacebookSignInCommand, Source={x:Reference Root}}" />
+            <ui:Button Text="Don't have an account? Sign up" Variant="Ghost"
+                       Command="{Binding SignUpCommand, Source={x:Reference Root}}" />
+        </VerticalStackLayout>
+        <VerticalStackLayout IsVisible="{Binding IsVerifyStep, Source={x:Reference Root}}" Spacing="10">
+            <Label Text="Your account requires email verification. Send a verification code to continue."
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+            <Label Text="{Binding Email, Source={x:Reference Root}}" FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+            <HorizontalStackLayout Spacing="8">
+                <ui:Button Text="Cancel" Variant="Outline" Command="{Binding CancelVerificationCommand, Source={x:Reference Root}}" />
+                <ui:Button Text="{Binding VerificationText, Source={x:Reference Root}}"
+                           Command="{Binding SendVerificationCommand, Source={x:Reference Root}}"
+                           IsEnabled="{Binding CanSubmit, Source={x:Reference Root}}" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+        <VerticalStackLayout IsVisible="{Binding IsSetPasswordStep, Source={x:Reference Root}}" Spacing="10">
+            <ui:Input Placeholder="6-digit verification code" Keyboard="Numeric" MaxLength="6"
+                      Text="{Binding VerificationCode, Source={x:Reference Root}, Mode=TwoWay}" />
+            <ui:Input Placeholder="New password" IsPassword="True"
+                      Text="{Binding NewPassword, Source={x:Reference Root}, Mode=TwoWay}" />
+            <ui:Input Placeholder="Confirm password" IsPassword="True"
+                      Text="{Binding ConfirmPassword, Source={x:Reference Root}, Mode=TwoWay}" />
+            <ui:Button Text="{Binding SetPasswordText, Source={x:Reference Root}}"
+                       Command="{Binding SetPasswordCommand, Source={x:Reference Root}}"
+                       IsEnabled="{Binding CanSubmit, Source={x:Reference Root}}" />
+        </VerticalStackLayout>
+        <VerticalStackLayout IsVisible="{Binding IsSignUpStep, Source={x:Reference Root}}" Spacing="8">
+            <Label Text="Create an account to shop and manage your orders."
+                   HorizontalTextAlignment="Center"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+            <ui:Button Text="Continue to account registration" Command="{Binding SignUpCommand, Source={x:Reference Root}}" />
+            <ui:Button Text="Back to login" Variant="Ghost" Command="{Binding ReturnToLoginCommand, Source={x:Reference Root}}" />
+        </VerticalStackLayout>
+        <ActivityIndicator IsRunning="{Binding IsLoading, Source={x:Reference Root}}"
+                           IsVisible="{Binding IsLoading, Source={x:Reference Root}}"
+                           Color="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+    </VerticalStackLayout>
+</ContentView>

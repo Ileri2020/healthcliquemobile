@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:utility="clr-namespace:EEE.Components.Utility"
+             x:Class="EEE.Components.Utility.Testimonials"
+             x:Name="Root">
+    <VerticalStackLayout Padding="10,24" Spacing="12">
+        <Label Text="{Binding Title, Source={x:Reference Root}}" FontSize="28" FontAttributes="Bold"
+               HorizontalTextAlignment="Center"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+        <Label Text="{Binding Description, Source={x:Reference Root}}" FontSize="16"
+               HorizontalTextAlignment="Center"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+        <CollectionView x:Name="TestimonialsCarousel" ItemsSource="{Binding Items, Source={x:Reference Root}}" HeightRequest="230">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="12" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <utility:TestimonialProp Author="{Binding Author}" Href="{Binding Href}" Text="{Binding Text}" />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentView>

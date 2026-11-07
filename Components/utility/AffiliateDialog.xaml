@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.AffiliateDialog"
+             x:Name="Root">
+    <Grid>
+        <ui:Button Text="{Binding TriggerText, Source={x:Reference Root}}"
+                   Command="{Binding OpenCommand, Source={x:Reference Root}}" />
+        <Grid IsVisible="{Binding IsOpen, Source={x:Reference Root}}"
+              ZIndex="100"
+              BackgroundColor="{AppThemeBinding Light={StaticResource ThemeOverlayLight}, Dark={StaticResource ThemeOverlayDark}}">
+            <Button Text="" BackgroundColor="{StaticResource ThemeTransparent}" Command="{Binding CloseCommand, Source={x:Reference Root}}" />
+            <Border Padding="24"
+                    Margin="20"
+                    MaximumWidthRequest="480"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                    StrokeShape="RoundRectangle 16"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource ThemeSurfaceLight}, Dark={StaticResource ThemeSurfaceDark}}">
+                <VerticalStackLayout Spacing="14">
+                    <Label Text="{Binding Title, Source={x:Reference Root}}" FontSize="22" FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                    <Label Text="{Binding Description, Source={x:Reference Root}}"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                    <ui:Input Placeholder="Full name" Text="{Binding Name, Source={x:Reference Root}, Mode=TwoWay}" />
+                    <ui:Input Placeholder="Email address" Text="{Binding Email, Source={x:Reference Root}, Mode=TwoWay}" Keyboard="Email" />
+                    <ui:Input Placeholder="Phone number" Text="{Binding Phone, Source={x:Reference Root}, Mode=TwoWay}" Keyboard="Telephone" />
+                    <ui:CheckBox IsChecked="{Binding AcceptedTerms, Source={x:Reference Root}, Mode=TwoWay}" />
+                    <Label Text="I agree to the affiliate terms and conditions."
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                    <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+                    <HorizontalStackLayout Spacing="8">
+                        <ui:Button Text="Cancel" Variant="Ghost" Command="{Binding CloseCommand, Source={x:Reference Root}}" HorizontalOptions="FillAndExpand" />
+                        <ui:Button Text="{Binding SubmitText, Source={x:Reference Root}}" Command="{Binding SubmitCommand, Source={x:Reference Root}}" IsEnabled="{Binding CanSubmit, Source={x:Reference Root}}" HorizontalOptions="FillAndExpand" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentView>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EEE.Components.UI.Sheet"
+             x:Name="Root">
+    <Grid IsVisible="{Binding IsOpen, Source={x:Reference Root}}"
+          ZIndex="100"
+          BackgroundColor="{AppThemeBinding Light={StaticResource ThemeOverlayLight}, Dark={StaticResource ThemeOverlayDark}}">
+        <Button Text="" BackgroundColor="{StaticResource ThemeTransparent}" Clicked="OnBackdropClicked" />
+        <Border Padding="24"
+                Margin="12"
+                VerticalOptions="End"
+                Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                StrokeShape="RoundRectangle 16"
+                BackgroundColor="{AppThemeBinding Light={StaticResource ThemeSurfaceLight}, Dark={StaticResource ThemeSurfaceDark}}">
+            <VerticalStackLayout Spacing="16">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <Label Text="{Binding Title, Source={x:Reference Root}}"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                    <Button Grid.Column="1" Text="×" Padding="8,2" MinimumWidthRequest="40" Clicked="OnCloseClicked" />
+                </Grid>
+                <ContentView Content="{Binding BodyContent, Source={x:Reference Root}}" />
+                <ContentView Content="{Binding FooterContent, Source={x:Reference Root}}" />
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentView>

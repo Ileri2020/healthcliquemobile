@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.AddressEdit"
+             x:Name="Root">
+    <VerticalStackLayout Spacing="12">
+        <Label Text="{Binding Heading, Source={x:Reference Root}}"
+               FontSize="20"
+               FontAttributes="Bold"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+        <ui:Input Placeholder="Country" Text="{Binding Country, Source={x:Reference Root}, Mode=TwoWay}" />
+        <ui:Input Placeholder="State / Province" Text="{Binding State, Source={x:Reference Root}, Mode=TwoWay}" />
+        <ui:Input Placeholder="City" Text="{Binding City, Source={x:Reference Root}, Mode=TwoWay}" />
+        <ui:Input Placeholder="Street address" Text="{Binding Address, Source={x:Reference Root}, Mode=TwoWay}" />
+        <ui:Input Placeholder="Postal code" Text="{Binding Zip, Source={x:Reference Root}, Mode=TwoWay}" />
+        <ui:Input Placeholder="Phone number" Text="{Binding Phone, Source={x:Reference Root}, Mode=TwoWay}" Keyboard="Telephone" />
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}"
+               IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+        <ui:Button Text="{Binding SubmitText, Source={x:Reference Root}}"
+                   Command="{Binding SaveCommand, Source={x:Reference Root}}"
+                   IsEnabled="{Binding CanSave, Source={x:Reference Root}}" />
+    </VerticalStackLayout>
+</ContentView>

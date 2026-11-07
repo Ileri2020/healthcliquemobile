@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             xmlns:utility="clr-namespace:EEE.Components.Utility"
+             x:Class="EEE.Components.Utility.LoginPopup"
+             x:Name="Root">
+    <Grid>
+        <ui:Dialog Title="Welcome to HealthClique"
+                   IsOpen="{Binding IsOpen, Source={x:Reference Root}, Mode=TwoWay}"
+                   IsVisible="{Binding IsDesktop, Source={x:Reference Root}}">
+            <ui:Dialog.BodyContent>
+                <ScrollView MaximumHeightRequest="640">
+                    <utility:Login x:Name="DesktopLogin"
+                                   ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference Root}}" />
+                </ScrollView>
+            </ui:Dialog.BodyContent>
+        </ui:Dialog>
+        <ui:Sheet Title="Welcome to HealthClique"
+                  IsOpen="{Binding IsOpen, Source={x:Reference Root}, Mode=TwoWay}"
+                  IsVisible="{Binding IsMobile, Source={x:Reference Root}}">
+            <ui:Sheet.BodyContent>
+                <ScrollView MaximumHeightRequest="640">
+                    <utility:Login x:Name="MobileLogin"
+                                   ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference Root}}" />
+                </ScrollView>
+            </ui:Sheet.BodyContent>
+        </ui:Sheet>
+    </Grid>
+</ContentView>

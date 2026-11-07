@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             xmlns:utility="clr-namespace:EEE.Components.Utility"
+             x:Class="EEE.Components.Utility.ProductCard"
+             x:Name="Root">
+    <Grid>
+        <ui:Card>
+            <ui:Card.BodyContent>
+                <VerticalStackLayout Spacing="8">
+                    <Grid HeightRequest="190">
+                        <Image Source="{Binding Product.ImageUrl, Source={x:Reference Root}}" Aspect="AspectFill" />
+                        <ui:Button Text="{Binding WishlistButtonText, Source={x:Reference Root}}" Variant="Outline"
+                                   HorizontalOptions="End" VerticalOptions="Start" Margin="6"
+                                   Command="{Binding WishlistCommand, Source={x:Reference Root}}" />
+                        <Label Text="{Binding CategoryName, Source={x:Reference Root}}" Padding="7,3"
+                               HorizontalOptions="Start" VerticalOptions="End" Margin="8"
+                               BackgroundColor="{AppThemeBinding Light={StaticResource ThemeSurfaceLight}, Dark={StaticResource ThemeSurfaceDark}}"
+                               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                    </Grid>
+                    <Label Text="{Binding Product.Name, Source={x:Reference Root}}" FontSize="16" FontAttributes="Bold" LineBreakMode="TailTruncation"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                    <Label Text="{Binding PriceText, Source={x:Reference Root}}" FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                    <Label Text="{Binding RatingText, Source={x:Reference Root}}" FontSize="12"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeAccentLight}, Dark={StaticResource ThemeAccentDark}}" />
+                    <HorizontalStackLayout Spacing="8">
+                        <ui:Button Text="Add to cart" Command="{Binding AddToCartCommand, Source={x:Reference Root}}" />
+                        <ui:Button Text="Details" Variant="Outline" Command="{Binding DetailsCommand, Source={x:Reference Root}}" />
+                        <ui:Button Text="Delete" Variant="Destructive"
+                                   IsVisible="{Binding IsAdmin, Source={x:Reference Root}}"
+                                   Command="{Binding DeleteCommand, Source={x:Reference Root}}" />
+                    </HorizontalStackLayout>
+                    <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+                </VerticalStackLayout>
+            </ui:Card.BodyContent>
+        </ui:Card>
+        <ui:Dialog Title="{Binding DetailsTitle, Source={x:Reference Root}}" IsOpen="{Binding IsDetailsOpen, Source={x:Reference Root}}">
+            <ui:Dialog.BodyContent>
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="{Binding Product.Description, Source={x:Reference Root}}"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                    <utility:PriceFeedback ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference Root}}"
+                                          ProductId="{Binding Product.Id, Source={x:Reference Root}}"
+                                          ProductName="{Binding Product.Name, Source={x:Reference Root}}"
+                                          UserId="{Binding UserId, Source={x:Reference Root}}"
+                                          IsInline="True" />
+                </VerticalStackLayout>
+            </ui:Dialog.BodyContent>
+        </ui:Dialog>
+    </Grid>
+</ContentView>

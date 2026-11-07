@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:app="clr-namespace:EEE.App"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             xmlns:utility="clr-namespace:EEE.Components.Utility"
+             x:Class="EEE.App.Pages.StorePage"
+             x:Name="StoreRoot"
+             Title="Store"
+             BackgroundColor="{AppThemeBinding Light={StaticResource ThemeBackgroundLight}, Dark={StaticResource ThemeBackgroundDark}}">
+    <app:RootLayout x:Name="PageLayout" CurrentPath="/store">
+        <ScrollView x:Name="StoreScroll">
+            <VerticalStackLayout Padding="12" Spacing="16">
+                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto"
+                      Padding="12" ColumnSpacing="10" RowSpacing="12"
+                      BackgroundColor="{AppThemeBinding Light={StaticResource ThemeMutedLight}, Dark={StaticResource ThemeMutedDark}}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Need help?" FontSize="16" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                        <Label Text="Our pharmacists are ready to consult."
+                               TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                    </VerticalStackLayout>
+                    <ui:Button Grid.Column="1" Text="Talk now"
+                               Command="{Binding ContactCommand, Source={x:Reference StoreRoot}}" />
+
+                    <VerticalStackLayout Grid.Row="1" Spacing="4">
+                        <Label Text="Scarce medicine?"
+                               FontSize="16" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                        <Label Text="Order special formulations or hard-to-find drugs."
+                               TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                    </VerticalStackLayout>
+                    <ui:Button Grid.Row="1" Grid.Column="1" Text="Order special"
+                               Variant="Outline"
+                               Command="{Binding OpenSpecialOrderCommand, Source={x:Reference StoreRoot}}" />
+                </Grid>
+
+                <Border Padding="12"
+                        Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                        StrokeShape="RoundRectangle 14">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Search the store" FontSize="20" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                        <utility:GlobalSearch x:Name="StoreSearch"
+                                             ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference PageLayout}}"
+                                             UserRole="visitor"
+                                             Placeholder="Search products, brands or ingredients..." />
+                    </VerticalStackLayout>
+                </Border>
+
+                <utility:Stocks x:Name="StoreProducts"
+                               ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference PageLayout}}"
+                               UserRole="visitor"
+                               IsAdmin="False" />
+
+                <VerticalStackLayout x:Name="SpecialOrderSection" Padding="8" Spacing="10">
+                    <Label Text="Special order"
+                           FontSize="22" FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                    <utility:SpecialOrderForm x:Name="SpecialOrderForm" ShowTrigger="False" />
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </app:RootLayout>
+</ContentPage>

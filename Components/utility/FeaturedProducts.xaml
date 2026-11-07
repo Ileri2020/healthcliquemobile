@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.FeaturedProducts"
+             x:Name="Root">
+    <VerticalStackLayout Padding="14" Spacing="16">
+        <Grid ColumnDefinitions="*,Auto">
+            <VerticalStackLayout Spacing="2">
+                <Label Text="Featured Products" FontSize="26" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                <Label Text="Discover trusted brands and popular essentials."
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+            </VerticalStackLayout>
+            <ui:Button Grid.Column="1" Text="Refresh" Variant="Outline" Command="{Binding RefreshCommand, Source={x:Reference Root}}" />
+        </Grid>
+        <ActivityIndicator IsRunning="{Binding IsLoading, Source={x:Reference Root}}"
+                           IsVisible="{Binding IsLoading, Source={x:Reference Root}}"
+                           Color="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+        <VerticalStackLayout Spacing="8" IsVisible="{Binding HasFeatured, Source={x:Reference Root}}">
+            <Label Text="Top picks" FontSize="21" FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+            <CollectionView ItemsSource="{Binding FeaturedProducts, Source={x:Reference Root}}" HeightRequest="290">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border WidthRequest="190" Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                                StrokeShape="RoundRectangle 12">
+                            <VerticalStackLayout Spacing="6">
+                                <Image Source="{Binding ImageUrl}" HeightRequest="145" Aspect="AspectFill" />
+                                <VerticalStackLayout Padding="8" Spacing="5">
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" LineBreakMode="TailTruncation"
+                                           TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                                    <Label Text="{Binding PriceText}" FontAttributes="Bold"
+                                           TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                                    <ui:Button Text="View product" Variant="Ghost"
+                                               Command="{Binding Source={x:Reference Root}, Path=ProductSelectedCommand}"
+                                               CommandParameter="{Binding Product}" />
+                                    <ui:Button Text="Add to cart" Command="{Binding Source={x:Reference Root}, Path=AddToCartCommand}"
+                                               CommandParameter="{Binding Product}" />
+                                    <ui:Button Text="{Binding FeaturedButtonText}" Variant="Outline"
+                                               IsVisible="{Binding Source={x:Reference Root}, Path=IsAdmin}"
+                                               Command="{Binding Source={x:Reference Root}, Path=ToggleFeaturedCommand}"
+                                               CommandParameter="{Binding Product}" />
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+        <VerticalStackLayout Spacing="10">
+            <Label Text="Top Brands" FontSize="21" FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+            <CollectionView ItemsSource="{Binding BrandGroups, Source={x:Reference Root}}" HeightRequest="355">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="{Binding Name}" FontSize="18" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                            <CollectionView ItemsSource="{Binding Products}" HeightRequest="300">
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border WidthRequest="160" Padding="8"
+                                                Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                                                StrokeShape="RoundRectangle 10">
+                                            <VerticalStackLayout Spacing="5">
+                                                <Image Source="{Binding ImageUrl}" HeightRequest="125" Aspect="AspectFill" />
+                                                <Label Text="{Binding Name}" FontAttributes="Bold" LineBreakMode="TailTruncation"
+                                                       TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                                                <Label Text="{Binding PriceText}"
+                                                       TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                                                <ui:Button Text="View product" Variant="Ghost"
+                                                           Command="{Binding Source={x:Reference Root}, Path=ProductSelectedCommand}"
+                                                           CommandParameter="{Binding Product}" />
+                                                <ui:Button Text="Add to cart" Variant="Outline"
+                                                           Command="{Binding Source={x:Reference Root}, Path=AddToCartCommand}"
+                                                           CommandParameter="{Binding Product}" />
+                                                <ui:Button Text="Set as featured" Variant="Ghost"
+                                                           IsVisible="{Binding Source={x:Reference Root}, Path=IsAdmin}"
+                                                           Command="{Binding Source={x:Reference Root}, Path=ToggleFeaturedCommand}"
+                                                           CommandParameter="{Binding Product}" />
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+        <VerticalStackLayout Spacing="8" IsVisible="{Binding HasOralCare, Source={x:Reference Root}}">
+            <Label Text="Dental &amp; Oral Care" FontSize="21" FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+            <CollectionView ItemsSource="{Binding OralCareProducts, Source={x:Reference Root}}" HeightRequest="290">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border WidthRequest="185" Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                                StrokeShape="RoundRectangle 12">
+                            <VerticalStackLayout Spacing="6">
+                                <Image Source="{Binding ImageUrl}" HeightRequest="140" Aspect="AspectFill" />
+                                <VerticalStackLayout Padding="8" Spacing="5">
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" LineBreakMode="TailTruncation"
+                                           TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                                    <Label Text="{Binding PriceText}"
+                                           TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                                    <ui:Button Text="View product" Variant="Ghost"
+                                               Command="{Binding Source={x:Reference Root}, Path=ProductSelectedCommand}"
+                                               CommandParameter="{Binding Product}" />
+                                    <ui:Button Text="Add to cart" Command="{Binding Source={x:Reference Root}, Path=AddToCartCommand}"
+                                               CommandParameter="{Binding Product}" />
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+</ContentView>

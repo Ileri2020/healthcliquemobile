@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             xmlns:utility="clr-namespace:EEE.Components.Utility"
+             x:Class="EEE.Components.Utility.Posts"
+             x:Name="Root">
+    <VerticalStackLayout Spacing="12">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+            <ui:Input Placeholder="Category (or All)" Text="{Binding Category, Source={x:Reference Root}, Mode=TwoWay}" />
+            <ui:Button Grid.Column="1" Text="{Binding SortText, Source={x:Reference Root}}" Variant="Outline"
+                       Command="{Binding ToggleSortCommand, Source={x:Reference Root}}" />
+        </Grid>
+        <HorizontalStackLayout Spacing="6">
+            <ui:Button Text="Video" Variant="{Binding VideoVariant, Source={x:Reference Root}}" Command="{Binding ToggleTypeCommand, Source={x:Reference Root}}" CommandParameter="video" />
+            <ui:Button Text="Audio" Variant="{Binding AudioVariant, Source={x:Reference Root}}" Command="{Binding ToggleTypeCommand, Source={x:Reference Root}}" CommandParameter="audio" />
+            <ui:Button Text="Image" Variant="{Binding ImageVariant, Source={x:Reference Root}}" Command="{Binding ToggleTypeCommand, Source={x:Reference Root}}" CommandParameter="image" />
+            <ui:Button Text="Refresh" Variant="Ghost" Command="{Binding RefreshCommand, Source={x:Reference Root}}" />
+        </HorizontalStackLayout>
+        <ActivityIndicator IsRunning="{Binding IsLoading, Source={x:Reference Root}}"
+                           IsVisible="{Binding IsLoading, Source={x:Reference Root}}" />
+        <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+        <Label Text="{Binding EmptyMessage, Source={x:Reference Root}}" IsVisible="{Binding IsEmpty, Source={x:Reference Root}}"
+               HorizontalTextAlignment="Center" Padding="20"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+        <CollectionView ItemsSource="{Binding VisiblePosts, Source={x:Reference Root}}" SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <utility:Post Post="{Binding .}"
+                                  ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference Root}}"
+                                  UserId="{Binding UserId, Source={x:Reference Root}}"
+                                  IsAdmin="{Binding IsAdmin, Source={x:Reference Root}}"
+                                  LikeRequested="OnLikeRequested"
+                                  CommentRequested="OnCommentRequested"
+                                  PostDeleted="OnPostDeleted"
+                                  ActionFailed="OnPostFailed" />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentView>

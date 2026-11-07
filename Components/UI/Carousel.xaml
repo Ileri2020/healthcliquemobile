@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EEE.Components.UI.Carousel"
+             x:Name="Root">
+    <VerticalStackLayout Spacing="8">
+        <CarouselView x:Name="CarouselControl"
+                      ItemsSource="{Binding ItemsSource, Source={x:Reference Root}}"
+                      ItemTemplate="{Binding ItemTemplate, Source={x:Reference Root}}"
+                      Position="{Binding Position, Source={x:Reference Root}, Mode=TwoWay}"
+                      Loop="{Binding Loop, Source={x:Reference Root}}"
+                      IsSwipeEnabled="{Binding IsSwipeEnabled, Source={x:Reference Root}}"
+                      IndicatorView="{x:Reference Indicators}" />
+        <IndicatorView x:Name="Indicators" HorizontalOptions="Center" />
+    </VerticalStackLayout>
+</ContentView>

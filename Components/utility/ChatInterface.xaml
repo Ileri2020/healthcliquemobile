@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             x:Class="EEE.Components.Utility.ChatInterface"
+             x:Name="Root">
+    <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*,2*" HeightRequest="620">
+        <VerticalStackLayout Grid.RowSpan="3" Padding="10" IsVisible="{Binding IsStaff, Source={x:Reference Root}}">
+            <ui:Input Placeholder="Search users" Text="{Binding SearchText, Source={x:Reference Root}, Mode=TwoWay}" />
+            <CollectionView ItemsSource="{Binding FilteredUsers, Source={x:Reference Root}}" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Padding="8" Margin="2"
+                                Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                                StrokeShape="RoundRectangle 8">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                <ui:Avatar FallbackText="{Binding Name}" Source="{Binding AvatarUrl}" Size="38" />
+                                <VerticalStackLayout Grid.Column="1">
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                    <Label Text="{Binding Email}" FontSize="11" />
+                                    <ui:Button Text="Open conversation" Variant="Ghost"
+                                               Command="{Binding Source={x:Reference Root}, Path=SelectUserCommand}"
+                                               CommandParameter="{Binding .}" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+        <Grid Grid.Column="{Binding ChatColumn, Source={x:Reference Root}}"
+              Grid.ColumnSpan="{Binding ChatColumnSpan, Source={x:Reference Root}}"
+              Grid.RowSpan="3" RowDefinitions="Auto,*,Auto" Padding="10" RowSpacing="8">
+            <Label Text="{Binding SelectedUser.Name, Source={x:Reference Root}, TargetNullValue=Chat with support}"
+                   FontSize="18" FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+            <CollectionView Grid.Row="1" ItemsSource="{Binding Messages, Source={x:Reference Root}}" x:Name="MessagesView">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Padding="10" Margin="4"
+                                HorizontalOptions="{Binding MessageAlignment}"
+                                Stroke="{AppThemeBinding Light={StaticResource ThemeBorderLight}, Dark={StaticResource ThemeBorderDark}}"
+                                StrokeShape="RoundRectangle 12"
+                                BackgroundColor="{Binding MessageBackground}">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Content}" />
+                                <Label Text="{Binding TimeText}" FontSize="10" HorizontalTextAlignment="End"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                <ui:Input Placeholder="Type your message" Text="{Binding NewMessage, Source={x:Reference Root}, Mode=TwoWay}" ReturnType="Send" />
+                <ui:Button Grid.Column="1" Text="Send" Command="{Binding SendCommand, Source={x:Reference Root}}" IsEnabled="{Binding CanSend, Source={x:Reference Root}}" />
+            </Grid>
+        </Grid>
+        <ActivityIndicator Grid.ColumnSpan="2" IsRunning="{Binding IsLoading, Source={x:Reference Root}}" IsVisible="{Binding IsLoading, Source={x:Reference Root}}"
+                           VerticalOptions="Start" Color="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+        <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding StatusMessage, Source={x:Reference Root}}"
+               IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
+               VerticalOptions="End"
+               TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+    </Grid>
+</ContentView>
