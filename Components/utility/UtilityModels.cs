@@ -1,5 +1,7 @@
 using System.Windows.Input;
 
+using System.Text.Json.Serialization;
+
 namespace EEE.Components.Utility;
 
 public sealed class UtilityNavigationItem
@@ -24,6 +26,7 @@ public sealed class ContactMessage
     public string Email { get; set; } = string.Empty;
     public string Category { get; set; } = "suggestion";
     public string Message { get; set; } = string.Empty;
+    [JsonPropertyName("emailto")]
     public string EmailTo { get; set; } = string.Empty;
 }
 

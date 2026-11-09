@@ -24,7 +24,12 @@ public partial class RootLayout : ContentView
             CreateNavigationItem("home", "Home"),
             CreateNavigationItem("/store", "Shop"),
             CreateNavigationItem("/cart", "Cart"),
+            CreateNavigationItem("/blog", "Clinical insights"),
             CreateNavigationItem("/account", "My account"),
+            CreateNavigationItem("/sales", "Sales"),
+            CreateNavigationItem("/stock", "Stock"),
+            CreateNavigationItem("/count", "Stock count"),
+            CreateNavigationItem("/expenses", "Expenses"),
             CreateNavigationItem("/contact", "Contact")
         ];
         PageSidenav.Items = SideNavigationItems;
@@ -110,6 +115,99 @@ public partial class RootLayout : ContentView
             return;
         }
 
+        if (route.StartsWith("store/", StringComparison.OrdinalIgnoreCase))
+        {
+            var productId = route["store/".Length..];
+            await NavigateShellAsync($"product?id={Uri.EscapeDataString(Uri.UnescapeDataString(productId))}");
+            return;
+        }
+
+        if (route.Equals("account", StringComparison.OrdinalIgnoreCase))
+        {
+            await NavigateShellAsync("account");
+            return;
+        }
+
+        if (route.Equals("admin", StringComparison.OrdinalIgnoreCase))
+        {
+            await NavigateManagementPageAsync("admin", string.Empty, query);
+            return;
+        }
+
+        if (route.Equals("admin/analytics", StringComparison.OrdinalIgnoreCase))
+        {
+            await NavigateManagementPageAsync("analytics", string.Empty, query);
+            return;
+        }
+
+        if (route.Equals("inventory/analytics", StringComparison.OrdinalIgnoreCase))
+        {
+            var analyticsQuery = string.IsNullOrWhiteSpace(query) ? "mode=inventory" : $"{query}&mode=inventory";
+            await NavigateManagementPageAsync("analytics", string.Empty, analyticsQuery);
+            return;
+        }
+
+        if (route.Equals("login", StringComparison.OrdinalIgnoreCase)
+            || route.Equals("signup", StringComparison.OrdinalIgnoreCase)
+            || route.Equals("staff", StringComparison.OrdinalIgnoreCase)
+            || route.Equals("vitals", StringComparison.OrdinalIgnoreCase)
+            || route.Equals("sheet", StringComparison.OrdinalIgnoreCase))
+        {
+            await NavigateManagementPageAsync(route, string.Empty, query);
+            return;
+        }
+
+        if (route.Equals("about", StringComparison.OrdinalIgnoreCase)
+            || route.Equals("help", StringComparison.OrdinalIgnoreCase)
+            || route.Equals("lunch", StringComparison.OrdinalIgnoreCase)
+            || route.Equals("privacy", StringComparison.OrdinalIgnoreCase)
+            || route.Equals("terms", StringComparison.OrdinalIgnoreCase)
+            || route.Equals("myui", StringComparison.OrdinalIgnoreCase))
+        {
+            await NavigateManagementPageAsync(route, string.Empty, query);
+            return;
+        }
+
+        if (route.Equals("blog", StringComparison.OrdinalIgnoreCase)
+            || route.Equals("cart", StringComparison.OrdinalIgnoreCase)
+            || route.Equals("contact", StringComparison.OrdinalIgnoreCase))
+        {
+            await NavigateManagementPageAsync(route, string.Empty, query);
+            return;
+        }
+
+        if (route.Equals("count", StringComparison.OrdinalIgnoreCase)
+            || route.StartsWith("count/", StringComparison.OrdinalIgnoreCase))
+        {
+            var subPath = route.Length > "count".Length ? route["count/".Length..] : string.Empty;
+            await NavigateManagementPageAsync("count", subPath, query);
+            return;
+        }
+
+        if (route.Equals("expenses", StringComparison.OrdinalIgnoreCase)
+            || route.StartsWith("expenses/", StringComparison.OrdinalIgnoreCase))
+        {
+            var subPath = route.Length > "expenses".Length ? route["expenses/".Length..] : string.Empty;
+            await NavigateManagementPageAsync("expenses", subPath, query);
+            return;
+        }
+
+        if (route.Equals("sales", StringComparison.OrdinalIgnoreCase)
+            || route.StartsWith("sales/", StringComparison.OrdinalIgnoreCase))
+        {
+            var subPath = route.Length > "sales".Length ? route["sales/".Length..] : string.Empty;
+            await NavigateManagementPageAsync("sales", subPath, query);
+            return;
+        }
+
+        if (route.Equals("stock", StringComparison.OrdinalIgnoreCase)
+            || route.StartsWith("stock/", StringComparison.OrdinalIgnoreCase))
+        {
+            var subPath = route.Length > "stock".Length ? route["stock/".Length..] : string.Empty;
+            await NavigateManagementPageAsync("stock", subPath, query);
+            return;
+        }
+
         if (route.StartsWith("products/", StringComparison.OrdinalIgnoreCase))
         {
             var productId = route["products/".Length..];
@@ -143,6 +241,16 @@ public partial class RootLayout : ContentView
         {
             NavigationFailed?.Invoke(this, exception);
         }
+    }
+
+    private async Task NavigateManagementPageAsync(string shellRoute, string subPath, string query)
+    {
+        var parameters = new List<string>();
+        if (!string.IsNullOrWhiteSpace(subPath))
+            parameters.Add($"path={Uri.EscapeDataString(Uri.UnescapeDataString(subPath))}");
+        if (!string.IsNullOrWhiteSpace(query))
+            parameters.Add(query);
+        await NavigateShellAsync(parameters.Count == 0 ? shellRoute : $"{shellRoute}?{string.Join("&", parameters)}");
     }
 
     private UtilityNavigationItem CreateNavigationItem(string route, string title) =>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:app="clr-namespace:EEE.ClientApp"
+             xmlns:ui="clr-namespace:EEE.Components.UI"
+             xmlns:utility="clr-namespace:EEE.Components.Utility"
+             x:Class="EEE.ClientApp.Pages.AccountPage"
+             x:Name="AccountRoot"
+             Title="My account"
+             BackgroundColor="{AppThemeBinding Light={StaticResource ThemeBackgroundLight}, Dark={StaticResource ThemeBackgroundDark}}">
+    <app:RootLayout x:Name="PageLayout" CurrentPath="/account">
+        <ScrollView>
+            <VerticalStackLayout Padding="16" Spacing="16">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="My account" FontSize="28" FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                    <Label Text="Manage your HealthClique profile and account settings."
+                           TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                </VerticalStackLayout>
+
+                <ActivityIndicator IsRunning="{Binding IsLoading, Source={x:Reference AccountRoot}}"
+                                   IsVisible="{Binding IsLoading, Source={x:Reference AccountRoot}}" />
+                <Label Text="{Binding StatusMessage, Source={x:Reference AccountRoot}}"
+                       IsVisible="{Binding HasStatus, Source={x:Reference AccountRoot}}"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
+
+                <utility:Login x:Name="AccountLogin"
+                               IsVisible="{Binding IsLoginVisible, Source={x:Reference AccountRoot}}"
+                               ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference PageLayout}}" />
+                <utility:Signup x:Name="AccountSignup"
+                                IsVisible="{Binding IsSignupVisible, Source={x:Reference AccountRoot}}"
+                                ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference PageLayout}}" />
+
+                <VerticalStackLayout IsVisible="{Binding IsSignedIn, Source={x:Reference AccountRoot}}" Spacing="14">
+                    <ui:Card CardPadding="16">
+                        <ui:Card.BodyContent>
+                            <VerticalStackLayout Spacing="8">
+                                <Label Text="{Binding CurrentUser.Name, Source={x:Reference AccountRoot}}"
+                                       FontSize="22" FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                                <Label Text="{Binding CurrentUser.Email, Source={x:Reference AccountRoot}}"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
+                                <Label Text="{Binding RoleText, Source={x:Reference AccountRoot}}"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                                <HorizontalStackLayout Spacing="8">
+                                    <utility:UserEdit x:Name="EditProfile"
+                                                      ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference PageLayout}}" />
+                                    <ui:Button Text="Sign out" Variant="Outline"
+                                               Command="{Binding SignOutCommand, Source={x:Reference AccountRoot}}" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </ui:Card.BodyContent>
+                    </ui:Card>
+
+                    <utility:AccountUpgrade x:Name="UpgradeAccount"
+                                            ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference PageLayout}}"
+                                            UserId="{Binding CurrentUser.Id, Source={x:Reference AccountRoot}}"
+                                            UserRole="{Binding CurrentUser.Role, Source={x:Reference AccountRoot}}"
+                                            IsVisible="{Binding IsCustomer, Source={x:Reference AccountRoot}}" />
+
+                    <VerticalStackLayout IsVisible="{Binding HasInventoryAccess, Source={x:Reference AccountRoot}}" Spacing="10">
+                        <Label Text="Inventory workspace" FontSize="20" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                        <HorizontalStackLayout Spacing="8">
+                            <ui:Button Text="Sales" Command="{Binding OpenSalesCommand, Source={x:Reference AccountRoot}}" />
+                            <ui:Button Text="Stock" Variant="Outline" Command="{Binding OpenStockCommand, Source={x:Reference AccountRoot}}" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout IsVisible="{Binding IsAdmin, Source={x:Reference AccountRoot}}" Spacing="12">
+                        <Label Text="Administration" FontSize="20" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
+                        <utility:AdminUserManager x:Name="UserManager"
+                                                  ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference PageLayout}}"
+                                                  IsAdmin="{Binding IsAdmin, Source={x:Reference AccountRoot}}" />
+                        <utility:AdminBulkManager x:Name="BulkManager"
+                                                  ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference PageLayout}}"
+                                                  IsAdmin="{Binding IsAdmin, Source={x:Reference AccountRoot}}" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </app:RootLayout>
+</ContentPage>

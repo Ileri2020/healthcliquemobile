@@ -101,12 +101,18 @@ public sealed class CommerceChatUser
     public string Id { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
+    public string Contact { get; set; } = string.Empty;
     public string Role { get; set; } = "customer";
     public string AvatarUrl { get; set; } = string.Empty;
     public bool AcceptedTerms { get; set; }
     public bool AcceptedPrivacy { get; set; }
     public bool AcceptedReturns { get; set; }
     public List<CommerceShippingAddress> Addresses { get; set; } = [];
+}
+
+public static class CommerceSessionState
+{
+    public static CommerceChatUser? CurrentUser { get; set; }
 }
 
 public sealed class CommerceMessage

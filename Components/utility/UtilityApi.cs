@@ -115,6 +115,47 @@ internal static class UtilityApi
         return session.User;
     }
 
+    public static async Task<CommerceChatUser?> GetSignedInUserAsync(string baseUrl, CancellationToken cancellationToken = default)
+    {
+        using var response = await HttpClient.GetAsync(CreateUri(baseUrl, "api/auth/session"), cancellationToken);
+        if (!response.IsSuccessStatusCode)
+            throw new HttpRequestException($"Unable to load the signed-in session ({(int)response.StatusCode}).", null, response.StatusCode);
+
+        var session = await response.Content.ReadFromJsonAsync<AuthSession>(JsonOptions, cancellationToken)
+            ?? throw new JsonException("The sign-in service returned an invalid session.");
+        return string.IsNullOrWhiteSpace(session.User?.Id) ? null : session.User;
+    }
+
+    public static async Task SignOutAsync(string baseUrl, CancellationToken cancellationToken = default)
+    {
+        using var csrfResponse = await HttpClient.GetAsync(CreateUri(baseUrl, "api/auth/csrf"), cancellationToken);
+        csrfResponse.EnsureSuccessStatusCode();
+        var csrf = await csrfResponse.Content.ReadFromJsonAsync<CsrfResponse>(JsonOptions, cancellationToken)
+            ?? throw new JsonException("The sign-out service did not return a CSRF token.");
+
+        using var content = new FormUrlEncodedContent(new Dictionary<string, string>
+        {
+            ["csrfToken"] = csrf.CsrfToken,
+            ["callbackUrl"] = CreateUri(baseUrl, string.Empty).ToString(),
+            ["json"] = "true"
+        });
+        using var request = new HttpRequestMessage(HttpMethod.Post, CreateUri(baseUrl, "api/auth/signout"))
+        {
+            Content = content
+        };
+        request.Headers.Referrer = CreateUri(baseUrl, string.Empty);
+        request.Headers.Add("X-Auth-Return-Redirect", "1");
+        using var response = await HttpClient.SendAsync(request, cancellationToken);
+        if (!response.IsSuccessStatusCode)
+        {
+            var detail = await response.Content.ReadAsStringAsync(cancellationToken);
+            throw new HttpRequestException($"Sign-out failed ({(int)response.StatusCode}): {detail}", null, response.StatusCode);
+        }
+
+        if (await GetSignedInUserAsync(baseUrl, cancellationToken) is not null)
+            throw new HttpRequestException("The sign-out service did not clear the active session.");
+    }
+
     private sealed class CsrfResponse
     {
         public string CsrfToken { get; set; } = string.Empty;
