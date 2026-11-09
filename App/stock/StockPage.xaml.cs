@@ -130,7 +130,7 @@ public partial class StockPage : ContentPage, IQueryAttributable
         var buttons = new HorizontalStackLayout { Spacing = 8 };
         buttons.Children.Add(CreateActionButton("Add product", () => AddStockLine(lineContainer)));
         buttons.Children.Add(CreateButton(editId is null ? "Save purchase" : "Save changes", async () =>
-            await SaveStockAsync(editId, company.Text, representative.Text, amountPaid.Text)));
+            await SaveStockAsync(company.Text, representative.Text, amountPaid.Text)));
         Workspace.Children.Add(buttons);
         AddStockLine(lineContainer);
 

@@ -87,7 +87,12 @@ public partial class ExpensesPage : ContentPage, IQueryAttributable
     private void AddDraft(VerticalStackLayout container)
     {
         var draft = new ExpenseDraft();
-        var panel = new VerticalStackLayout { Spacing = 6, Padding = 10 };
+        var content = new VerticalStackLayout { Spacing = 6, Padding = 10 };
+        var panel = new Border
+        {
+            StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 10 },
+            Content = content
+        };
         var name = new Entry { Placeholder = "Expense name (e.g. Transport)" };
         var amount = new Entry { Placeholder = "Amount (₦)", Keyboard = Keyboard.Numeric };
         var span = new CheckBox();
@@ -117,18 +122,18 @@ public partial class ExpensesPage : ContentPage, IQueryAttributable
             _drafts.Remove(draft);
             container.Children.Remove(panel);
             UpdateDraftTotal();
+            return Task.CompletedTask;
         }, outline: true);
         rowGrid.Add(remove, 1, 0);
-        panel.Children.Add(rowGrid);
-        panel.Children.Add(amount);
-        panel.Children.Add(new HorizontalStackLayout
+        content.Children.Add(rowGrid);
+        content.Children.Add(amount);
+        content.Children.Add(new HorizontalStackLayout
         {
             Spacing = 6,
             Children = { span, new Label { Text = "Shared across dates", VerticalTextAlignment = TextAlignment.Center } }
         });
-        panel.Children.Add(spanDates);
+        content.Children.Add(spanDates);
         panel.BackgroundColor = Color.FromArgb("#F3F4F6");
-        panel.StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 10 };
         container.Children.Add(panel);
         draft.Name = name;
         draft.Amount = amount;
@@ -310,7 +315,7 @@ public partial class ExpensesPage : ContentPage, IQueryAttributable
     private static string? Query(IDictionary<string, object> query, string key) =>
         query.TryGetValue(key, out var value) ? Uri.UnescapeDataString(value?.ToString() ?? string.Empty) : null;
 
-    private static Button CreateButton(string text, Func<Task> onClick, bool outline)
+    private static Button CreateButton(string text, Func<Task> onClick, bool outline = false)
     {
         var button = new Button { Text = text };
         button.Clicked += async (_, _) => await onClick();

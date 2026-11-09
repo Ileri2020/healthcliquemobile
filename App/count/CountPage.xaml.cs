@@ -150,7 +150,8 @@ public partial class CountPage : ContentPage, IQueryAttributable
                     product.CountedPcs = counted.Text;
                     counted.TextChanged += (_, args) => product.CountedPcs = args.NewTextValue;
                     product.ExpiryInput = existingExpiry?.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-                    expiry.DateSelected += (_, args) => product.ExpiryInput = args.NewDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    expiry.DateSelected += (_, args) => product.ExpiryInput =
+                        args.NewDate.GetValueOrDefault().ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                 }
             }
 
