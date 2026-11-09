@@ -30,7 +30,12 @@ public partial class RootLayout : ContentView
             CreateNavigationItem("/stock", "Stock"),
             CreateNavigationItem("/count", "Stock count"),
             CreateNavigationItem("/expenses", "Expenses"),
-            CreateNavigationItem("/contact", "Contact")
+            CreateNavigationItem("/contact", "Contact"),
+            CreateNavigationItem("/admin", "Administration"),
+            CreateNavigationItem("/inventory/analytics", "Inventory analytics"),
+            CreateNavigationItem("/staff", "Register customer"),
+            CreateNavigationItem("/vitals", "Vitals"),
+            CreateNavigationItem("/sheet", "Data sheet")
         ];
         PageSidenav.Items = SideNavigationItems;
         CartItems = CommerceCartState.Shared.Items;

@@ -203,37 +203,37 @@ public partial class ExpensesPage : ContentPage, IQueryAttributable
         return await InventoryApi.GetAsync<List<ExpenseRecord>>(PageLayout.ApiBaseUrl, path);
     }
 
+    private void AddRangeFilter()
+    {
+        var range = _path.Split("_to_", StringSplitOptions.None);
+        var fallback = DateTime.TryParse(range[0], CultureInfo.InvariantCulture, DateTimeStyles.None, out var date)
+            ? date.Date
+            : DateTime.Today;
+        var fromPicker = new DatePicker
+        {
+            Date = DateTime.TryParse(_from, CultureInfo.InvariantCulture, DateTimeStyles.None, out var from) ? from.Date : fallback
+        };
+        var toPicker = new DatePicker
+        {
+            Date = DateTime.TryParse(_to, CultureInfo.InvariantCulture, DateTimeStyles.None, out var to)
+                ? to.Date
+                : range.Length > 1 && DateTime.TryParse(range[1], CultureInfo.InvariantCulture, DateTimeStyles.None, out var rangeTo)
+                    ? rangeTo.Date
+                    : fallback
+        };
+        AddLabel("Filter saved records", 16, true);
+        Workspace.Children.Add(fromPicker);
+        Workspace.Children.Add(toPicker);
+        Workspace.Children.Add(CreateButton("Apply date range", async () =>
+            await PageLayout.NavigateToAsync($"/expenses/all?from={fromPicker.Date:yyyy-MM-dd}&to={toPicker.Date:yyyy-MM-dd}"), outline: true));
+    }
+
     private void AddExpenseList(List<ExpenseRecord> expenses)
     {
         if (expenses.Count == 0)
         {
             AddLabel("No saved expenses found.", 14);
             return;
-        }
-
-        private void AddRangeFilter()
-        {
-            var range = _path.Split("_to_", StringSplitOptions.None);
-            var fallback = DateTime.TryParse(range[0], CultureInfo.InvariantCulture, DateTimeStyles.None, out var date)
-                ? date.Date
-                : DateTime.Today;
-            var fromPicker = new DatePicker
-            {
-                Date = DateTime.TryParse(_from, CultureInfo.InvariantCulture, DateTimeStyles.None, out var from) ? from.Date : fallback
-            };
-            var toPicker = new DatePicker
-            {
-                Date = DateTime.TryParse(_to, CultureInfo.InvariantCulture, DateTimeStyles.None, out var to)
-                    ? to.Date
-                    : range.Length > 1 && DateTime.TryParse(range[1], CultureInfo.InvariantCulture, DateTimeStyles.None, out var rangeTo)
-                        ? rangeTo.Date
-                        : fallback
-            };
-            AddLabel("Filter saved records", 16, true);
-            Workspace.Children.Add(fromPicker);
-            Workspace.Children.Add(toPicker);
-            Workspace.Children.Add(CreateButton("Apply date range", async () =>
-                await PageLayout.NavigateToAsync($"/expenses/all?from={fromPicker.Date:yyyy-MM-dd}&to={toPicker.Date:yyyy-MM-dd}"), outline: true));
         }
 
         foreach (var expense in expenses.OrderByDescending(item => item.Date))
