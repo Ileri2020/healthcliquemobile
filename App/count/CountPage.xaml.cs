@@ -81,9 +81,10 @@ public partial class CountPage : ContentPage, IQueryAttributable
         var datePicker = new DatePicker { Date = _date, MaximumDate = DateTime.Today.AddYears(2) };
         datePicker.DateSelected += async (_, args) =>
         {
-            if (args.NewDate.Date == _date.Date)
+            var selectedDate = args.NewDate.GetValueOrDefault().Date;
+            if (selectedDate == _date.Date)
                 return;
-            _date = args.NewDate.Date;
+            _date = selectedDate;
             await RenderAsync();
         };
         Workspace.Children.Add(datePicker);
@@ -141,7 +142,7 @@ public partial class CountPage : ContentPage, IQueryAttributable
                     var card = new Border
                     {
                         Padding = 2,
-                        StrokeShape = new RoundRectangle { CornerRadius = 10 },
+                        StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 10 },
                         Content = panel
                     };
                     rows.Children.Add(card);
@@ -289,7 +290,7 @@ public partial class CountPage : ContentPage, IQueryAttributable
         var card = new Border
         {
             Padding = 12,
-            StrokeShape = new RoundRectangle { CornerRadius = 10 },
+            StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 10 },
             Content = new VerticalStackLayout
             {
                 Spacing = 5,
@@ -330,7 +331,7 @@ public partial class CountPage : ContentPage, IQueryAttributable
             Workspace.Children.Add(new Border
             {
                 Padding = 2,
-                StrokeShape = new RoundRectangle { CornerRadius = 10 },
+                StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 10 },
                 Content = panel
             });
             if (IsAdmin && line.CountedPcs.HasValue && !line.NormalizedPcs.HasValue)

@@ -127,7 +127,7 @@ public partial class SalesPage : ContentPage, IQueryAttributable
         var datePicker = new DatePicker { Date = _selectedDate, MaximumDate = DateTime.Today.AddYears(2) };
         datePicker.DateSelected += (_, args) =>
         {
-            _selectedDate = args.NewDate.Date;
+            _selectedDate = args.NewDate.GetValueOrDefault().Date;
             _rangeTo = null;
         };
         Workspace.Children.Add(datePicker);
@@ -319,7 +319,7 @@ public partial class SalesPage : ContentPage, IQueryAttributable
                 var datePicker = new DatePicker { Date = _selectedDate };
                 datePicker.DateSelected += async (_, args) =>
                 {
-                    _selectedDate = args.NewDate.Date;
+                    _selectedDate = args.NewDate.GetValueOrDefault().Date;
                     await PageLayout.NavigateToAsync($"/sales/daily?date={_selectedDate:yyyy-MM-dd}");
                 };
                 Workspace.Children.Add(datePicker);
@@ -338,8 +338,8 @@ public partial class SalesPage : ContentPage, IQueryAttributable
             Workspace.Children.Add(rangeInputs.View);
             Workspace.Children.Add(CreateButton("Apply date range", async () =>
             {
-                var start = rangeInputs.From.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-                var end = rangeInputs.To.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                var start = rangeInputs.From.Date.GetValueOrDefault().ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                var end = rangeInputs.To.Date.GetValueOrDefault().ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                 await PageLayout.NavigateToAsync($"/sales/{start}_to_{end}");
             }));
         }

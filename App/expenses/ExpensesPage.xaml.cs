@@ -65,7 +65,7 @@ public partial class ExpensesPage : ContentPage, IQueryAttributable
     {
         AddLabel("Expense date", 16, true);
         var datePicker = new DatePicker { Date = _date, MaximumDate = DateTime.Today.AddYears(2) };
-        datePicker.DateSelected += (_, args) => _date = args.NewDate.Date;
+        datePicker.DateSelected += (_, args) => _date = args.NewDate.GetValueOrDefault().Date;
         Workspace.Children.Add(datePicker);
 
         _draftTotal = AddLabel("Draft total: ₦0", 18, true);
@@ -76,7 +76,11 @@ public partial class ExpensesPage : ContentPage, IQueryAttributable
         AddDraft(rows);
         AddDraft(rows);
 
-        Workspace.Children.Add(CreateButton("Add expense row", () => AddDraft(rows), outline: true));
+        Workspace.Children.Add(CreateButton("Add expense row", () =>
+        {
+            AddDraft(rows);
+            return Task.CompletedTask;
+        }, outline: true));
         Workspace.Children.Add(CreateButton("Save expenses", async () => await SaveAsync(), outline: false));
     }
 
@@ -124,7 +128,7 @@ public partial class ExpensesPage : ContentPage, IQueryAttributable
         });
         panel.Children.Add(spanDates);
         panel.BackgroundColor = Color.FromArgb("#F3F4F6");
-        panel.StrokeShape = new RoundRectangle { CornerRadius = 10 };
+        panel.StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 10 };
         container.Children.Add(panel);
         draft.Name = name;
         draft.Amount = amount;
@@ -152,7 +156,7 @@ public partial class ExpensesPage : ContentPage, IQueryAttributable
                 await DisplayAlertAsync("Expenses", $"Enter a valid non-negative amount for {draft.Name.Text}.", "OK");
                 return;
             }
-            if (draft.Span.IsChecked && draft.SpanFrom.Date > draft.SpanTo.Date)
+            if (draft.Span.IsChecked && draft.SpanFrom.Date.GetValueOrDefault().Date > draft.SpanTo.Date.GetValueOrDefault().Date)
             {
                 await DisplayAlertAsync("Expenses", $"The date range for {draft.Name.Text} is invalid.", "OK");
                 return;
@@ -162,8 +166,8 @@ public partial class ExpensesPage : ContentPage, IQueryAttributable
                 Name = draft.Name.Text!.Trim(),
                 Amount = amount,
                 Span = draft.Span.IsChecked,
-                SpanFrom = draft.Span.IsChecked ? draft.SpanFrom.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) : null,
-                SpanTo = draft.Span.IsChecked ? draft.SpanTo.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) : null
+                SpanFrom = draft.Span.IsChecked ? draft.SpanFrom.Date.GetValueOrDefault().ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) : null,
+                SpanTo = draft.Span.IsChecked ? draft.SpanTo.Date.GetValueOrDefault().ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) : null
             });
         }
 
@@ -258,7 +262,7 @@ public partial class ExpensesPage : ContentPage, IQueryAttributable
             Workspace.Children.Add(new Border
             {
                 Padding = 2,
-                StrokeShape = new RoundRectangle { CornerRadius = 10 },
+                StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 10 },
                 Content = panel
             });
         }

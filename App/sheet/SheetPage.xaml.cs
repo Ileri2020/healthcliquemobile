@@ -123,7 +123,7 @@ public partial class SheetPage : ContentPage, IQueryAttributable
             _results.Children.Add(new Border
             {
                 Padding = 10,
-                StrokeShape = new RoundRectangle { CornerRadius = 10 },
+                StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 10 },
                 Content = details
             });
         }

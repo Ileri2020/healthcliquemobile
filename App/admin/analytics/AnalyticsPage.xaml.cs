@@ -71,8 +71,8 @@ public partial class AnalyticsPage : ContentPage, IQueryAttributable
     {
         if (_fromPicker is null || _toPicker is null || _results is null)
             return;
-        _from = _fromPicker.Date.Date;
-        _to = _toPicker.Date.Date;
+        _from = _fromPicker.Date.GetValueOrDefault().Date;
+        _to = _toPicker.Date.GetValueOrDefault().Date;
         if (_from > _to)
         {
             await DisplayAlertAsync("Analytics", "The start date must be on or before the end date.", "OK");
@@ -138,7 +138,7 @@ public partial class AnalyticsPage : ContentPage, IQueryAttributable
         new()
         {
             Padding = 12,
-            StrokeShape = new RoundRectangle { CornerRadius = 10 },
+            StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 10 },
             Content = new VerticalStackLayout
             {
                 Children =

@@ -22,7 +22,7 @@ public abstract class StaticInfoPage : ContentPage
             _content.Children.Add(new Border
             {
                 Padding = 14,
-                StrokeShape = new RoundRectangle { CornerRadius = 12 },
+                StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 12 },
                 Content = new VerticalStackLayout
                 {
                     Spacing = 6,

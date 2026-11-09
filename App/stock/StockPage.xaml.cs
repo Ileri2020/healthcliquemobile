@@ -112,7 +112,7 @@ public partial class StockPage : ContentPage, IQueryAttributable
         var datePicker = new DatePicker { Date = _selectedDate, MaximumDate = DateTime.Today.AddYears(2) };
         datePicker.DateSelected += (_, args) =>
         {
-            _selectedDate = args.NewDate.Date;
+            _selectedDate = args.NewDate.GetValueOrDefault().Date;
             _rangeTo = null;
         };
         Workspace.Children.Add(datePicker);
@@ -315,8 +315,8 @@ public partial class StockPage : ContentPage, IQueryAttributable
         Workspace.Children.Add(dates.View);
         Workspace.Children.Add(CreateButton("Apply date range", async () =>
         {
-            var start = dates.From.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-            var end = dates.To.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            var start = dates.From.Date.GetValueOrDefault().ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            var end = dates.To.Date.GetValueOrDefault().ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
             await PageLayout.NavigateToAsync($"/stock/{start}_to_{end}");
         }));
 
@@ -430,7 +430,7 @@ public partial class StockPage : ContentPage, IQueryAttributable
         var date = new DatePicker { Date = _selectedDate };
         date.DateSelected += async (_, args) =>
         {
-            _selectedDate = args.NewDate.Date;
+            _selectedDate = args.NewDate.GetValueOrDefault().Date;
             await PageLayout.NavigateToAsync($"/stock/count?date={_selectedDate:yyyy-MM-dd}");
         };
         Workspace.Children.Add(date);

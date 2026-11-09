@@ -100,7 +100,7 @@ public partial class CartPage : ContentPage, IQueryAttributable
             var card = new Border
             {
                 Padding = 12,
-                StrokeShape = new RoundRectangle { CornerRadius = 12 },
+                StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 12 },
                 Content = new VerticalStackLayout
                 {
                     Spacing = 6,

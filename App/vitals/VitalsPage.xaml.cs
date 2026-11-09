@@ -104,7 +104,7 @@ public partial class VitalsPage : ContentPage
                 _readingList.Children.Add(new Border
                 {
                     Padding = 12,
-                    StrokeShape = new RoundRectangle { CornerRadius = 10 },
+                    StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 10 },
                     Content = new VerticalStackLayout
                     {
                         Spacing = 5,
@@ -158,7 +158,7 @@ public partial class VitalsPage : ContentPage
             await InventoryApi.SendAsync<VitalReading>(PageLayout.ApiBaseUrl, HttpMethod.Post, "api/vitals", new
             {
                 customerName = _selectedCustomer,
-                date = _date.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                date = _date.Date.GetValueOrDefault().ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                 systolic,
                 diastolic,
                 pulse,
