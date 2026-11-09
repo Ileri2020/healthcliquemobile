@@ -359,9 +359,9 @@ public partial class SalesPage : ContentPage, IQueryAttributable
         foreach (var sale in sales)
         {
             var detail = new VerticalStackLayout { Spacing = 4 };
-            detail.Children.Add(CreateLabel(sale.CustomerName.Length == 0 ? "Sale" : sale.CustomerName, 17, true));
+            detail.Children.Add(CreateLabel((sale.CustomerName.Length == 0 ? "Sale" : sale.CustomerName), 17, true));
             detail.Children.Add(CreateLabel($"{InventoryApi.DateText(sale.Date ?? sale.RangeFrom)} · {sale.Rows.Count} products · {InventoryApi.MoneyText(sale.Total)}"));
-            detail.Children.Add(CreateLabel($"Payment: {string.IsNullOrWhiteSpace(sale.PaymentMethod) ? "—" : sale.PaymentMethod} · Staff: {string.IsNullOrWhiteSpace(sale.StaffName) ? "—" : sale.StaffName}"));
+            detail.Children.Add(CreateLabel($"Payment: {(string.IsNullOrWhiteSpace(sale.PaymentMethod) ? "—" : sale.PaymentMethod)} · Staff: {(string.IsNullOrWhiteSpace(sale.StaffName) ? "—" : sale.StaffName)}"));
             Workspace.Children.Add(CreateCard(detail));
             Workspace.Children.Add(CreateButton("View sale", async () => await PageLayout.NavigateToAsync($"/sales/view/{Uri.EscapeDataString(sale.Id)}")));
         }
