@@ -1,10 +1,13 @@
 name: Build iOS iPhone app
 
 on:
-  workflow_dispatch:
   push:
+    branches:
+      - "**"
     tags:
       - "v*"
+  pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -24,6 +27,14 @@ jobs:
       - name: Install .NET MAUI iOS workload
         run: dotnet workload install maui
 
+      - name: Validate iOS simulator build
+        run: >-
+          dotnet build EEE.csproj
+          -f net10.0-ios
+          -c Release
+          -p:RuntimeIdentifier=iossimulator-arm64
+          -p:CodesignKey=-
+
       - name: Prepare Apple signing
         id: signing
         shell: bash
@@ -35,8 +46,9 @@ jobs:
         run: |
           set -euo pipefail
           if [[ -z "$APPLE_CERTIFICATE_BASE64" || -z "$APPLE_CERTIFICATE_PASSWORD" || -z "$APPLE_PROVISIONING_PROFILE_BASE64" || -z "$APPLE_TEAM_ID" ]]; then
-            echo "Configure APPLE_CERTIFICATE_BASE64, APPLE_CERTIFICATE_PASSWORD, APPLE_PROVISIONING_PROFILE_BASE64, and APPLE_TEAM_ID repository secrets. Set the IOS_BUNDLE_ID repository variable to the provisioning profile's App ID (defaults to com.companyname.eee)." >> "$GITHUB_STEP_SUMMARY"
-            exit 1
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "iOS simulator build passed. Configure APPLE_CERTIFICATE_BASE64, APPLE_CERTIFICATE_PASSWORD, APPLE_PROVISIONING_PROFILE_BASE64, and APPLE_TEAM_ID secrets to produce an installable iPhone IPA. Set IOS_BUNDLE_ID to match the provisioning profile (defaults to com.companyname.eee)." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
           fi
 
           CERTIFICATE_PATH="$RUNNER_TEMP/apple-distribution.p12"
@@ -67,12 +79,14 @@ jobs:
             exit 1
           fi
           {
+            echo "available=true"
             echo "identity=$CODESIGN_IDENTITY"
             echo "profile_uuid=$PROFILE_UUID"
             echo "team_id=$APPLE_TEAM_ID"
           } >> "$GITHUB_OUTPUT"
 
       - name: Publish signed iPhone IPA
+        if: steps.signing.outputs.available == 'true'
         shell: bash
         env:
           CODESIGN_IDENTITY: ${{ steps.signing.outputs.identity }}
@@ -101,6 +115,7 @@ jobs:
           cp "$IPA_PATH" Platforms/dist/ios/HealthClique.ipa
 
       - name: Upload signed iPhone IPA
+        if: steps.signing.outputs.available == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: healthclique-ios-iphone
