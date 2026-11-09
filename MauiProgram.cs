@@ -21,7 +21,7 @@ public static class MauiProgram
 			});
 
 		builder.Services.AddSingleton<MainViewModel>();
-		builder.Services.AddSingleton<HomePage>();
+		builder.Services.AddTransient<HomePage>();
 		builder.Services.AddSingleton<AppShell>();
 
 #if DEBUG

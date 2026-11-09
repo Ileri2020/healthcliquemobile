@@ -1,10 +1,11 @@
 using EEE.ClientApp.Pages;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EEE;
 
 public partial class AppShell : Shell
 {
-	public AppShell(HomePage homePage)
+	public AppShell(IServiceProvider services)
 	{
 		InitializeComponent();
 		Routing.RegisterRoute("store", typeof(StorePage));
@@ -34,7 +35,7 @@ public partial class AppShell : Shell
 		{
 			Title = "Home",
 			Route = "home",
-			Content = homePage
+			ContentTemplate = new DataTemplate(() => services.GetRequiredService<HomePage>())
 		});
 	}
 }

@@ -27,11 +27,7 @@ public partial class RootLayout : ContentView
 
     public RootLayout()
     {
-        InitializeComponent();
         SideNavigationItems = [];
-        PageSidenav.Items = SideNavigationItems;
-        Loaded += OnLoaded;
-        Unloaded += OnUnloaded;
         CartItems = CommerceCartState.Shared.Items;
         OpenCartCommand = new Command(() => IsCartOpen = true);
         CloseCartCommand = new Command(() => IsCartOpen = false);
@@ -41,6 +37,10 @@ public partial class RootLayout : ContentView
                 CommerceCartState.Shared.Remove(item);
         });
         CheckoutCommand = new Command(async () => await NavigateToAsync("/cart"));
+        InitializeComponent();
+        PageSidenav.Items = SideNavigationItems;
+        Loaded += OnLoaded;
+        Unloaded += OnUnloaded;
         CommerceCartState.Shared.PropertyChanged += (_, args) =>
         {
             if (args.PropertyName is nameof(CommerceCartState.ItemCount) or nameof(CommerceCartState.TotalText))

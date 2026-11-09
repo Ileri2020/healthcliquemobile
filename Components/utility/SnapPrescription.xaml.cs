@@ -26,8 +26,6 @@ public partial class SnapPrescription : ContentView
 
     public SnapPrescription()
     {
-        InitializeComponent();
-        Groups = [];
         OpenCommand = new Command(() => IsOpen = true);
         PickImageCommand = new Command(async () => await PickImageAsync());
         CaptureCommand = new Command(async () => await CaptureImageAsync());
@@ -40,6 +38,7 @@ public partial class SnapPrescription : ContentView
                 group.SpecialSelected = !group.SpecialSelected;
         });
         AddSelectedCommand = new Command(async () => await AddSelectedAsync(), () => !_isAddingToCart);
+        InitializeComponent();
     }
 
     public string ApiBaseUrl { get => (string)GetValue(ApiBaseUrlProperty); set => SetValue(ApiBaseUrlProperty, value); }
@@ -54,7 +53,7 @@ public partial class SnapPrescription : ContentView
     public bool HasImage => _imageFile is not null;
     public bool HasGroups => Groups.Count > 0;
     public string IdentifyText => IsLoading ? "Identifying..." : "Identify Products";
-    public ObservableCollection<PrescriptionMatchGroupView> Groups { get; }
+    public ObservableCollection<PrescriptionMatchGroupView> Groups { get; } = [];
     public ICommand OpenCommand { get; }
     public ICommand PickImageCommand { get; }
     public ICommand CaptureCommand { get; }

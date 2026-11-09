@@ -22,8 +22,6 @@ public partial class PartnerBrands : ContentView
 
     public PartnerBrands()
     {
-        InitializeComponent();
-        Brands = [];
         RefreshCommand = new Command(async () => await LoadAsync(), () => !IsLoading);
         NewCommand = new Command(StartNew, () => IsAdmin);
         EditCommand = new Command<PartnerBrand>(StartEdit, brand => IsAdmin && brand is not null);
@@ -36,6 +34,7 @@ public partial class PartnerBrands : ContentView
         SaveCommand = new Command(async () => await SaveAsync(), () => IsAdmin && !IsLoading);
         SaveOrderCommand = new Command(async () => await SaveOrderAsync(), () => IsAdmin && !IsLoading);
         CancelCommand = new Command(() => IsEditorOpen = false);
+        InitializeComponent();
         Loaded += async (_, _) => await LoadAsync();
     }
 
@@ -49,7 +48,7 @@ public partial class PartnerBrands : ContentView
     public string EditOrder { get => (string)GetValue(EditOrderProperty); set => SetValue(EditOrderProperty, value); }
     public string EditorTitle => _editingBrand is null ? "Add partner" : "Edit partner";
     public bool IsEmpty => !IsLoading && Brands.Count == 0;
-    public ObservableCollection<PartnerBrand> Brands { get; }
+    public ObservableCollection<PartnerBrand> Brands { get; } = [];
     public ICommand RefreshCommand { get; }
     public ICommand NewCommand { get; }
     public ICommand EditCommand { get; }

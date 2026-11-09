@@ -39,7 +39,7 @@ jobs:
           dotnet publish EEE.csproj
           -f net10.0-android
           -c Release
-          --artifacts-path Platforms/dist
+          --artifacts-path "$RUNNER_TEMP/healthclique-artifacts"
           -p:PublishReadyToRun=false
           -p:PublishTrimmed=false
           -p:RunAOTCompilation=false
@@ -49,7 +49,7 @@ jobs:
       - name: Prepare Android APK
         run: |
           mkdir -p Platforms/dist
-          SIGNED_APK=$(find Platforms/dist -type f -name "*-Signed.apk" -print -quit)
+          SIGNED_APK=$(find "$RUNNER_TEMP/healthclique-artifacts" -type f -name "*-Signed.apk" -print -quit)
           if [ -z "$SIGNED_APK" ]; then
             echo "Error: Signed APK not found in publish output"
             exit 1

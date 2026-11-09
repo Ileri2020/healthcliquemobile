@@ -18,6 +18,7 @@
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<DefaultItemExcludes>$(DefaultItemExcludes);Platforms\dist\**;Platforms\installer\**</DefaultItemExcludes>
 
 		<!-- Enable XAML source generation for faster build times and improved performance.
 		     This generates C# code from XAML at compile time instead of runtime inflation.
@@ -28,10 +29,11 @@
 		<MauiXamlInflator>SourceGen</MauiXamlInflator>
 
 		<!-- Display name -->
-		<ApplicationTitle>EEE</ApplicationTitle>
+		<ApplicationTitle>HealthClique</ApplicationTitle>
 
-		<!-- App Identifier -->
+		<!-- Keep this Android ID distinct from other MAUI apps built from the default template. -->
 		<ApplicationId>com.companyname.eee</ApplicationId>
+		<ApplicationId Condition="'$(TargetFramework)' == 'net10.0-android'">com.ileri2020.healthclique.mobiledesktop</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -46,6 +48,13 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<MauiXaml Remove="Platforms\dist\**\*.xaml;Platforms\installer\**\*.xaml" />
+		<Compile Remove="Platforms\dist\**\*.cs;Platforms\installer\**\*.cs" />
+		<Content Remove="Platforms\dist\**\*;Platforms\installer\**\*" />
+		<None Remove="Platforms\dist\**\*;Platforms\installer\**\*" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<!-- App Icon -->
