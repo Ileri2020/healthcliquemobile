@@ -24,23 +24,47 @@ jobs:
       - name: Install .NET MAUI workload
         run: dotnet workload install maui
 
-      - name: Publish unsigned MSIX installer
+      - name: Publish Windows MSIX installer
         shell: pwsh
-        run: >-
-          dotnet publish EEE.csproj
-          -f net10.0-windows10.0.19041.0
-          -c Release
-          --artifacts-path Platforms/dist
-          -p:PublishReadyToRun=false
-          -p:WindowsPackageType=MSIX
-          -p:GenerateAppxPackageOnBuild=true
-          -p:AppxPackageSigningEnabled=false
-          -p:AppxBundle=Never
-          -p:AppxPackageDir=Platforms/installer/
+        env:
+          WINDOWS_CERTIFICATE_BASE64: ${{ secrets.WINDOWS_CERTIFICATE_BASE64 }}
+          WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+        run: |
+          $arguments = @(
+            "publish", "EEE.csproj",
+            "-f", "net10.0-windows10.0.19041.0",
+            "-c", "Release",
+            "--artifacts-path", "Platforms/dist",
+            "-p:PublishReadyToRun=false",
+            "-p:WindowsPackageType=MSIX",
+            "-p:GenerateAppxPackageOnBuild=true",
+            "-p:AppxBundle=Never",
+            "-p:AppxPackageDir=Platforms/installer/"
+          )
+
+          if (($env:WINDOWS_CERTIFICATE_BASE64 -and -not $env:WINDOWS_CERTIFICATE_PASSWORD) -or (-not $env:WINDOWS_CERTIFICATE_BASE64 -and $env:WINDOWS_CERTIFICATE_PASSWORD)) {
+            throw "Configure both WINDOWS_CERTIFICATE_BASE64 and WINDOWS_CERTIFICATE_PASSWORD, or leave both unset."
+          }
+
+          if ($env:WINDOWS_CERTIFICATE_BASE64) {
+            $certificatePath = Join-Path $env:RUNNER_TEMP "healthclique-signing.pfx"
+            [IO.File]::WriteAllBytes($certificatePath, [Convert]::FromBase64String($env:WINDOWS_CERTIFICATE_BASE64))
+            $arguments += "-p:AppxPackageSigningEnabled=true"
+            $arguments += "-p:PackageCertificateKeyFile=$certificatePath"
+            $arguments += "-p:PackageCertificatePassword=$env:WINDOWS_CERTIFICATE_PASSWORD"
+          } else {
+            $arguments += "-p:AppxPackageSigningEnabled=false"
+            "Configure WINDOWS_CERTIFICATE_BASE64 and WINDOWS_CERTIFICATE_PASSWORD repository secrets for a signed MSIX. Without them, the artifact is unsigned and must be signed before installation." >> $env:GITHUB_STEP_SUMMARY
+          }
+
+          & dotnet @arguments
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
 
       - name: Upload Windows MSIX installer
         uses: actions/upload-artifact@v4
         with:
-          name: healthclique-windows-msix
+          name: healthclique-windows-msix-release
           path: Platforms/installer/**/*.msix
           if-no-files-found: error

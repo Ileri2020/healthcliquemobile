@@ -112,7 +112,19 @@ public sealed class CommerceChatUser
 
 public static class CommerceSessionState
 {
-    public static CommerceChatUser? CurrentUser { get; set; }
+    private static CommerceChatUser? _currentUser;
+
+    public static CommerceChatUser? CurrentUser
+    {
+        get => _currentUser;
+        set
+        {
+            _currentUser = value;
+            CurrentUserChanged?.Invoke();
+        }
+    }
+
+    public static event Action? CurrentUserChanged;
 }
 
 public sealed class CommerceMessage

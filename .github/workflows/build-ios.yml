@@ -1,0 +1,119 @@
+name: Build iOS iPhone app
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  build-ios:
+    runs-on: macos-15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Install .NET MAUI iOS workload
+        run: dotnet workload install maui
+
+      - name: Prepare Apple signing
+        id: signing
+        shell: bash
+        env:
+          APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_PROVISIONING_PROFILE_BASE64: ${{ secrets.APPLE_PROVISIONING_PROFILE_BASE64 }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$APPLE_CERTIFICATE_BASE64" || -z "$APPLE_CERTIFICATE_PASSWORD" || -z "$APPLE_PROVISIONING_PROFILE_BASE64" || -z "$APPLE_TEAM_ID" ]]; then
+            echo "Configure APPLE_CERTIFICATE_BASE64, APPLE_CERTIFICATE_PASSWORD, APPLE_PROVISIONING_PROFILE_BASE64, and APPLE_TEAM_ID repository secrets. Set the IOS_BUNDLE_ID repository variable to the provisioning profile's App ID (defaults to com.companyname.eee)." >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+          CERTIFICATE_PATH="$RUNNER_TEMP/apple-distribution.p12"
+          PROFILE_PATH="$RUNNER_TEMP/healthclique.mobileprovision"
+          PROFILE_PLIST="$RUNNER_TEMP/profile.plist"
+          KEYCHAIN_PATH="$RUNNER_TEMP/healthclique-signing.keychain-db"
+          KEYCHAIN_PASSWORD="$(openssl rand -base64 32)"
+
+          printf '%s' "$APPLE_CERTIFICATE_BASE64" | base64 -D > "$CERTIFICATE_PATH"
+          printf '%s' "$APPLE_PROVISIONING_PROFILE_BASE64" | base64 -D > "$PROFILE_PATH"
+
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          echo "keychain_path=$KEYCHAIN_PATH" >> "$GITHUB_OUTPUT"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security import "$CERTIFICATE_PATH" -P "$APPLE_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security list-keychains -d user -s "$KEYCHAIN_PATH" "$HOME/Library/Keychains/login.keychain-db"
+
+          security cms -D -i "$PROFILE_PATH" > "$PROFILE_PLIST"
+          PROFILE_UUID="$(/usr/libexec/PlistBuddy -c 'Print UUID' "$PROFILE_PLIST")"
+          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+          cp "$PROFILE_PATH" "$HOME/Library/MobileDevice/Provisioning Profiles/$PROFILE_UUID.mobileprovision"
+
+          CODESIGN_IDENTITY="$(security find-identity -v -p codesigning "$KEYCHAIN_PATH" | awk -F '"' '/Apple Distribution:/ { print $2; exit }')"
+          if [[ -z "$CODESIGN_IDENTITY" ]]; then
+            echo "The imported certificate does not contain a valid Apple Distribution signing identity." >&2
+            exit 1
+          fi
+          {
+            echo "identity=$CODESIGN_IDENTITY"
+            echo "profile_uuid=$PROFILE_UUID"
+            echo "team_id=$APPLE_TEAM_ID"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Publish signed iPhone IPA
+        shell: bash
+        env:
+          CODESIGN_IDENTITY: ${{ steps.signing.outputs.identity }}
+          PROFILE_UUID: ${{ steps.signing.outputs.profile_uuid }}
+          APPLE_TEAM_ID: ${{ steps.signing.outputs.team_id }}
+          IOS_BUNDLE_ID: ${{ vars.IOS_BUNDLE_ID }}
+        run: |
+          set -euo pipefail
+          dotnet publish EEE.csproj \
+            -f net10.0-ios \
+            -c Release \
+            -p:RuntimeIdentifier=ios-arm64 \
+            -p:BuildIpa=true \
+            -p:ArchiveOnBuild=true \
+            -p:CodesignKey="$CODESIGN_IDENTITY" \
+            -p:CodesignProvision="$PROFILE_UUID" \
+            -p:CodesignTeamId="$APPLE_TEAM_ID" \
+            -p:ApplicationId="${IOS_BUNDLE_ID:-com.companyname.eee}"
+
+          mkdir -p Platforms/dist/ios
+          IPA_PATH="$(find . -type f -name '*.ipa' -not -path './.git/*' -print -quit)"
+          if [[ -z "$IPA_PATH" ]]; then
+            echo "The iOS publish completed without producing an IPA." >&2
+            exit 1
+          fi
+          cp "$IPA_PATH" Platforms/dist/ios/HealthClique.ipa
+
+      - name: Upload signed iPhone IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: healthclique-ios-iphone
+          path: Platforms/dist/ios/HealthClique.ipa
+          if-no-files-found: error
+
+      - name: Remove Apple signing keychain
+        if: always() && steps.signing.outputs.keychain_path != ''
+        shell: bash
+        env:
+          KEYCHAIN_PATH: ${{ steps.signing.outputs.keychain_path }}
+          PROFILE_UUID: ${{ steps.signing.outputs.profile_uuid }}
+        run: |
+          security delete-keychain "$KEYCHAIN_PATH"
+          rm -f "$RUNNER_TEMP/apple-distribution.p12" "$RUNNER_TEMP/healthclique.mobileprovision" "$RUNNER_TEMP/profile.plist"
+          rm -f "$HOME/Library/MobileDevice/Provisioning Profiles/$PROFILE_UUID.mobileprovision"
