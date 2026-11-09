@@ -25,7 +25,14 @@
                 <Grid RowDefinitions="Auto,*,Auto" RowSpacing="12">
                     <Grid ColumnDefinitions="*,Auto">
                         <VerticalStackLayout Spacing="6">
-                            <Image Source="healthcliquelogo.svg" HeightRequest="38" HorizontalOptions="Start" Aspect="AspectFit" />
+                            <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                                <Image Source="healthcliquelogo.svg" HeightRequest="38" WidthRequest="38" Aspect="AspectFit" />
+                                <Label Text="HealthClique"
+                                       FontSize="20"
+                                       FontAttributes="Bold"
+                                       VerticalOptions="Center"
+                                       TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+                            </HorizontalStackLayout>
                             <Label Text="{Binding Title, Source={x:Reference Root}}"
                                    FontSize="16"
                                    FontAttributes="Bold"

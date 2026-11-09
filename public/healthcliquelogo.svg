@@ -1,9 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 88" role="img" aria-labelledby="title">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 88" role="img" aria-labelledby="title">
   <title id="title">HealthClique</title>
   <g fill="none" stroke="#80BC00" stroke-linecap="round" stroke-linejoin="round" stroke-width="6">
     <path d="M29 7h15c7 0 12 5 12 12v13h13c7 0 12 5 12 12v15c0 7-5 12-12 12H56v5c0 7-5 12-12 12H29c-7 0-12-5-12-12V71H7C0 71-5 66-5 59V44c0-7 5-12 12-12h5V19c0-7 5-12 12-12Z" transform="translate(8 0)"/>
     <path d="M32 29v23M20.5 40.5h23"/>
   </g>
   <path d="m52 49 26 19-11 3 6 13-7 3-6-13-7 9Z" fill="#0073E6" stroke="#fff" stroke-linejoin="round" stroke-width="3"/>
-  <text x="102" y="58" fill="#80BC00" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="700" letter-spacing="-2">HealthClique</text>
 </svg>

@@ -8,7 +8,14 @@
     <Grid x:Name="HeroGrid" RowDefinitions="Auto,Auto" ColumnDefinitions="*,*"
           ColumnSpacing="20" RowSpacing="16" Padding="16">
         <VerticalStackLayout x:Name="HeroCopy" Grid.RowSpan="2" Spacing="16" VerticalOptions="Center">
-            <Image Source="healthcliquelogo.svg" HeightRequest="48" HorizontalOptions="Start" Aspect="AspectFit" />
+            <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                <Image Source="healthcliquelogo.svg" HeightRequest="48" WidthRequest="48" Aspect="AspectFit" />
+                <Label Text="HealthClique"
+                       FontSize="26"
+                       FontAttributes="Bold"
+                       VerticalOptions="Center"
+                       TextColor="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
+            </HorizontalStackLayout>
             <ui:Badge Text="NAFDAC Approved Pharmacy" />
             <Label Text="{Binding RotatingMessage, Source={x:Reference Root}}"
                    FontSize="20" FontAttributes="Bold,Italic"
