@@ -32,10 +32,10 @@
                            TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
                     <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
                            TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
-                    <HorizontalStackLayout Spacing="8">
-                        <ui:Button Text="Cancel" Variant="Ghost" Command="{Binding CloseCommand, Source={x:Reference Root}}" HorizontalOptions="FillAndExpand" />
-                        <ui:Button Text="{Binding SubmitText, Source={x:Reference Root}}" Command="{Binding SubmitCommand, Source={x:Reference Root}}" IsEnabled="{Binding CanSubmit, Source={x:Reference Root}}" HorizontalOptions="FillAndExpand" />
-                    </HorizontalStackLayout>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <ui:Button Text="Cancel" Variant="Ghost" Command="{Binding CloseCommand, Source={x:Reference Root}}" />
+                        <ui:Button Grid.Column="1" Text="{Binding SubmitText, Source={x:Reference Root}}" Command="{Binding SubmitCommand, Source={x:Reference Root}}" IsEnabled="{Binding CanSubmit, Source={x:Reference Root}}" />
+                    </Grid>
                 </VerticalStackLayout>
             </Border>
         </Grid>

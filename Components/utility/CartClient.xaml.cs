@@ -36,7 +36,6 @@ public partial class CartClient : ContentView
     private double _deliveryFee;
     private CouponInfo? _coupon;
     private CheckoutResponse? _checkout;
-    private bool _changingItems;
 
     public CartClient()
     {
@@ -85,6 +84,7 @@ public partial class CartClient : ContentView
     public ICommand DecreaseCommand { get; }
     public ICommand RemoveItemCommand { get; }
     public event Action<object?, CheckoutResponse>? CheckoutReady;
+    public event EventHandler? PaymentConfirmed;
     public event Action<object?, Exception>? RequestFailed;
 
     private static void OnUserChanged(BindableObject bindable, object oldValue, object newValue) =>
@@ -141,9 +141,7 @@ public partial class CartClient : ContentView
         var delivery = IncludeDelivery ? Math.Ceiling(_deliveryFee / 5) * 5 : 0;
         var total = Math.Max(0, subtotal - discount + delivery);
 
-        _changingItems = true;
         ItemCount = Items.Sum(item => Math.Max(0, item.Quantity));
-        _changingItems = false;
         HasItems = Items.Count > 0;
         IsEmpty = !HasItems;
         SubtotalText = $"₦{subtotal:N0}";

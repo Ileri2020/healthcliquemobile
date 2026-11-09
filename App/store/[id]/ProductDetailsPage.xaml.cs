@@ -17,12 +17,12 @@ public partial class ProductDetailsPage : ContentPage, IQueryAttributable
     {
         InitializeComponent();
         BindingContext = this;
-        AddToCartCommand = new Command(AddToCart);
+        AddToCartCommand = new Command(async () => await AddToCartAsync());
         WhatsAppCommand = new Command(async () => await OpenWhatsAppAsync());
         SimilarProducts.ProductSelected += async (_, product) => await OpenProductAsync(product.Id);
         SimilarProducts.AddToCartRequested += (_, product) => CommerceCartState.Shared.Add(product);
         PageLayout.NavigationFailed += async (_, exception) =>
-            await DisplayAlert("Navigation unavailable", exception.Message, "OK");
+            await DisplayAlertAsync("Navigation unavailable", exception.Message, "OK");
     }
 
     public DiscoveryProduct? Product { get; private set; }
@@ -86,12 +86,12 @@ public partial class ProductDetailsPage : ContentPage, IQueryAttributable
         }
     }
 
-    private void AddToCart()
+    private async Task AddToCartAsync()
     {
         if (Product is null)
             return;
         CommerceCartState.Shared.Add(Product);
-        _ = DisplayAlert("Added to cart", $"{Product.Name} was added to your cart.", "Continue");
+        await DisplayAlertAsync("Added to cart", $"{Product.Name} was added to your cart.", "Continue");
     }
 
     private async Task OpenWhatsAppAsync()

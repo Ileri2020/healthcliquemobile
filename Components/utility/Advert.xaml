@@ -32,14 +32,14 @@
                                 StrokeShape="RoundRectangle 10">
                             <VerticalStackLayout Spacing="8">
                                 <Label Text="{Binding Text}" TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
-                                <HorizontalStackLayout Spacing="8">
+                                <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
                                     <ui:Button Text="Save" Variant="Outline"
                                                Command="{Binding Source={x:Reference Root}, Path=SaveCommand}"
-                                               CommandParameter="{Binding .}" HorizontalOptions="FillAndExpand" />
-                                    <ui:Button Text="Delete" Variant="Destructive"
+                                               CommandParameter="{Binding .}" />
+                                    <ui:Button Grid.Column="1" Text="Delete" Variant="Destructive"
                                                Command="{Binding Source={x:Reference Root}, Path=DeleteCommand}"
-                                               CommandParameter="{Binding .}" HorizontalOptions="FillAndExpand" />
-                                </HorizontalStackLayout>
+                                               CommandParameter="{Binding .}" />
+                                </Grid>
                             </VerticalStackLayout>
                         </Border>
                     </DataTemplate>

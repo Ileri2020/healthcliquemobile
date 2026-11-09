@@ -129,8 +129,8 @@ public partial class Post : ContentView
         try
         {
             var id = Uri.EscapeDataString(PostData.Id);
-            var likesTask = GetAsync<List<CommunityLike>>($"api/dbhandler?model=likes&id={id}");
-            var commentsTask = GetAsync<List<CommunityComment>>($"api/dbhandler?model=comments&id={id}");
+            var likesTask = GetAsync<CommunityLike>($"api/dbhandler?model=likes&id={id}");
+            var commentsTask = GetAsync<CommunityComment>($"api/dbhandler?model=comments&id={id}");
             await Task.WhenAll(likesTask, commentsTask);
             if (version != _engagementVersion)
                 return;
@@ -161,7 +161,7 @@ public partial class Post : ContentView
             return;
         try
         {
-            var comments = await GetAsync<List<CommunityComment>>(
+            var comments = await GetAsync<CommunityComment>(
                 $"api/dbhandler?model=comments&id={Uri.EscapeDataString(PostData.Id)}");
             SetComments(comments);
         }

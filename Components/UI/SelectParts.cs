@@ -96,7 +96,7 @@ public class SelectItem : ContentView
     public ICommand? Command { get => (ICommand?)GetValue(CommandProperty); set => SetValue(CommandProperty, value); }
 
     private static void OnTextChanged(BindableObject bindable, object oldValue, object newValue) =>
-        ((SelectItem)bindable)._button.Text = (string?)newValue;
+        ((SelectItem)bindable)._button.Text = (string?)newValue ?? string.Empty;
 }
 
 public class SelectSeparator : BoxView

@@ -114,7 +114,7 @@ public partial class CartDetails : ContentView
             SelectedAddress = Addresses.FirstOrDefault();
             CartName = _cart.Name ?? string.Empty;
             Status = _cart.Status;
-            PrescriptionUrl = _cart.PrescriptionUrl;
+            PrescriptionUrl = _cart.PrescriptionUrl ?? string.Empty;
             HasPrescription = !string.IsNullOrWhiteSpace(PrescriptionUrl);
             PharmacistSummary = _cart.PharmacistSummary ?? string.Empty;
             Items.Clear();

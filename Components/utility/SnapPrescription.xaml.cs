@@ -77,7 +77,7 @@ public partial class SnapPrescription : ContentView
             });
             await UpdateImagePathAsync();
         }
-        catch (Exception exception) when (exception is FilePickerException or InvalidOperationException or TaskCanceledException)
+        catch (Exception exception) when (exception is InvalidOperationException or PermissionException or FeatureNotSupportedException or TaskCanceledException)
         {
             SetError(exception);
         }

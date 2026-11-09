@@ -8,10 +8,10 @@
         <Label Text="Bulk data manager" FontSize="20" FontAttributes="Bold"
                TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
         <Picker Title="Data type" ItemsSource="{Binding Models, Source={x:Reference Root}}" SelectedItem="{Binding Model, Source={x:Reference Root}, Mode=TwoWay}" />
-        <HorizontalStackLayout Spacing="8">
-            <ui:Button Text="Export CSV" Command="{Binding ExportCommand, Source={x:Reference Root}}" IsEnabled="{Binding CanExport, Source={x:Reference Root}}" HorizontalOptions="FillAndExpand" />
-            <ui:Button Text="Import CSV" Variant="Outline" Command="{Binding ImportCommand, Source={x:Reference Root}}" IsEnabled="{Binding CanImport, Source={x:Reference Root}}" HorizontalOptions="FillAndExpand" />
-        </HorizontalStackLayout>
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+            <ui:Button Text="Export CSV" Command="{Binding ExportCommand, Source={x:Reference Root}}" IsEnabled="{Binding CanExport, Source={x:Reference Root}}" />
+            <ui:Button Grid.Column="1" Text="Import CSV" Variant="Outline" Command="{Binding ImportCommand, Source={x:Reference Root}}" IsEnabled="{Binding CanImport, Source={x:Reference Root}}" />
+        </Grid>
         <ActivityIndicator IsRunning="{Binding IsLoading, Source={x:Reference Root}}" IsVisible="{Binding IsLoading, Source={x:Reference Root}}" Color="{AppThemeBinding Light={StaticResource ThemePrimaryLight}, Dark={StaticResource ThemePrimaryDark}}" />
         <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
                TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />

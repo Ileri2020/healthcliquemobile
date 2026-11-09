@@ -59,7 +59,7 @@ public partial class SpecialOrderForm : ContentView
             OnPropertyChanged(nameof(PrescriptionButtonText));
             OnPropertyChanged(nameof(DetailsLabel));
         }
-        catch (Exception exception) when (exception is FilePickerException or InvalidOperationException or TaskCanceledException)
+        catch (Exception exception) when (exception is InvalidOperationException or PermissionException or FeatureNotSupportedException or TaskCanceledException)
         {
             SetError(exception);
         }

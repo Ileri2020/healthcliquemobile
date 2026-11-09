@@ -10,10 +10,10 @@
         <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}"
                TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
         <VerticalStackLayout IsVisible="{Binding HasCart, Source={x:Reference Root}}" Spacing="10">
-            <HorizontalStackLayout Spacing="8">
-                <ui:Input Placeholder="Cart name" Text="{Binding CartName, Source={x:Reference Root}, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
-                <ui:Button Text="Save name" Variant="Outline" Command="{Binding SaveNameCommand, Source={x:Reference Root}}" />
-            </HorizontalStackLayout>
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                <ui:Input Placeholder="Cart name" Text="{Binding CartName, Source={x:Reference Root}, Mode=TwoWay}" />
+                <ui:Button Grid.Column="1" Text="Save name" Variant="Outline" Command="{Binding SaveNameCommand, Source={x:Reference Root}}" />
+            </Grid>
             <ui:Badge Text="{Binding Status, Source={x:Reference Root}}" />
             <Image Source="{Binding PrescriptionUrl, Source={x:Reference Root}}" Aspect="AspectFit" HeightRequest="180"
                    IsVisible="{Binding HasPrescription, Source={x:Reference Root}}" />

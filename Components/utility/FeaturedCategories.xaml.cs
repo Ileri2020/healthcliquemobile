@@ -228,7 +228,7 @@ public partial class FeaturedCategories : ContentView
         if (!IsAdmin || category is null)
             return;
         var page = Application.Current?.Windows.FirstOrDefault()?.Page;
-        var confirmed = page is null || await page.DisplayAlert("Delete category", $"Delete {category.Name}?", "Delete", "Cancel");
+        var confirmed = page is null || await page.DisplayAlertAsync("Delete category", $"Delete {category.Name}?", "Delete", "Cancel");
         if (!confirmed)
             return;
         IsLoading = true;

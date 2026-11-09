@@ -134,30 +134,30 @@ public partial class TextCtrl : ContentView
 
     private async Task AnimateOutAsync()
     {
-        await AnimatedText.FadeTo(0, 180, Easing.CubicIn);
+        await AnimatedText.FadeToAsync(0, 180, Easing.CubicIn);
         if (Animation == TextAnimation.SlideIn)
-            await AnimatedText.TranslateTo(36, 0, 180, Easing.CubicIn);
+            await AnimatedText.TranslateToAsync(36, 0, 180, Easing.CubicIn);
         else if (Animation is TextAnimation.SlideUp or TextAnimation.RiseAndFade)
-            await AnimatedText.TranslateTo(0, -18, 180, Easing.CubicIn);
+            await AnimatedText.TranslateToAsync(0, -18, 180, Easing.CubicIn);
         else if (Animation is TextAnimation.ScaleIn or TextAnimation.BounceIn or TextAnimation.Zoom)
-            await AnimatedText.ScaleTo(0.85, 180, Easing.CubicIn);
+            await AnimatedText.ScaleToAsync(0.85, 180, Easing.CubicIn);
         else if (Animation is TextAnimation.RotateIn or TextAnimation.FlipIn)
-            await AnimatedText.RotateTo(30, 180, Easing.CubicIn);
+            await AnimatedText.RotateToAsync(30, 180, Easing.CubicIn);
     }
 
     private async Task AnimateInAsync()
     {
         var duration = Animation == TextAnimation.RiseAndFade ? 900u : Animation == TextAnimation.Zoom ? 900u : 400u;
         var easing = Animation == TextAnimation.BounceIn ? Easing.BounceOut : Easing.CubicOut;
-        var tasks = new List<Task> { AnimatedText.FadeTo(1, duration, easing) };
+        var tasks = new List<Task> { AnimatedText.FadeToAsync(1, duration, easing) };
         if (Animation == TextAnimation.SlideIn)
-            tasks.Add(AnimatedText.TranslateTo(0, 0, duration, easing));
+            tasks.Add(AnimatedText.TranslateToAsync(0, 0, duration, easing));
         else if (Animation is TextAnimation.SlideUp or TextAnimation.RiseAndFade)
-            tasks.Add(AnimatedText.TranslateTo(0, 0, duration, easing));
+            tasks.Add(AnimatedText.TranslateToAsync(0, 0, duration, easing));
         else if (Animation is TextAnimation.ScaleIn or TextAnimation.BounceIn or TextAnimation.Zoom)
-            tasks.Add(AnimatedText.ScaleTo(1, duration, easing));
+            tasks.Add(AnimatedText.ScaleToAsync(1, duration, easing));
         else if (Animation is TextAnimation.RotateIn or TextAnimation.FlipIn)
-            tasks.Add(AnimatedText.RotateTo(0, duration, easing));
+            tasks.Add(AnimatedText.RotateToAsync(0, duration, easing));
         await Task.WhenAll(tasks);
     }
 }

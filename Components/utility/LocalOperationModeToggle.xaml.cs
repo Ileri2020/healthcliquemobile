@@ -35,8 +35,6 @@ public partial class LocalOperationModeToggle : ContentView
     public ICommand SetOfflineCommand { get; }
 
     public LayoutOptions LayoutOptions => FullWidth ? LayoutOptions.Fill : LayoutOptions.Start;
-    public LayoutOptions ItemLayoutOptions => FullWidth ? LayoutOptions.FillAndExpand : LayoutOptions.Start;
-
     private static void OnLayoutChanged(BindableObject bindable, object oldValue, object newValue) =>
         ((LocalOperationModeToggle)bindable).UpdateLayoutOptions();
 
@@ -51,7 +49,6 @@ public partial class LocalOperationModeToggle : ContentView
     private void UpdateLayoutOptions()
     {
         OnPropertyChanged(nameof(LayoutOptions));
-        OnPropertyChanged(nameof(ItemLayoutOptions));
     }
 
     private void UpdateVariants()

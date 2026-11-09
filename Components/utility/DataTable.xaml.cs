@@ -16,7 +16,7 @@ public partial class DataTable : ContentView
     public static readonly BindableProperty CanGoNextProperty = BindableProperty.Create(nameof(CanGoNext), typeof(bool), typeof(DataTable), false);
     public static readonly BindableProperty SortPropertyProperty = BindableProperty.Create(nameof(SortProperty), typeof(string), typeof(DataTable), string.Empty);
     public static readonly BindableProperty SortAscendingProperty = BindableProperty.Create(nameof(SortAscending), typeof(bool), typeof(DataTable), true);
-    private List<DiscoveryDataColumn>? _generatedColumns;
+    private List<DiscoveryDataColumn> _generatedColumns = [];
     private Type? _generatedColumnType;
     private bool _isUpdatingGeneratedColumns;
 

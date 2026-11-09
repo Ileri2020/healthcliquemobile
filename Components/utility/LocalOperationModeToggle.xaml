@@ -4,18 +4,17 @@
              xmlns:ui="clr-namespace:EEE.Components.UI"
              x:Class="EEE.Components.Utility.LocalOperationModeToggle"
              x:Name="Root">
-    <HorizontalStackLayout IsVisible="{Binding IsLocal, Source={x:Reference Root}}"
-                           Padding="4"
-                           Spacing="4"
-                           HorizontalOptions="{Binding LayoutOptions, Source={x:Reference Root}}"
-                           BackgroundColor="{AppThemeBinding Light={StaticResource ThemeMutedLight}, Dark={StaticResource ThemeMutedDark}}">
+    <Grid IsVisible="{Binding IsLocal, Source={x:Reference Root}}"
+          ColumnDefinitions="*,*"
+          Padding="4"
+          ColumnSpacing="4"
+          HorizontalOptions="{Binding LayoutOptions, Source={x:Reference Root}}"
+          BackgroundColor="{AppThemeBinding Light={StaticResource ThemeMutedLight}, Dark={StaticResource ThemeMutedDark}}">
         <ui:Button Text="Online"
                    Variant="{Binding OnlineVariant, Source={x:Reference Root}}"
-                   Command="{Binding SetOnlineCommand, Source={x:Reference Root}}"
-                   HorizontalOptions="{Binding ItemLayoutOptions, Source={x:Reference Root}}" />
-        <ui:Button Text="Offline"
+                   Command="{Binding SetOnlineCommand, Source={x:Reference Root}}" />
+        <ui:Button Grid.Column="1" Text="Offline"
                    Variant="{Binding OfflineVariant, Source={x:Reference Root}}"
-                   Command="{Binding SetOfflineCommand, Source={x:Reference Root}}"
-                   HorizontalOptions="{Binding ItemLayoutOptions, Source={x:Reference Root}}" />
-    </HorizontalStackLayout>
+                   Command="{Binding SetOfflineCommand, Source={x:Reference Root}}" />
+    </Grid>
 </ContentView>

@@ -41,10 +41,10 @@
                             <ui:Input Placeholder="Facility address" Text="{Binding FacilityAddress, Source={x:Reference Root}, Mode=TwoWay}" IsVisible="{Binding IsWholesaler, Source={x:Reference Root}}" />
                             <ui:Input Placeholder="Facility registration number" Text="{Binding FacilityRegNumber, Source={x:Reference Root}, Mode=TwoWay}" IsVisible="{Binding IsWholesaler, Source={x:Reference Root}}" />
                             <Label Text="{Binding StatusMessage, Source={x:Reference Root}}" IsVisible="{Binding HasStatus, Source={x:Reference Root}}" TextColor="{AppThemeBinding Light={StaticResource ThemeDestructiveLight}, Dark={StaticResource ThemeDestructiveDark}}" />
-                            <HorizontalStackLayout Spacing="8">
-                                <ui:Button Text="Back" Variant="Ghost" Command="{Binding BackCommand, Source={x:Reference Root}}" HorizontalOptions="FillAndExpand" />
-                                <ui:Button Text="{Binding SubmitText, Source={x:Reference Root}}" Command="{Binding SubmitCommand, Source={x:Reference Root}}" IsEnabled="{Binding CanSubmit, Source={x:Reference Root}}" HorizontalOptions="FillAndExpand" />
-                            </HorizontalStackLayout>
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                                <ui:Button Text="Back" Variant="Ghost" Command="{Binding BackCommand, Source={x:Reference Root}}" />
+                                <ui:Button Grid.Column="1" Text="{Binding SubmitText, Source={x:Reference Root}}" Command="{Binding SubmitCommand, Source={x:Reference Root}}" IsEnabled="{Binding CanSubmit, Source={x:Reference Root}}" />
+                            </Grid>
                         </VerticalStackLayout>
                         <VerticalStackLayout IsVisible="{Binding IsSuccessStep, Source={x:Reference Root}}" Spacing="12">
                             <Label Text="Application submitted. Your request is being reviewed." TextColor="{AppThemeBinding Light={StaticResource ThemeAccentLight}, Dark={StaticResource ThemeAccentDark}}" />

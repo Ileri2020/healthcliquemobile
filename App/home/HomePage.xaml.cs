@@ -18,7 +18,7 @@ public partial class HomePage : ContentPage
         HomeHero.PrescriptionRequested += async (_, _) => await OpenPrescriptionAsync();
         HomeHero.SpecialOrderRequested += async (_, _) => await OpenSpecialOrderAsync();
         HomeHero.ActionFailed += async (_, exception) =>
-            await DisplayAlert("Action unavailable", exception.Message, "OK");
+            await DisplayAlertAsync("Action unavailable", exception.Message, "OK");
 
         CommonMeds.AddToCartRequested += (_, product) => CommerceCartState.Shared.Add(product);
         DiscountedDeals.NavigationRequested += async (_, path) => await PageLayout.NavigateToAsync(path);
@@ -39,7 +39,7 @@ public partial class HomePage : ContentPage
             await OpenStoreAsync($"categoryName={Uri.EscapeDataString(category.Name)}");
 
         PageLayout.NavigationFailed += async (_, exception) =>
-            await DisplayAlert("Navigation unavailable", exception.Message, "OK");
+            await DisplayAlertAsync("Navigation unavailable", exception.Message, "OK");
     }
 
     public ICommand ContactCommand { get; }

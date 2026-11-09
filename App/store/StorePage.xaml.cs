@@ -19,14 +19,14 @@ public partial class StorePage : ContentPage, IQueryAttributable
 
         StoreSearch.ProductSelected += async (_, product) => await OpenProductAsync(product.Id);
         StoreSearch.SearchFailed += async (_, exception) =>
-            await DisplayAlert("Search unavailable", exception.Message, "OK");
+            await DisplayAlertAsync("Search unavailable", exception.Message, "OK");
         StoreProducts.ProductSelected += async (_, product) => await OpenProductAsync(product.Id);
         StoreProducts.AddToCartRequested += (_, product) => CommerceCartState.Shared.Add(product);
         StoreProducts.RequestFailed += async (_, exception) =>
-            await DisplayAlert("Store unavailable", exception.Message, "OK");
+            await DisplayAlertAsync("Store unavailable", exception.Message, "OK");
         SpecialOrderForm.AddToCartRequested += (_, item) => CommerceCartState.Shared.Add(item);
         PageLayout.NavigationFailed += async (_, exception) =>
-            await DisplayAlert("Navigation unavailable", exception.Message, "OK");
+            await DisplayAlertAsync("Navigation unavailable", exception.Message, "OK");
     }
 
     public ICommand ContactCommand { get; }

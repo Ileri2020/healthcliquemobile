@@ -266,7 +266,7 @@ public partial class HeavilyDiscountedCarousel : ContentView
         if (!IsAdmin && item.CreatorId != UserId)
             return;
         var page = Application.Current?.Windows.FirstOrDefault()?.Page;
-        if (page is not null && !await page.DisplayAlert("Remove rapid sale", "Remove this product from rapid sale?", "Remove", "Cancel"))
+        if (page is not null && !await page.DisplayAlertAsync("Remove rapid sale", "Remove this product from rapid sale?", "Remove", "Cancel"))
             return;
         IsLoading = true;
         try
