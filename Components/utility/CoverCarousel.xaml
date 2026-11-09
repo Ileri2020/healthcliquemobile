@@ -4,7 +4,7 @@
              xmlns:ui="clr-namespace:EEE.Components.UI"
              x:Class="EEE.Components.Utility.CoverCarousel"
              x:Name="Root">
-    <Grid HeightRequest="{Binding Height, Source={x:Reference Root}}">
+    <Grid HeightRequest="{Binding CarouselHeight, Source={x:Reference Root}}">
         <CollectionView x:Name="CardCollection"
                         ItemsSource="{Binding Cards, Source={x:Reference Root}}"
                         ItemsLayout="HorizontalList"

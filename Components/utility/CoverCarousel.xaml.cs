@@ -6,7 +6,7 @@ namespace EEE.Components.Utility;
 public partial class CoverCarousel : ContentView
 {
     public static readonly BindableProperty NumCardsProperty = BindableProperty.Create(nameof(NumCards), typeof(int), typeof(CoverCarousel), 0, propertyChanged: OnNumCardsChanged);
-    public static readonly BindableProperty HeightProperty = BindableProperty.Create(nameof(Height), typeof(double), typeof(CoverCarousel), 400d);
+    public static readonly BindableProperty CarouselHeightProperty = BindableProperty.Create(nameof(CarouselHeight), typeof(double), typeof(CoverCarousel), 400d);
     public static readonly BindableProperty CardWidthProperty = BindableProperty.Create(nameof(CardWidth), typeof(double), typeof(CoverCarousel), 320d);
     public static readonly BindableProperty CurrentIndexProperty = BindableProperty.Create(nameof(CurrentIndex), typeof(int), typeof(CoverCarousel), 0);
     public static readonly BindableProperty HasCardsProperty = BindableProperty.Create(nameof(HasCards), typeof(bool), typeof(CoverCarousel), false);
@@ -21,7 +21,7 @@ public partial class CoverCarousel : ContentView
     }
 
     public int NumCards { get => (int)GetValue(NumCardsProperty); set => SetValue(NumCardsProperty, value); }
-    public double Height { get => (double)GetValue(HeightProperty); set => SetValue(HeightProperty, value); }
+    public double CarouselHeight { get => (double)GetValue(CarouselHeightProperty); set => SetValue(CarouselHeightProperty, value); }
     public double CardWidth { get => (double)GetValue(CardWidthProperty); set => SetValue(CardWidthProperty, value); }
     public int CurrentIndex { get => (int)GetValue(CurrentIndexProperty); private set => SetValue(CurrentIndexProperty, value); }
     public bool HasCards { get => (bool)GetValue(HasCardsProperty); private set => SetValue(HasCardsProperty, value); }

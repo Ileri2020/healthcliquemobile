@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ui="clr-namespace:EEE.Components.UI"
              xmlns:utility="clr-namespace:EEE.Components.Utility"
-             x:Class="EEE.App.RootLayout"
+             x:Class="EEE.ClientApp.RootLayout"
              x:Name="Root">
     <Grid RowDefinitions="Auto,*,Auto"
           BackgroundColor="{AppThemeBinding Light={StaticResource ThemeBackgroundLight}, Dark={StaticResource ThemeBackgroundDark}}">
@@ -20,7 +20,7 @@
             </utility:Navbar.SideNavigation>
             <utility:Navbar.BrandContent>
                 <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
-                    <Image Source="healthclique-logo.svg" HeightRequest="34" Aspect="AspectFit" />
+                    <Image Source="healthcliquelogo.svg" HeightRequest="34" Aspect="AspectFit" />
                     <Label Text="HealthClique"
                            FontAttributes="Bold"
                            VerticalOptions="Center"

@@ -11,9 +11,9 @@
                     <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
                         <ui:Avatar WidthRequest="42" HeightRequest="42"
                                    Source="{Binding AvatarSource, Source={x:Reference Root}}"
-                                   FallbackText="{Binding Post.User.Name, Source={x:Reference Root}}" />
+                                   FallbackText="{Binding PostData.User.Name, Source={x:Reference Root}}" />
                         <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                            <Label Text="{Binding Post.AuthorName, Source={x:Reference Root}}" FontAttributes="Bold"
+                            <Label Text="{Binding PostData.AuthorName, Source={x:Reference Root}}" FontAttributes="Bold"
                                    TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
                             <Label Text="{Binding DateCategory, Source={x:Reference Root}}" FontSize="11"
                                    TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
@@ -22,15 +22,15 @@
                                    IsVisible="{Binding IsAdmin, Source={x:Reference Root}}"
                                    Command="{Binding DeleteCommand, Source={x:Reference Root}}" />
                     </Grid>
-                    <Label Text="{Binding Post.Title, Source={x:Reference Root}}" FontSize="19" FontAttributes="Bold"
+                    <Label Text="{Binding PostData.Title, Source={x:Reference Root}}" FontSize="19" FontAttributes="Bold"
                            IsVisible="{Binding HasTitle, Source={x:Reference Root}}"
                            TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
-                    <Image Source="{Binding Post.ContentUrl, Source={x:Reference Root}}" HeightRequest="280" Aspect="AspectFill"
+                    <Image Source="{Binding PostData.ContentUrl, Source={x:Reference Root}}" HeightRequest="280" Aspect="AspectFill"
                            IsVisible="{Binding IsImage, Source={x:Reference Root}}" />
-                    <ui:Button Text="{Binding Post.MediaLabel, Source={x:Reference Root}}" Variant="Outline"
+                    <ui:Button Text="{Binding PostData.MediaLabel, Source={x:Reference Root}}" Variant="Outline"
                                IsVisible="{Binding IsExternalMedia, Source={x:Reference Root}}"
                                Command="{Binding OpenMediaCommand, Source={x:Reference Root}}" />
-                    <Label Text="{Binding Post.Description, Source={x:Reference Root}}" LineBreakMode="WordWrap"
+                    <Label Text="{Binding PostData.Description, Source={x:Reference Root}}" LineBreakMode="WordWrap"
                            TextColor="{AppThemeBinding Light={StaticResource ThemeMutedForegroundLight}, Dark={StaticResource ThemeMutedForegroundDark}}" />
                     <HorizontalStackLayout Spacing="8">
                         <ui:Button Text="{Binding LikeButtonText, Source={x:Reference Root}}" Variant="Secondary"

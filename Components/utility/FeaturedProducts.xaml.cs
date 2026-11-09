@@ -24,7 +24,7 @@ public partial class FeaturedProducts : ContentView
     public FeaturedProducts()
     {
         InitializeComponent();
-        FeaturedProducts = [];
+        FeaturedProductItems = [];
         OralCareProducts = [];
         BrandGroups = [];
         RefreshCommand = new Command(async () => await LoadAsync(), () => !IsLoading);
@@ -50,7 +50,7 @@ public partial class FeaturedProducts : ContentView
     public bool HasOralCare { get => (bool)GetValue(HasOralCareProperty); private set => SetValue(HasOralCareProperty, value); }
     public bool HasStatus { get => (bool)GetValue(HasStatusProperty); private set => SetValue(HasStatusProperty, value); }
     public string StatusMessage { get => (string)GetValue(StatusMessageProperty); private set => SetValue(StatusMessageProperty, value); }
-    public ObservableCollection<ProductCardView> FeaturedProducts { get; }
+    public ObservableCollection<ProductCardView> FeaturedProductItems { get; }
     public ObservableCollection<ProductCardView> OralCareProducts { get; }
     public ObservableCollection<BrandProductGroup> BrandGroups { get; }
     public ICommand RefreshCommand { get; }
@@ -98,13 +98,13 @@ public partial class FeaturedProducts : ContentView
             }
 
             _featuredIds.Clear();
-            FeaturedProducts.Clear();
+            FeaturedProductItems.Clear();
             foreach (var item in featured.Where(item => item.Product is not null))
             {
                 _featuredIds[item.ProductId] = item.Id;
-                FeaturedProducts.Add(new ProductCardView(item.Product!, UserRole, !string.IsNullOrWhiteSpace(item.Id)));
+                FeaturedProductItems.Add(new ProductCardView(item.Product!, UserRole, !string.IsNullOrWhiteSpace(item.Id)));
             }
-            HasFeatured = FeaturedProducts.Count > 0;
+            HasFeatured = FeaturedProductItems.Count > 0;
 
             BrandGroups.Clear();
             for (var index = 0; index < TopBrands.Length; index++)
@@ -153,10 +153,10 @@ public partial class FeaturedProducts : ContentView
                 using var response = await UtilityApi.SendAsync(HttpMethod.Delete, uri, (object?)null);
                 _featuredIds.Remove(product.Id);
                 UpdateProductFeaturedState(product.Id, false);
-                var existing = FeaturedProducts.FirstOrDefault(item => item.Product.Id == product.Id);
+                var existing = FeaturedProductItems.FirstOrDefault(item => item.Product.Id == product.Id);
                 if (existing is not null)
-                    FeaturedProducts.Remove(existing);
-                HasFeatured = FeaturedProducts.Count > 0;
+                    FeaturedProductItems.Remove(existing);
+                HasFeatured = FeaturedProductItems.Count > 0;
             }
             else
             {
@@ -166,9 +166,9 @@ public partial class FeaturedProducts : ContentView
                     ?? throw new JsonException("Featured product API returned an invalid response.");
                 _featuredIds[product.Id] = created.Id;
                 UpdateProductFeaturedState(product.Id, true);
-                if (!FeaturedProducts.Any(item => item.Product.Id == product.Id))
-                    FeaturedProducts.Insert(0, new ProductCardView(product, UserRole, true));
-                HasFeatured = FeaturedProducts.Count > 0;
+                if (!FeaturedProductItems.Any(item => item.Product.Id == product.Id))
+                    FeaturedProductItems.Insert(0, new ProductCardView(product, UserRole, true));
+                HasFeatured = FeaturedProductItems.Count > 0;
             }
         }
         catch (Exception exception) when (exception is HttpRequestException or InvalidOperationException or JsonException or TaskCanceledException)
@@ -184,7 +184,7 @@ public partial class FeaturedProducts : ContentView
 
     private void UpdateProductFeaturedState(string productId, bool isFeatured)
     {
-        var cards = FeaturedProducts
+        var cards = FeaturedProductItems
             .Concat(OralCareProducts)
             .Concat(BrandGroups.SelectMany(group => group.Products));
         foreach (var card in cards.Where(card => card.Product.Id == productId))

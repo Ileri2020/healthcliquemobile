@@ -1,4 +1,4 @@
-using EEE.App.Pages;
+using EEE.ClientApp.Pages;
 
 namespace EEE;
 

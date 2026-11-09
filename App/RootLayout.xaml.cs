@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using EEE.Components.Utility;
 
-namespace EEE.App;
+namespace EEE.ClientApp;
 
 [ContentProperty(nameof(PageContent))]
 public partial class RootLayout : ContentView

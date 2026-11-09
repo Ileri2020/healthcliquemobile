@@ -13,7 +13,7 @@ public partial class Post : ContentView
     private bool _isLoadingEngagement;
     private int _engagementVersion;
 
-    public static readonly BindableProperty PostProperty = BindableProperty.Create(nameof(Post), typeof(CommunityPost), typeof(Post), propertyChanged: OnPostChanged);
+    public static readonly BindableProperty PostDataProperty = BindableProperty.Create(nameof(PostData), typeof(CommunityPost), typeof(Post), propertyChanged: OnPostChanged);
     public static readonly BindableProperty ApiBaseUrlProperty = BindableProperty.Create(nameof(ApiBaseUrl), typeof(string), typeof(Post), string.Empty, propertyChanged: OnContextChanged);
     public static readonly BindableProperty UserIdProperty = BindableProperty.Create(nameof(UserId), typeof(string), typeof(Post), string.Empty, propertyChanged: OnContextChanged);
     public static readonly BindableProperty IsAdminProperty = BindableProperty.Create(nameof(IsAdmin), typeof(bool), typeof(Post), false, propertyChanged: OnAdminChanged);
@@ -33,16 +33,16 @@ public partial class Post : ContentView
         CommentCommand = new Command(async () =>
         {
             IsCommentsOpen = true;
-            CommentRequested?.Invoke(this, Post);
+            CommentRequested?.Invoke(this, PostData);
             await LoadCommentsAsync();
         });
-        DeleteCommand = new Command(async () => await DeleteAsync(), () => IsAdmin && Post is not null);
+        DeleteCommand = new Command(async () => await DeleteAsync(), () => IsAdmin && PostData is not null);
         OpenMediaCommand = new Command(async () => await OpenMediaAsync());
         ShareCommand = new Command(async () => await ShareAsync());
         SubmitCommentCommand = new Command(async () => await SubmitCommentAsync(), () => !IsSubmittingComment);
     }
 
-    public CommunityPost? Post { get => (CommunityPost?)GetValue(PostProperty); set => SetValue(PostProperty, value); }
+    public CommunityPost? PostData { get => (CommunityPost?)GetValue(PostDataProperty); set => SetValue(PostDataProperty, value); }
     public string ApiBaseUrl { get => (string)GetValue(ApiBaseUrlProperty); set => SetValue(ApiBaseUrlProperty, value); }
     public string UserId { get => (string)GetValue(UserIdProperty); set => SetValue(UserIdProperty, value); }
     public bool IsAdmin { get => (bool)GetValue(IsAdminProperty); set => SetValue(IsAdminProperty, value); }
@@ -53,12 +53,12 @@ public partial class Post : ContentView
     public bool IsSubmittingComment { get => (bool)GetValue(IsSubmittingCommentProperty); private set => SetValue(IsSubmittingCommentProperty, value); }
     public bool HasStatus { get => (bool)GetValue(HasStatusProperty); private set => SetValue(HasStatusProperty, value); }
     public string StatusMessage { get => (string)GetValue(StatusMessageProperty); private set => SetValue(StatusMessageProperty, value); }
-    public bool HasTitle => !string.IsNullOrWhiteSpace(Post?.Title);
+    public bool HasTitle => !string.IsNullOrWhiteSpace(PostData?.Title);
     public ImageSource? AvatarSource
     {
         get
         {
-            var source = Post?.User?.AvatarUrl;
+            var source = PostData?.User?.AvatarUrl;
             if (string.IsNullOrWhiteSpace(source))
                 return null;
             return Uri.TryCreate(source, UriKind.Absolute, out var uri)
@@ -66,9 +66,9 @@ public partial class Post : ContentView
                 : ImageSource.FromFile(source);
         }
     }
-    public bool IsImage => Post?.Type.Equals("image", StringComparison.OrdinalIgnoreCase) == true && !string.IsNullOrWhiteSpace(Post.ContentUrl);
-    public bool IsExternalMedia => Post?.Type.Equals("video", StringComparison.OrdinalIgnoreCase) == true || Post?.Type.Equals("audio", StringComparison.OrdinalIgnoreCase) == true;
-    public string DateCategory => $"{Post?.Category ?? "General"} • {Post?.DateLabel}";
+    public bool IsImage => PostData?.Type.Equals("image", StringComparison.OrdinalIgnoreCase) == true && !string.IsNullOrWhiteSpace(PostData.ContentUrl);
+    public bool IsExternalMedia => PostData?.Type.Equals("video", StringComparison.OrdinalIgnoreCase) == true || PostData?.Type.Equals("audio", StringComparison.OrdinalIgnoreCase) == true;
+    public string DateCategory => $"{PostData?.Category ?? "General"} • {PostData?.DateLabel}";
     public string LikeButtonText => $"{(IsLiked ? "Liked" : "Like")}  {LikeCount}";
     public string CommentsSummary => Comments.Count == 0 ? "No comments yet." : $"{Comments.Count} comment(s)";
     public string CommentSubmitText => IsSubmittingComment ? "Posting..." : "Post comment";
@@ -120,7 +120,7 @@ public partial class Post : ContentView
 
     private async Task LoadEngagementAsync()
     {
-        if (_isLoadingEngagement || Post is null || string.IsNullOrWhiteSpace(ApiBaseUrl))
+        if (_isLoadingEngagement || PostData is null || string.IsNullOrWhiteSpace(ApiBaseUrl))
             return;
         var version = _engagementVersion;
         _isLoadingEngagement = true;
@@ -128,7 +128,7 @@ public partial class Post : ContentView
         (LikeCommand as Command)?.ChangeCanExecute();
         try
         {
-            var id = Uri.EscapeDataString(Post.Id);
+            var id = Uri.EscapeDataString(PostData.Id);
             var likesTask = GetAsync<List<CommunityLike>>($"api/dbhandler?model=likes&id={id}");
             var commentsTask = GetAsync<List<CommunityComment>>($"api/dbhandler?model=comments&id={id}");
             await Task.WhenAll(likesTask, commentsTask);
@@ -157,12 +157,12 @@ public partial class Post : ContentView
 
     private async Task LoadCommentsAsync()
     {
-        if (Post is null || string.IsNullOrWhiteSpace(ApiBaseUrl))
+        if (PostData is null || string.IsNullOrWhiteSpace(ApiBaseUrl))
             return;
         try
         {
             var comments = await GetAsync<List<CommunityComment>>(
-                $"api/dbhandler?model=comments&id={Uri.EscapeDataString(Post.Id)}");
+                $"api/dbhandler?model=comments&id={Uri.EscapeDataString(PostData.Id)}");
             SetComments(comments);
         }
         catch (Exception exception) when (exception is HttpRequestException or InvalidOperationException or JsonException or TaskCanceledException)
@@ -188,7 +188,7 @@ public partial class Post : ContentView
 
     private async Task ToggleLikeAsync()
     {
-        if (Post is null)
+        if (PostData is null)
             return;
         if (string.IsNullOrWhiteSpace(UserId))
         {
@@ -217,14 +217,14 @@ public partial class Post : ContentView
             {
                 using var response = await UtilityApi.SendAsync(HttpMethod.Post,
                     UtilityApi.CreateUri(ApiBaseUrl, "api/dbhandler?model=likes"),
-                    new { userId = UserId, contentId = Post.Id });
+                    new { userId = UserId, contentId = PostData.Id });
                 var like = await response.Content.ReadFromJsonAsync<CommunityLike>(JsonOptions)
                     ?? throw new JsonException("The like endpoint returned an empty response.");
                 _likeId = like.Id;
                 IsLiked = true;
                 LikeCount++;
             }
-            LikeRequested?.Invoke(this, Post);
+            LikeRequested?.Invoke(this, PostData);
         }
         catch (Exception exception) when (exception is HttpRequestException or InvalidOperationException or JsonException or TaskCanceledException)
         {
@@ -239,7 +239,7 @@ public partial class Post : ContentView
 
     private async Task SubmitCommentAsync()
     {
-        if (Post is null || string.IsNullOrWhiteSpace(CommentText))
+        if (PostData is null || string.IsNullOrWhiteSpace(CommentText))
         {
             SetError(new ArgumentException("Enter a comment before posting."));
             return;
@@ -261,7 +261,7 @@ public partial class Post : ContentView
         {
             using var response = await UtilityApi.SendAsync(HttpMethod.Post,
                 UtilityApi.CreateUri(ApiBaseUrl, "api/dbhandler?model=comments"),
-                new { userId = UserId, contentId = Post.Id, comment = CommentText.Trim() });
+                new { userId = UserId, contentId = PostData.Id, comment = CommentText.Trim() });
             CommentText = string.Empty;
             await LoadCommentsAsync();
         }
@@ -285,13 +285,13 @@ public partial class Post : ContentView
 
     private async Task DeleteAsync()
     {
-        if (!IsAdmin || Post is null || string.IsNullOrWhiteSpace(ApiBaseUrl))
+        if (!IsAdmin || PostData is null || string.IsNullOrWhiteSpace(ApiBaseUrl))
             return;
         try
         {
             using var response = await UtilityApi.SendAsync(HttpMethod.Delete,
-                UtilityApi.CreateUri(ApiBaseUrl, $"api/dbhandler?model=post&id={Uri.EscapeDataString(Post.Id)}"), (object?)null);
-            PostDeleted?.Invoke(this, Post);
+                UtilityApi.CreateUri(ApiBaseUrl, $"api/dbhandler?model=post&id={Uri.EscapeDataString(PostData.Id)}"), (object?)null);
+            PostDeleted?.Invoke(this, PostData);
         }
         catch (Exception exception) when (exception is HttpRequestException or InvalidOperationException or TaskCanceledException)
         {
@@ -301,11 +301,11 @@ public partial class Post : ContentView
 
     private async Task OpenMediaAsync()
     {
-        if (string.IsNullOrWhiteSpace(Post?.ContentUrl))
+        if (string.IsNullOrWhiteSpace(PostData?.ContentUrl))
             return;
         try
         {
-            await Launcher.Default.OpenAsync(new Uri(Post.ContentUrl));
+            await Launcher.Default.OpenAsync(new Uri(PostData.ContentUrl));
         }
         catch (Exception exception) when (exception is FeatureNotSupportedException or UriFormatException or InvalidOperationException)
         {
@@ -315,15 +315,15 @@ public partial class Post : ContentView
 
     private async Task ShareAsync()
     {
-        if (Post is null)
+        if (PostData is null)
             return;
         try
         {
             var origin = string.IsNullOrWhiteSpace(ApiBaseUrl) ? string.Empty : new Uri(ApiBaseUrl).GetLeftPart(UriPartial.Authority);
             await Share.Default.RequestAsync(new ShareTextRequest
             {
-                Title = Post.Title ?? "HealthClique clinical post",
-                Text = $"{origin}/blog#{Post.Id}",
+                Title = PostData.Title ?? "HealthClique clinical post",
+                Text = $"{origin}/blog#{PostData.Id}",
             });
         }
         catch (Exception exception) when (exception is FeatureNotSupportedException or InvalidOperationException or UriFormatException)

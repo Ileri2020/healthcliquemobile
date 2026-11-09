@@ -27,7 +27,7 @@
         <CollectionView ItemsSource="{Binding VisiblePosts, Source={x:Reference Root}}" SelectionMode="None">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <utility:Post Post="{Binding .}"
+                    <utility:Post PostData="{Binding .}"
                                   ApiBaseUrl="{Binding ApiBaseUrl, Source={x:Reference Root}}"
                                   UserId="{Binding UserId, Source={x:Reference Root}}"
                                   IsAdmin="{Binding IsAdmin, Source={x:Reference Root}}"

@@ -3,9 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="EEE.Components.Utility.TextCarousel"
              x:Name="Root">
-    <Grid HeightRequest="{Binding Height, Source={x:Reference Root}}"
-          BackgroundColor="{AppThemeBinding Light={StaticResource ThemeBackgroundLight}, Dark={StaticResource ThemeBackgroundDark}}"
-          ClipToBounds="True">
+    <Grid HeightRequest="{Binding CarouselHeight, Source={x:Reference Root}}"
+          BackgroundColor="{AppThemeBinding Light={StaticResource ThemeBackgroundLight}, Dark={StaticResource ThemeBackgroundDark}}">
         <Image Source="{Binding ImageUrl, Source={x:Reference Root}}"
                Aspect="AspectFit"
                IsVisible="{Binding ShowImage, Source={x:Reference Root}}"
@@ -17,6 +16,6 @@
                HorizontalTextAlignment="Center"
                VerticalTextAlignment="Center"
                TextColor="{AppThemeBinding Light={StaticResource ThemeAccentLight}, Dark={StaticResource ThemeAccentDark}}"
-               RotationY="{Binding Rotation, Source={x:Reference Root}}" />
+               RotationY="{Binding TextRotation, Source={x:Reference Root}}" />
     </Grid>
 </ContentView>

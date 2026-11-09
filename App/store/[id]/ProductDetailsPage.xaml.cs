@@ -4,8 +4,9 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Windows.Input;
 using EEE.Components.Utility;
+using EEE.ClientApp;
 
-namespace EEE.App.Pages;
+namespace EEE.ClientApp.Pages;
 
 public partial class ProductDetailsPage : ContentPage, IQueryAttributable
 {

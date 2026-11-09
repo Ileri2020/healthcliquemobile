@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using EEE.Components.Utility;
 
-namespace EEE.App;
+namespace EEE.ClientApp;
 
 public sealed class CommerceCartState : INotifyPropertyChanged
 {

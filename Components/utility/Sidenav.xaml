@@ -25,7 +25,7 @@
                 <Grid RowDefinitions="Auto,*,Auto" RowSpacing="12">
                     <Grid ColumnDefinitions="*,Auto">
                         <VerticalStackLayout Spacing="6">
-                            <Image Source="healthclique-logo.svg" HeightRequest="38" HorizontalOptions="Start" Aspect="AspectFit" />
+                            <Image Source="healthcliquelogo.svg" HeightRequest="38" HorizontalOptions="Start" Aspect="AspectFit" />
                             <Label Text="{Binding Title, Source={x:Reference Root}}"
                                    FontSize="16"
                                    FontAttributes="Bold"

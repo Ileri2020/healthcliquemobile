@@ -22,7 +22,7 @@
         <VerticalStackLayout Spacing="8" IsVisible="{Binding HasFeatured, Source={x:Reference Root}}">
             <Label Text="Top picks" FontSize="21" FontAttributes="Bold"
                    TextColor="{AppThemeBinding Light={StaticResource ThemeForegroundLight}, Dark={StaticResource ThemeForegroundDark}}" />
-            <CollectionView ItemsSource="{Binding FeaturedProducts, Source={x:Reference Root}}" HeightRequest="290">
+            <CollectionView             ItemsSource="{Binding FeaturedProductItems, Source={x:Reference Root}}" HeightRequest="290">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10" />
                 </CollectionView.ItemsLayout>
