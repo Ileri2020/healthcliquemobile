@@ -28,13 +28,13 @@ public partial class RootLayout : ContentView
     public RootLayout()
     {
         SideNavigationItems = [];
-        CartItems = CommerceCartState.Shared.Items;
+        CartItems = CommerceCartState.Shared?.Items ?? [];
         OpenCartCommand = new Command(() => IsCartOpen = true);
         CloseCartCommand = new Command(() => IsCartOpen = false);
         RemoveCartItemCommand = new Command<CommerceCartItem>(item =>
         {
             if (item is not null)
-                CommerceCartState.Shared.Remove(item);
+                CommerceCartState.Shared?.Remove(item);
         });
         CheckoutCommand = new Command(async () => await NavigateToAsync("/cart"));
         InitializeComponent();
@@ -61,10 +61,10 @@ public partial class RootLayout : ContentView
     public string ApiBaseUrl { get => (string)GetValue(ApiBaseUrlProperty); set => SetValue(ApiBaseUrlProperty, value); }
     public string CurrentPath { get => (string)GetValue(CurrentPathProperty); set => SetValue(CurrentPathProperty, value); }
     public bool IsCartOpen { get => (bool)GetValue(IsCartOpenProperty); set => SetValue(IsCartOpenProperty, value); }
-    public ObservableCollection<CommerceCartItem> CartItems { get; }
-    public string CartButtonText => $"Cart ({CommerceCartState.Shared.ItemCount})";
-    public string CartTotalText => CommerceCartState.Shared.TotalText;
-    public bool HasCartItems => CartItems.Count > 0;
+    public ObservableCollection<CommerceCartItem> CartItems { get; } = CommerceCartState.Shared?.Items ?? [];
+    public string CartButtonText => $"Cart ({CommerceCartState.Shared?.ItemCount ?? 0})";
+    public string CartTotalText => CommerceCartState.Shared?.TotalText ?? "₦0";
+    public bool HasCartItems => CartItems is not null && CartItems.Count > 0;
     public bool IsCartEmpty => !HasCartItems;
     public ICommand OpenCartCommand { get; }
     public ICommand CloseCartCommand { get; }

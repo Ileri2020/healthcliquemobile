@@ -31,11 +31,5 @@ public partial class AppShell : Shell
 		Routing.RegisterRoute("privacy", typeof(PrivacyPage));
 		Routing.RegisterRoute("terms", typeof(TermsPage));
 		Routing.RegisterRoute("myui", typeof(MyUiPage));
-		Items.Add(new ShellContent
-		{
-			Title = "Home",
-			Route = "home",
-			ContentTemplate = new DataTemplate(() => services.GetRequiredService<HomePage>())
-		});
 	}
 }
